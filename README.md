@@ -1,0 +1,2 @@
+# Licence
+World-Traveler project.
