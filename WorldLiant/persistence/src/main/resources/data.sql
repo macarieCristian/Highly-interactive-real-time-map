@@ -1,3 +1,0 @@
-INSERT INTO public.app_user (id, first_name, last_name, password, role_type, username, home_location_id) VALUES (-2, 'firstName2', 'Lastname2', '$2a$10$Lc8KKuppO1odH.mjhJ329.e7iwELC8HTVJUbEku0GfdQt7REYL3eK', 'ROLE_PREMIUM_USER', 'user1', null);
-INSERT INTO public.app_user (id, first_name, last_name, password, role_type, username, home_location_id) VALUES (-1, 'firstName1', 'LastName1', '$2a$10$Lc8KKuppO1odH.mjhJ329.e7iwELC8HTVJUbEku0GfdQt7REYL3eK', 'ROLE_ADMIN', 'user', null);
-INSERT INTO public.app_user (id, first_name, last_name, password, role_type, username, home_location_id) VALUES (-3, 'firstName3', 'LastName3', '$2a$10$Lc8KKuppO1odH.mjhJ329.e7iwELC8HTVJUbEku0GfdQt7REYL3eK', 'ROLE_REGULAR_USER', 'user2', null);
