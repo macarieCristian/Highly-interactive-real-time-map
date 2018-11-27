@@ -1,0 +1,140 @@
+<div class="parent-layer">
+  <mdb-carousel [isControls]="false"
+                class="carousel slide carousel-fade child-layer"
+                [interval]="20000"
+                [noPause]="true"
+                [animation]="'fade'">
+
+    <mdb-carousel-item *ngFor="let imgData of imgList">
+      <div class="view">
+        <img class="carousel-img" src="../../assets/carouselImgs/{{imgData.imgName}}">
+        <div class="mask rgba-indigo-light waves-light" mdbWavesEffect></div>
+      </div>
+      <!--Caption-->
+      <div class="carousel-caption">
+        <div class="animated fadeInDown">
+          <h3 class="h3-responsive login-text">{{imgData.imgTitle}}</h3>
+          <p class="login-text">{{imgData.imgQuote}}</p>
+        </div>
+      </div>
+    </mdb-carousel-item>
+
+  </mdb-carousel>
+
+  <div style="margin-top: 15vh" class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-sm-3">
+        <form autocomplete="off"
+              (ngSubmit)="submitLogin()"
+              #loginForm="ngForm"
+              class="form-container">
+
+          <div class="row justify-content-center">
+            <div class="logo">
+              <img class="globe-animation" src="../../assets/img/globe-logo.gif">
+            </div>
+          </div>
+
+          <div class="row justify-content-center">
+            <span class="title"><b>World Liant</b></span>
+          </div>
+
+          <div class="md-form">
+            <i style="color: black"
+               class="fa fa-user-circle-o prefix input-img-style">
+            </i>
+            <input mdbInputDirective
+                   id="username"
+                   name="username"
+                   [mdbValidate]="false"
+                   style="border-bottom-color: white; box-shadow: unset"
+                   [(ngModel)]="model.username"
+                   #usernameControl="ngModel"
+                   #username
+                   required
+                   minlength="5"
+                   maxlength="25"
+                   pattern="^[a-zA-Z0-9]+$"
+                   class="form-control input-text-style"
+                   [class.isInvalid]="usernameControl.invalid && usernameControl.touched"
+                   type="text">
+            <small class="character-counter">{{username.value.length}} / 25</small>
+            <label style="color: white"
+                   class="input-label-text-style"
+                   for="username">Type your username</label>
+            <p style="height: 20px">
+              <small class="help-block error-text input-under-text-margin-style"
+                     *ngIf="usernameControl.invalid && usernameControl.touched && usernameControl.value != '' &&usernameControl.value != null">
+                Please enter a valid username.
+              </small>
+              <small class="input-under-text-style"
+                     *ngIf="usernameControl.value == null || usernameControl.value == ''">
+                Must contain only numbers and letters.
+              </small>
+              <small class="input-under-text-style" *ngIf="usernameControl.valid">
+                Valid username.
+              </small>
+            </p>
+          </div>
+
+          <div class="md-form">
+            <i style="left: 0.1em; color: black"
+               class="fa fa-lock prefix input-img-style">
+            </i>
+            <input mdbInputDirective
+                   id="password"
+                   name="password"
+                   [mdbValidate]="false"
+                   style="border-bottom-color: white; box-shadow: unset"
+                   [(ngModel)]="model.password"
+                   #passwordControl="ngModel"
+                   required
+                   minlength="4"
+                   maxlength="25"
+                   pattern="^[a-zA-Z0-9.@*&$]+$"
+                   class="form-control input-text-style"
+                   [class.isInvalid]="passwordControl.invalid && passwordControl.touched"
+                   type="password">
+            <label style="color: white"
+                   class="input-label-text-style"
+                   for="password">Type your password</label>
+            <p style="height: 20px">
+              <small class="help-block error-text input-under-text-margin-style"
+                     *ngIf="passwordControl.invalid && passwordControl.touched && passwordControl.value != '' &&passwordControl.value != null">
+                Please enter a valid password.
+              </small>
+              <small class="input-under-text-style"
+                     *ngIf="passwordControl.value == null || passwordControl.value == ''">
+                Must be at least 4 characters long.
+              </small>
+              <small class="input-under-text-style" *ngIf="passwordControl.valid">
+                Valid password.
+              </small>
+            </p>
+          </div>
+
+          <div class="row justify-content-center">
+            <recaptcha
+              name="recaptcha"
+              [(ngModel)]="recaptcha">
+            </recaptcha>
+          </div>
+
+          <div class="md-form text-center">
+            <button mdbBtn
+                    type="submit"
+                    [disabled]="loginForm.invalid || !recaptcha"
+                    class="btn login-button">Login
+            </button>
+          </div>
+
+          <div class="text-center">
+            <small class="login-text">Don't have an account? <a routerLink="/sing-up"><b class="sign-up">Sing Up</b></a></small>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>

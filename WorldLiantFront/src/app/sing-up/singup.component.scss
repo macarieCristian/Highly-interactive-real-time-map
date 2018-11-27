@@ -1,0 +1,81 @@
+.parent-layer {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.child-layer {
+  position: absolute;
+  width: 100vw;
+}
+
+.carousel-img {
+  min-width: 100vw;
+  min-height: 100vh;
+}
+
+.sing-up-carousel {
+  min-height: 60vh;
+}
+
+.form-container {
+  border: 0 solid;
+  padding-top: 4%;
+  padding-bottom: 8%;
+  min-width: 445px;
+  -webkit-box-shadow: -1px 4px 26px 11px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -1px 4px 26px 11px rgba(0, 0, 0, 0.75);
+  box-shadow: -1px 4px 26px 11px rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.custom-color-img {
+  background-color: rgba(255, 255, 255, 0.2);
+
+}
+
+.custom-background {
+  background-image: linear-gradient(to right, #4285f4 0%, #95caff 51%, #4285f4 100%);
+}
+
+.input-text-style {
+  font-size: 1.6em;
+  color: white;
+  text-shadow: 2px 2px black;
+}
+
+.input-img-style {
+  font-size: 2em;
+  top: 0.3em;
+  left: -0.1em;
+}
+
+.input-label-text-style {
+  font-size: 1.2em;
+  color: white;
+  text-shadow: 2px 2px black;
+}
+
+.input-under-text-style {
+  color: white;
+  margin-left: 3.1em;
+  text-shadow: 2px 2px black;
+}
+
+.input-under-text-margin-style {
+  margin-left: 3.1em;
+  text-shadow: 2px 2px black;
+}
+
+.error-text {
+  color: red;
+  text-shadow: 0 0 #841439;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.character-counter {
+  float: right;
+  color: white;
+  text-shadow: 2px 2px black;
+}

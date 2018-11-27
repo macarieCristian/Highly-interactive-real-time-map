@@ -18,7 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
-    private static Logger logger = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
+    private static final String EXCEPTION_MSG_FORMAT = "Exception={}";
+    private static Logger log = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
 
     @Autowired
     private TokenProvider tokenProvider;
@@ -28,34 +29,39 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String header = req.getHeader(Constants.HEADER_STRING);
         String username = null;
         String authToken = null;
+        Claims claims = null;
         if (header != null && header.startsWith(Constants.TOKEN_PREFIX)) {
             authToken = header.replace(Constants.TOKEN_PREFIX, "");
             try {
-                Claims claims = tokenProvider.getClaimsFromToken(authToken);
+                claims = tokenProvider.getClaimsFromToken(authToken);
                 username = claims.getSubject();
             } catch (ExpiredJwtException e1) {
                 res.addHeader(Constants.EXCEPTION_MESSAGE_HEADER, "Token is expired.");
-                logger.warn("Exception={}", e1.getMessage());
+                log.warn(EXCEPTION_MSG_FORMAT, e1.getMessage());
             } catch (SignatureException e2) {
                 res.addHeader(Constants.EXCEPTION_MESSAGE_HEADER, "Token has wrong signature.");
-                logger.warn("Exception={}", e2.getMessage());
+                log.warn(EXCEPTION_MSG_FORMAT, e2.getMessage());
             } catch (MalformedJwtException e3) {
                 res.addHeader(Constants.EXCEPTION_MESSAGE_HEADER, "Token is malformed.");
-                logger.warn("Exception={}", e3.getMessage());
+                log.warn(EXCEPTION_MSG_FORMAT, e3.getMessage());
             } catch (IllegalArgumentException | UnsupportedJwtException e) {
                 res.addHeader(Constants.EXCEPTION_MESSAGE_HEADER, "Token is not supported.");
-                logger.warn("Exception={}", e.getMessage());
+                log.warn(EXCEPTION_MSG_FORMAT, e.getMessage());
             }
         } else {
-            logger.warn("couldn't find bearer string, will ignore the header");
+            log.info("couldn't find bearer string, will ignore the header");
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UsernamePasswordAuthenticationToken authentication = tokenProvider.getAuthentication(authToken);
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-            logger.info("authorized user: " + username + ", setting security context");
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (!tokenProvider.isUserDisabled(username)) {
+                UsernamePasswordAuthenticationToken authentication = tokenProvider.getAuthentication(claims);
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
+                log.info("authorized user: {}, setting security context", username);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                res.addHeader(Constants.EXCEPTION_MESSAGE_HEADER, "User disabled.");
+                log.warn("User with username: {} is disabled.", username);
+            }
         }
-
         chain.doFilter(req, res);
     }
 }

@@ -5,5 +5,5 @@ import ro.licence.cristian.persistence.model.BaseEntity;
 
 import java.io.Serializable;
 
-public interface BasicRepository<T extends BaseEntity<ID>, ID extends Serializable> extends JpaRepository<T, ID> {
+public interface BaseRepository<T extends BaseEntity<I>, I extends Serializable> extends JpaRepository<T, I> {
 }

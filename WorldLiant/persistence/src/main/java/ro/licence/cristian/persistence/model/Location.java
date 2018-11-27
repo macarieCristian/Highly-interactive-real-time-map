@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
-import java.io.Serializable;
 
 @Entity
 @Embeddable

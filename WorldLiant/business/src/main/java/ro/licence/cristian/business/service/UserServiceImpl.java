@@ -3,57 +3,80 @@ package ro.licence.cristian.business.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import ro.licence.cristian.business.dto.UserDto;
+import ro.licence.cristian.business.dto.AppUserDto;
 import ro.licence.cristian.business.exception.BusinessException;
 import ro.licence.cristian.business.exception.BusinessExceptionCode;
+import ro.licence.cristian.business.mapper.AppUserMapper;
+import ro.licence.cristian.business.validator.AppUserValidator;
 import ro.licence.cristian.persistence.model.AppUser;
+import ro.licence.cristian.persistence.model.Role;
+import ro.licence.cristian.persistence.model.enums.AccountStatusType;
+import ro.licence.cristian.persistence.model.enums.RoleType;
+import ro.licence.cristian.persistence.model.enums.StatusType;
 import ro.licence.cristian.persistence.repository.UserRepository;
 
-import java.util.List;
-import java.util.Optional;
+import javax.validation.constraints.NotNull;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private final static Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private AppUserMapper appUserMapper;
+
+    @Autowired
+    private AppUserValidator appUserValidator;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     @Override
-    public List<AppUser> getUsers() {
+    public List<AppUserDto> getUsers() {
         log.info("getUsers -- entered");
         List<AppUser> appUsers = userRepository.findAll();
-        log.info("getUsers: result={}", appUsers);
-        return appUsers;
-    }
-
-    private AppUser loadAppUser(final String username) throws BusinessException {
-        Optional<AppUser> optionalAppUser = userRepository.findAppUserByUsername(username);
-        return optionalAppUser
-                .orElseThrow(() -> new BusinessException(BusinessExceptionCode.USER_WITH_USERNAME_DOES_NOT_EXIST));
+        List<AppUserDto> appUserDtos = appUserMapper.entitiesToDtos(appUsers);
+        log.info("getUsers: result={}", appUserDtos);
+        return appUserDtos;
     }
 
     @Override
-    public UserDto findUserByUsername(final String username) throws BusinessException {
+    public AppUserDto findUserByUsername(final String username) throws BusinessException {
         log.info("findUserByUsername: username={}", username);
-        AppUser appUser = loadAppUser(username);
+        Optional<AppUser> optionalAppUser = userRepository.findAppUserByUsernameLocationsLoaded(username);
+        AppUser appUser = optionalAppUser
+                .orElseThrow(() -> new BusinessException(BusinessExceptionCode.USER_WITH_USERNAME_DOES_NOT_EXIST));
+        appUser.setRoles(new HashSet<>());
+        AppUserDto appUserDto = appUserMapper.entityToDto(appUser);
+        log.info("findUserByUsername: result={}", appUserDto);
+        return appUserDto;
+    }
 
-        //TODO userDto converter
-        UserDto userDto = UserDto.builder()
-                .id(appUser.getId())
-                .username(appUser.getUsername())
-                .password(appUser.getPassword())
-                .firstName(appUser.getFirstName())
-                .lastName(appUser.getLastName())
-                .role(appUser.getRoleType().name())
-                .build();
-        log.info("findUserByUsername: result={}", userDto);
-        return userDto;
+    @Override
+    public Boolean saveNewAppUser(@NotNull AppUserDto appUserDto) {
+        log.info("saveNewAppUser: username={}", appUserDto.getUsername());
+        AppUser appUser = appUserMapper.dtoToEntity(appUserDto);
+        appUserValidator.validate(appUser);
+        prepareNewAppUser(appUser);
+        AppUser result = userRepository.save(appUser);
+        log.info("saveNewAppUser: result={}", result);
+        return true;
+    }
+
+    private void prepareNewAppUser(@NotNull AppUser appUser) {
+        appUser.setPassword(bCryptPasswordEncoder.encode(appUser.getPassword()));
+        appUser.setAccountStatusType(AccountStatusType.ACTIVE);
+        appUser.setStatusType(StatusType.AVAILABLE);
+        Set<Role> roles = new HashSet<>();
+        Role basicRole = Role.builder().roleType(RoleType.ROLE_REGULAR_USER).build();
+        basicRole.setId(RoleType.ROLE_REGULAR_USER.getId());
+        roles.add(basicRole);
+        appUser.setRoles(roles);
     }
 }

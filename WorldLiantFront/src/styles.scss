@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: wild-youth;
+  src: url(assets/font/WildYouth.otf) format("opentype");
+}
+
+.title {
+  margin-top: 1vh;
+  color: white;
+  font-size: 2em;
+  text-shadow: 2px 2px black;
+  font-family: 'wild-youth', 'arial', sans-serif;
+}
+
+.simple-title {
+  margin-top: 1vh;
+  color: white;
+  font-size: 2em;
+  text-shadow: 2px 2px black;
+}
+
+

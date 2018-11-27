@@ -8,10 +8,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ro.licence.cristian.persistence.model.AppUser;
+import ro.licence.cristian.persistence.model.enums.AccountStatusType;
 import ro.licence.cristian.persistence.repository.UserRepository;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -19,11 +21,24 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        final Optional<AppUser> optionalAppUser = userRepository.findAppUserByUsername(username);
+    @Override
+    public UserDetails loadUserByUsername(String username) {
+        final Optional<AppUser> optionalAppUser = userRepository.findAppUserByUsernameRolesLoaded(username);
         final AppUser appUser = optionalAppUser.orElseThrow(() -> new UsernameNotFoundException("Invalid username or password."));
-        if(appUser.getRoleType() == null)
-            throw new RuntimeException("No role found.");
-        return new User(appUser.getUsername(), appUser.getPassword(), Arrays.asList(new SimpleGrantedAuthority(appUser.getRoleType().name())));
+        final List<SimpleGrantedAuthority> authorities = appUser.getRoles().stream()
+                .map(r -> new SimpleGrantedAuthority(r.getRoleType().name()))
+                .collect(Collectors.toList());
+        final Boolean enabled = appUser.getAccountStatusType().equals(AccountStatusType.ACTIVE);
+        return new User(appUser.getUsername(),
+                appUser.getPassword(),
+                enabled,
+                true,
+                true,
+                true,
+                authorities);
+    }
+
+    public Boolean isUserDisabled(String username) {
+        return userRepository.existsAppUserByUsernameEqualsAndAccountStatusTypeEquals(username, AccountStatusType.DISABLED);
     }
 }

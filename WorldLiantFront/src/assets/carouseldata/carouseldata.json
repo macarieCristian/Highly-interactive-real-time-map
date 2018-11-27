@@ -1,0 +1,29 @@
+{
+  "slidesData": [
+    {
+      "imgName": "paris.jpg",
+      "imgTitle": "Paris",
+      "imgQuote": "'Secrets travel fast in Paris.' - French emperor Napoleon Bonaparte"
+    },
+    {
+      "imgName": "london.jpg",
+      "imgTitle": "London",
+      "imgQuote": "'London is like a cold dark dream sometimes.' - Jean Rhys"
+    },
+    {
+      "imgName": "egypt.jpg",
+      "imgTitle": "Egypt",
+      "imgQuote": "'From the heights of these pyramids, forty centuries look down on us.' - Napoleon Bonaparte"
+    },
+    {
+      "imgName": "coast.jpg",
+      "imgTitle": "Sunset at the coast",
+      "imgQuote": "'Just living is not enough. One must have sunshine, freedom, and a little flower.' - Hans Christian Andersen"
+    },
+    {
+      "imgName": "city.jpg",
+      "imgTitle": "Big city at night",
+      "imgQuote": "'A city is not gauged by its length and width, but by the broadness of its vision and the height of its dreams.' - Herb Caen"
+    }
+  ]
+}

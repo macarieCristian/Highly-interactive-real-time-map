@@ -14,11 +14,11 @@ import java.io.Serializable;
 
 @Component
 public class JwtAuthenticationUnauthorizedEntryPoint implements AuthenticationEntryPoint, Serializable {
-    private final Logger logger = LoggerFactory.getLogger(JwtAuthenticationUnauthorizedEntryPoint.class);
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationUnauthorizedEntryPoint.class);
 
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        logger.warn("Unauthorized request, exception={}", e.getMessage());
+        log.warn("Unauthorized request, exception={}", e.getMessage());
         httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
     }
 }
