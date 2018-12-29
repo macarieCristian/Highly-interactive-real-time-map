@@ -3,10 +3,13 @@ package ro.licence.cristian.controller.resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ro.licence.cristian.business.dto.AppUserDto;
+import ro.licence.cristian.business.dto.AttachmentDto;
 import ro.licence.cristian.business.exception.BusinessException;
 import ro.licence.cristian.business.service.UserService;
 import ro.licence.cristian.persistence.model.AppUser;
@@ -54,8 +57,11 @@ public class UserController {
 
     //##################################################################################################################
 
-    @PostMapping("/register")
-    public ResponseEntity<Boolean> register(@RequestBody AppUserDto appUserDto) {
+    @PostMapping(value = "/register", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Boolean> register(@RequestPart(value = "profilePicture", required = false) MultipartFile profilePicture,
+                                            @RequestPart(value = "appUser") AppUserDto appUserDto) {
+        AttachmentDto attachmentDto = AttachmentDto.builder().content(profilePicture).build();
+        appUserDto.setProfilePicture(attachmentDto);
         return ResponseEntity.ok(userService.saveNewAppUser(appUserDto));
     }
 

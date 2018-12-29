@@ -74,6 +74,7 @@
   border-radius: 25px;
   text-transform: capitalize;
   text-shadow: 2px 2px black;
+  font-size: 1em;
   background-image: linear-gradient(to right, #4285f4 0%, #95caff 51%, #4285f4 100%);
   transition: 0.5s;
   background-size: 200% auto;
@@ -122,4 +123,8 @@
 
 .globe-animation:hover {
   transform: scale(1.1);
+}
+
+.custom-margin {
+  margin-top: 5vh;
 }

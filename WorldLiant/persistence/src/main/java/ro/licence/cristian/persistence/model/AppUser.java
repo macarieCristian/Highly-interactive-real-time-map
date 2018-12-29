@@ -49,6 +49,9 @@ public class AppUser extends BaseEntity<Long> {
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private Location homeLocation;
 
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private Attachment profilePicture;
+
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "app_user_id")
     private Set<Location> desiredLocations = new HashSet<>();

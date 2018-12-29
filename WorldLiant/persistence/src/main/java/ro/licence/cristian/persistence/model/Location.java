@@ -18,5 +18,6 @@ public class Location extends BaseEntity<Long> {
     private String longitude;
     private String latitude;
     private String country;
+    private String county;
     private String city;
 }

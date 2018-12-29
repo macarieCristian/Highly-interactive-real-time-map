@@ -11,7 +11,10 @@ import {LoginService} from './shared/service/login.service';
 import {HttpClientModule} from '@angular/common/http';
 import {RecaptchaModule} from 'angular-google-recaptcha';
 import {Constants} from './shared/constants/constants';
-import { SingupComponent } from './sing-up/singup.component';
+import {SingupComponent} from './sing-up/singup.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatDatepickerModule, MatNativeDateModule, MatStepperModule} from '@angular/material';
+import {NgSelectModule} from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -26,11 +29,19 @@ import { SingupComponent } from './sing-up/singup.component';
     MDBBootstrapModule.forRoot(),
     FormsModule,
     HttpClientModule,
+    MatStepperModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     RecaptchaModule.forRoot({
       siteKey: Constants.SITE_KEY,
     }),
+    BrowserAnimationsModule,
+    NgSelectModule,
   ],
-  providers: [LoginService],
+  providers: [
+    LoginService,
+    MatDatepickerModule,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

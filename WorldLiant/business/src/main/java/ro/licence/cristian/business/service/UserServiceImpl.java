@@ -10,6 +10,7 @@ import ro.licence.cristian.business.exception.BusinessException;
 import ro.licence.cristian.business.exception.BusinessExceptionCode;
 import ro.licence.cristian.business.mapper.AppUserMapper;
 import ro.licence.cristian.business.validator.AppUserValidator;
+import ro.licence.cristian.business.validator.config.AppUserValidationConfig;
 import ro.licence.cristian.persistence.model.AppUser;
 import ro.licence.cristian.persistence.model.Role;
 import ro.licence.cristian.persistence.model.enums.AccountStatusType;

@@ -24,10 +24,11 @@
   padding-top: 4%;
   padding-bottom: 8%;
   min-width: 445px;
+  height: 90vh;
   -webkit-box-shadow: -1px 4px 26px 11px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: -1px 4px 26px 11px rgba(0, 0, 0, 0.75);
   box-shadow: -1px 4px 26px 11px rgba(0, 0, 0, 0.75);
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.35);
 }
 
 .custom-color-img {
@@ -39,16 +40,36 @@
   background-image: linear-gradient(to right, #4285f4 0%, #95caff 51%, #4285f4 100%);
 }
 
+.header-style,
+.with-style {
+  font-family: 'wild-youth', 'arial', sans-serif;
+}
+
+.header-style,
 .input-text-style {
-  font-size: 1.6em;
+  font-size: 1.5em;
   color: white;
   text-shadow: 2px 2px black;
 }
 
+.stepper-style {
+  background: transparent;
+  padding-left: 2.5vw;
+  padding-right: 2.5vw;
+}
+
+.select-input-img-style,
 .input-img-style {
-  font-size: 2em;
+  //color: rgba(149, 202, 255, 0.8) !important;
+  color: black !important;
+  font-size: 2em !important;
   top: 0.3em;
   left: -0.1em;
+}
+
+.select-input-img-style {
+  top: 0.6em;
+  margin-left: .3em;
 }
 
 .input-label-text-style {
@@ -69,13 +90,95 @@
 }
 
 .error-text {
-  color: red;
-  text-shadow: 0 0 #841439;
-  background-color: rgba(255, 255, 255, 0.5);
+  color: #ff6d6d;
 }
 
+.character-counter-error,
+.character-counter-white,
 .character-counter {
   float: right;
-  color: white;
   text-shadow: 2px 2px black;
 }
+
+.character-counter-white {
+  color: white;
+}
+
+.character-counter-error {
+  color: #ff6d6d;
+}
+
+.valid-color-counter,
+.valid-color {
+  color: #88FF67;
+}
+
+.valid-color-counter {
+  float: right;
+}
+
+.custom-select-position {
+  padding-left: 2vw;
+  height: 6vh;
+  margin-bottom: 4vh;
+  margin-top: 2vh;
+}
+
+.datepicker-img-custom {
+  font-size: 2em;
+  margin-bottom: 1.2em;
+}
+
+.datepicker-custom-position {
+  margin-bottom: 4vh;
+}
+
+.input-file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.img-upload-custom {
+  border: 1px solid white;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  overflow: hidden;
+  height: auto;
+  width: auto;
+  min-width: 390px;
+}
+
+.inner-circle-custom {
+  height: 390px;
+  width: 390px;
+  min-width: 390px;
+  border: 3px dashed white;
+  border-radius: 50%;
+  box-shadow: 0px 0px 0px 99px rgba(0, 0, 0, 0.7);
+}
+
+.login-button {
+  border-radius: 25px;
+  text-transform: none;
+  font-size: 1em;
+  text-shadow: 2px 2px black;
+  background-image: linear-gradient(to right, #4285f4 0%, #95caff 51%, #4285f4 100%);
+  transition: 0.5s;
+  background-size: 200% auto;
+}
+
+.login-button:hover {
+  background-position: right center;
+}
+
+.login-button:active {
+  background: #95caff;
+}
+
+
+

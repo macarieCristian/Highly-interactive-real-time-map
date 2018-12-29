@@ -39,7 +39,7 @@
             <span class="title"><b>World Liant</b></span>
           </div>
 
-          <div class="md-form">
+          <div class="md-form custom-margin">
             <i style="color: black"
                class="fa fa-user-circle-o prefix input-img-style">
             </i>
@@ -52,29 +52,12 @@
                    #usernameControl="ngModel"
                    #username
                    required
-                   minlength="5"
-                   maxlength="25"
                    pattern="^[a-zA-Z0-9]+$"
                    class="form-control input-text-style"
-                   [class.isInvalid]="usernameControl.invalid && usernameControl.touched"
                    type="text">
-            <small class="character-counter">{{username.value.length}} / 25</small>
             <label style="color: white"
                    class="input-label-text-style"
                    for="username">Type your username</label>
-            <p style="height: 20px">
-              <small class="help-block error-text input-under-text-margin-style"
-                     *ngIf="usernameControl.invalid && usernameControl.touched && usernameControl.value != '' &&usernameControl.value != null">
-                Please enter a valid username.
-              </small>
-              <small class="input-under-text-style"
-                     *ngIf="usernameControl.value == null || usernameControl.value == ''">
-                Must contain only numbers and letters.
-              </small>
-              <small class="input-under-text-style" *ngIf="usernameControl.valid">
-                Valid username.
-              </small>
-            </p>
           </div>
 
           <div class="md-form">
@@ -89,32 +72,17 @@
                    [(ngModel)]="model.password"
                    #passwordControl="ngModel"
                    required
-                   minlength="4"
-                   maxlength="25"
                    pattern="^[a-zA-Z0-9.@*&$]+$"
                    class="form-control input-text-style"
-                   [class.isInvalid]="passwordControl.invalid && passwordControl.touched"
                    type="password">
             <label style="color: white"
                    class="input-label-text-style"
                    for="password">Type your password</label>
-            <p style="height: 20px">
-              <small class="help-block error-text input-under-text-margin-style"
-                     *ngIf="passwordControl.invalid && passwordControl.touched && passwordControl.value != '' &&passwordControl.value != null">
-                Please enter a valid password.
-              </small>
-              <small class="input-under-text-style"
-                     *ngIf="passwordControl.value == null || passwordControl.value == ''">
-                Must be at least 4 characters long.
-              </small>
-              <small class="input-under-text-style" *ngIf="passwordControl.valid">
-                Valid password.
-              </small>
-            </p>
           </div>
 
-          <div class="row justify-content-center">
+          <div class="row justify-content-center custom-margin">
             <recaptcha
+              style="opacity: 0.8"
               name="recaptcha"
               [(ngModel)]="recaptcha">
             </recaptcha>
@@ -129,7 +97,7 @@
           </div>
 
           <div class="text-center">
-            <small class="login-text">Don't have an account? <a routerLink="/sing-up"><b class="sign-up">Sing Up</b></a></small>
+            <small class="login-text">Don't have an account? <a routerLink="/sign-up"><b class="sign-up">Sign Up</b></a></small>
           </div>
 
         </form>

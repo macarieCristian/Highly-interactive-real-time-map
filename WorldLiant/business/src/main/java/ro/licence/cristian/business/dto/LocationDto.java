@@ -12,6 +12,7 @@ public class LocationDto extends BaseDto {
     private String longitude;
     private String latitude;
     private String country;
+    private String county;
     private String city;
 
 }

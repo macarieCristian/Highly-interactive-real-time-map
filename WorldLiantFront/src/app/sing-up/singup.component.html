@@ -2,7 +2,7 @@
 
   <div class="child-layer">
     <div class="view">
-      <img class="carousel-img" src="../../assets/img/sing-up.jpg">
+      <img class="carousel-img" src="../../assets/carouselImgs/coast.jpg">
       <div class="mask rgba-indigo-light waves-light"></div>
     </div>
     <div class="carousel-caption">
@@ -13,225 +13,530 @@
     </div>
   </div>
 
-  <div style="margin-top: 15vh" class="container-fluid">
+  <div style="margin-top: 5vh" class="container-fluid">
     <div class="row justify-content-center">
-      <div class="col-lg-4">
+      <div class="col-md-5">
         <form autocomplete="off"
-              #loginForm="ngForm"
+              #signUpForm="ngForm"
               class="form-container">
 
-          <div class="row justify-content-center">
+          <div class="row justify-content-center" style="margin-bottom: 3vh">
             <span class="title"><b>Create new account</b></span>
           </div>
 
-          <mdb-carousel [isControls]="true"
-                        class="carousel slide"
-                        [interval]="0"
-                        [animation]="'slide'">
+          <mat-horizontal-stepper class="stepper-style" [linear]="false">
+            <mat-step>
+              <div class="row justify-content-center">
+                <div class="col-md-9">
 
-            <mdb-carousel-item class="sing-up-carousel justify-content-center">
+                  <ng-template matStepLabel>
+                    <span class="input-text-style">Personal info</span>
+                  </ng-template>
 
-              <div class="row d-block">
+                  <div class="md-form">
+                    <i class="fa fa-user-circle-o prefix input-img-style"></i>
+                    <input mdbInputDirective
+                           id="firstName"
+                           name="firstName"
+                           [mdbValidate]="false"
+                           style="box-shadow: unset"
+                           class="form-control input-text-style"
+                           [(ngModel)]="model.firstName"
+                           #firstNameControl="ngModel"
+                           #firstName
+                           required
+                           minlength="5"
+                           maxlength="25"
+                           pattern="^[a-zA-Z]+$"
+                           [style.border-bottom-color]="!firstNameControl.invalid ? '#88FF67' :
+                        !firstNameControl.touched || firstNameControl.value == '' || firstNameControl.value == null ? 'white' : '#ff6d6d'"
+                           [class.isInvalid]="firstNameControl.invalid && firstNameControl.touched"
+                           type="text">
+                    <small [class]="firstName.value.length >= 5 ? 'valid-color-counter' :
+                !firstNameControl.touched || firstNameControl.value == '' || firstNameControl.value == null ? 'character-counter-white' : 'character-counter-error'">
+                      {{firstName.value.length}} / 25
+                    </small>
+                    <label style="color: white"
+                           class="input-label-text-style"
+                           for="firstName">First name...</label>
+                    <p style="height: 20px">
+                      <small class="help-block error-text input-under-text-margin-style"
+                             *ngIf="firstNameControl.invalid && firstNameControl.touched && firstNameControl.value != '' &&firstNameControl.value != null">
+                        Please enter a valid first name.
+                      </small>
+                      <small class="input-under-text-style"
+                             *ngIf="firstNameControl.value == null || firstNameControl.value == ''">
+                        Letters only and at least 5 characters long.
+                      </small>
+                      <small class="input-under-text-style valid-color" *ngIf="firstNameControl.valid">
+                        Valid first name.
+                      </small>
+                    </p>
+                  </div>
 
-                <div class="md-form">
-                  <i style="color: #d1f1ff" class="fa fa-user-circle-o prefix input-img-style">
-                  </i>
-                  <input mdbInputDirective
-                         id="firstName"
-                         name="firstName"
-                         [mdbValidate]="false"
-                         style="border-bottom-color: white; box-shadow: unset"
-                         [(ngModel)]="model.firstName"
-                         #firstNameControl="ngModel"
-                         #firstName
-                         required
-                         minlength="5"
-                         maxlength="25"
-                         pattern="^[a-zA-Z0-9]+$"
-                         class="form-control input-text-style"
-                         [class.isInvalid]="firstNameControl.invalid && firstNameControl.touched"
-                         type="text">
-                  <small class="character-counter">{{firstName.value.length}} / 25</small>
-                  <label style="color: white"
-                         class="input-label-text-style"
-                         for="firstName">First name...</label>
-                  <p style="height: 20px">
-                    <small class="help-block error-text input-under-text-margin-style"
-                           *ngIf="firstNameControl.invalid && firstNameControl.touched && firstNameControl.value != '' &&firstNameControl.value != null">
-                      Please enter a valid first name.
+                  <div class="md-form">
+                    <i class="fa fa-user-circle-o prefix input-img-style"></i>
+                    <input mdbInputDirective
+                           id="lastName"
+                           name="lastName"
+                           [mdbValidate]="false"
+                           style="box-shadow: unset"
+                           class="form-control input-text-style"
+                           [(ngModel)]="model.lastName"
+                           #lastNameControl="ngModel"
+                           #lastName
+                           required
+                           minlength="5"
+                           maxlength="25"
+                           pattern="^[a-zA-Z]+$"
+                           [style.border-bottom-color]="!lastNameControl.invalid ? '#88FF67' :
+                        !lastNameControl.touched || lastNameControl.value == '' || lastNameControl.value == null ? 'white' : '#ff6d6d'"
+                           [class.isInvalid]="lastNameControl.invalid && lastNameControl.touched"
+                           type="text">
+                    <small [class]="lastName.value.length >= 5 ? 'valid-color-counter' :
+                !lastNameControl.touched || lastNameControl.value == '' || lastNameControl.value == null ? 'character-counter-white' : 'character-counter-error'">
+                      {{lastName.value.length}} / 25
                     </small>
-                    <small class="input-under-text-style"
-                           *ngIf="firstNameControl.value == null || firstNameControl.value == ''">
-                      Must contain only numbers and letters.
-                    </small>
-                    <small class="input-under-text-style" *ngIf="firstNameControl.valid">
-                      Valid first name.
-                    </small>
-                  </p>
-                </div>
+                    <label style="color: white"
+                           class="input-label-text-style"
+                           for="lastName">Last name...</label>
+                    <p style="height: 20px">
+                      <small class="help-block error-text input-under-text-margin-style"
+                             *ngIf="lastNameControl.invalid && lastNameControl.touched && lastNameControl.value != '' &&lastNameControl.value != null">
+                        Please enter a valid last name.
+                      </small>
+                      <small class="input-under-text-style"
+                             *ngIf="lastNameControl.value == null || lastNameControl.value == ''">
+                        Letters only and at least 5 characters long.
+                      </small>
+                      <small class="input-under-text-style valid-color" *ngIf="lastNameControl.valid">
+                        Valid last name.
+                      </small>
+                    </p>
+                  </div>
 
-                <div class="md-form">
-                  <i style="color: #d1f1ff" class="fa fa-user-circle-o prefix input-img-style">
-                  </i>
-                  <input mdbInputDirective
-                         id="lastName"
-                         name="lastName"
-                         [mdbValidate]="false"
-                         style="border-bottom-color: white; box-shadow: unset"
-                         [(ngModel)]="model.lastName"
-                         #lastNameControl="ngModel"
-                         #lastName
-                         required
-                         minlength="5"
-                         maxlength="25"
-                         pattern="^[a-zA-Z0-9]+$"
-                         class="form-control input-text-style"
-                         [class.isInvalid]="lastNameControl.invalid && lastNameControl.touched"
-                         type="text">
-                  <small class="character-counter">{{lastName.value.length}} / 25</small>
-                  <label style="color: white"
-                         class="input-label-text-style"
-                         for="lastName">Last name...</label>
-                  <p style="height: 20px">
-                    <small class="help-block error-text input-under-text-margin-style"
-                           *ngIf="lastNameControl.invalid && lastNameControl.touched && lastNameControl.value != '' &&lastNameControl.value != null">
-                      Please enter a valid last name.
-                    </small>
-                    <small class="input-under-text-style"
-                           *ngIf="lastNameControl.value == null || lastNameControl.value == ''">
-                      Must contain only numbers and letters.
-                    </small>
-                    <small class="input-under-text-style" *ngIf="lastNameControl.valid">
-                      Valid last name.
-                    </small>
-                  </p>
-                </div>
+                  <div class="md-form datepicker-custom-position">
+                    <mat-datepicker-toggle matSuffix
+                                           class="prefix input-img-style"
+                                           [for]="dp">
+                      <i matDatepickerToggleIcon class="fa fa-calendar datepicker-img-custom"></i>
+                    </mat-datepicker-toggle>
+                    <input mdbInputDirective
+                           id="dateOfBirth"
+                           name="dateOfBirth"
+                           readonly
+                           (click)="dp.open()"
+                           [mdbValidate]="false"
+                           style="box-shadow: unset; cursor: pointer"
+                           [style.border-bottom-color]="!dateOfBirthControl.touched || dateOfBirthControl.value == '' || dateOfBirthControl.value == null ?
+                            'white' : dateOfBirthControl.value != '' ? '#88FF67' : '#ff6d6d'"
+                           class="form-control input-text-style"
+                           [(ngModel)]="model.dateOfBirth"
+                           #dateOfBirth
+                           #dateOfBirthControl="ngModel"
+                           required
+                           [matDatepicker]="dp"
+                           type="text">
+                    <label style="color: white; cursor: pointer"
+                           class="input-label-text-style"
+                           for="dateOfBirth">Date of birth...</label>
+                    <mat-datepicker #dp disabled="false"></mat-datepicker>
+                  </div>
 
+                  <div class="md-form custom-select-position">
+                    <i class="fa fa-male prefix select-input-img-style"></i>
+                    <ng-select bindLabel="message"
+                               bindValue="value"
+                               [searchable]="false"
+                               [clearable]="false"
+                               #genderSelectControl="ngModel"
+                               id="genderSelect"
+                               name="genderSelect"
+                               required
+                               placeholder="Gender..."
+                               [(ngModel)]="model.gender"
+                               [items]="genders">
+                    </ng-select>
+                  </div>
 
-                <div class="md-form">
-                  <i style="color: #d1f1ff" class="fa fa-envelope prefix input-img-style">
-                  </i>
-                  <input mdbInputDirective
-                         id="email"
-                         name="email"
-                         [mdbValidate]="false"
-                         style="border-bottom-color: white; box-shadow: unset"
-                         [(ngModel)]="model.email"
-                         #emailControl="ngModel"
-                         #email
-                         required
-                         minlength="5"
-                         maxlength="25"
-                         pattern="^[a-zA-Z0-9]+$"
-                         class="form-control input-text-style"
-                         [class.isInvalid]="emailControl.invalid && emailControl.touched"
-                         type="text">
-                  <small class="character-counter">{{email.value.length}} / 25</small>
-                  <label style="color: white"
-                         class="input-label-text-style"
-                         for="email">Email...</label>
-                  <p style="height: 20px">
-                    <small class="help-block error-text input-under-text-margin-style"
-                           *ngIf="emailControl.invalid && emailControl.touched && emailControl.value != '' &&emailControl.value != null">
-                      Please enter a valid last name.
+                  <div class="md-form">
+                    <i class="fa fa-envelope prefix input-img-style"></i>
+                    <input mdbInputDirective
+                           id="email"
+                           name="email"
+                           [mdbValidate]="false"
+                           style="box-shadow: unset"
+                           class="form-control input-text-style"
+                           [(ngModel)]="model.email"
+                           #emailControl="ngModel"
+                           #email
+                           required
+                           minlength="15"
+                           maxlength="40"
+                           pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9]+\.[a-zA-Z]+$"
+                           [style.border-bottom-color]="!emailControl.invalid ? '#88FF67' :
+                        !emailControl.touched || emailControl.value == '' || emailControl.value == null ? 'white' : '#ff6d6d'"
+                           [class.isInvalid]="emailControl.invalid && emailControl.touched"
+                           type="email">
+                    <small [class]="email.value.length >= 15 ? 'valid-color-counter' :
+                !emailControl.touched || emailControl.value == '' || emailControl.value == null ? 'character-counter-white' : 'character-counter-error'">
+                      {{email.value.length}} / 40
                     </small>
-                    <small class="input-under-text-style"
-                           *ngIf="emailControl.value == null || emailControl.value == ''">
-                      Must contain only numbers and letters.
-                    </small>
-                    <small class="input-under-text-style" *ngIf="emailControl.valid">
-                      Valid last name.
-                    </small>
-                  </p>
-                </div>
+                    <label style="color: white"
+                           class="input-label-text-style"
+                           for="email">Email...</label>
+                    <p style="height: 20px">
+                      <small class="help-block error-text input-under-text-margin-style"
+                             *ngIf="emailControl.invalid && emailControl.touched && emailControl.value != '' &&emailControl.value != null">
+                        Please enter a valid email, (ex: mcie1@gmail.com).
+                      </small>
+                      <small class="input-under-text-style"
+                             *ngIf="emailControl.value == null || emailControl.value == ''">
+                        Letters, numbers and special characters.
+                      </small>
+                      <small class="input-under-text-style valid-color" *ngIf="emailControl.valid">
+                        Valid email.
+                      </small>
+                    </p>
+                  </div>
 
-                <div class="md-form">
-                  <i style="color: #d1f1ff" class="fa fa-phone prefix input-img-style">
-                  </i>
-                  <input mdbInputDirective
-                         id="phone"
-                         name="phone"
-                         [mdbValidate]="false"
-                         style="border-bottom-color: white; box-shadow: unset"
-                         [(ngModel)]="model.phone"
-                         #phoneControl="ngModel"
-                         #phone
-                         required
-                         minlength="5"
-                         maxlength="25"
-                         pattern="^[a-zA-Z0-9]+$"
-                         class="form-control input-text-style"
-                         [class.isInvalid]="phoneControl.invalid && phoneControl.touched"
-                         type="text">
-                  <small class="character-counter">{{phone.value.length}} / 25</small>
-                  <label style="color: white"
-                         class="input-label-text-style"
-                         for="phone">Phone number...</label>
-                  <p style="height: 20px">
-                    <small class="help-block error-text input-under-text-margin-style"
-                           *ngIf="phoneControl.invalid && phoneControl.touched && phoneControl.value != '' &&phoneControl.value != null">
-                      Please enter a valid last name.
+                  <div class="md-form">
+                    <i class="fa fa-phone prefix input-img-style"></i>
+                    <input mdbInputDirective
+                           id="phone"
+                           name="phone"
+                           [mdbValidate]="false"
+                           style="box-shadow: unset"
+                           class="form-control input-text-style"
+                           [(ngModel)]="model.phone"
+                           #phoneControl="ngModel"
+                           #phone
+                           required
+                           minlength="10"
+                           maxlength="10"
+                           pattern="^[0-9]+$"
+                           [style.border-bottom-color]="!phoneControl.invalid ? '#88FF67' :
+                        !phoneControl.touched || phoneControl.value == '' || phoneControl.value == null ? 'white' : '#ff6d6d'"
+                           [class.isInvalid]="phoneControl.invalid && phoneControl.touched"
+                           type="text">
+                    <small [class]="phone.value.length >= 10 ? 'valid-color-counter' :
+                !phoneControl.touched || phoneControl.value == '' || phoneControl.value == null ? 'character-counter-white' : 'character-counter-error'">
+                      {{phone.value.length}} / 10
                     </small>
-                    <small class="input-under-text-style"
-                           *ngIf="phoneControl.value == null || phoneControl.value == ''">
-                      Must contain only numbers and letters.
-                    </small>
-                    <small class="input-under-text-style" *ngIf="phoneControl.valid">
-                      Valid last name.
-                    </small>
-                  </p>
+                    <label style="color: white"
+                           class="input-label-text-style"
+                           for="phone">Phone number...</label>
+                    <p style="height: 20px">
+                      <small class="help-block error-text input-under-text-margin-style"
+                             *ngIf="phoneControl.invalid && phoneControl.touched && phoneControl.value != '' &&phoneControl.value != null">
+                        Please enter a valid phone number.
+                      </small>
+                      <small class="input-under-text-style"
+                             *ngIf="phoneControl.value == null || phoneControl.value == ''">
+                        Must contain only digits.
+                      </small>
+                      <small class="input-under-text-style valid-color" *ngIf="phoneControl.valid">
+                        Valid phone number.
+                      </small>
+                    </p>
+                  </div>
                 </div>
               </div>
+            </mat-step>
 
+            <mat-step>
+              <div class="row justify-content-center">
+                <div class="col-md-9">
 
-            </mdb-carousel-item>
+                  <ng-template matStepLabel>
+                    <span class="input-text-style">Account info</span>
+                  </ng-template>
 
-            <mdb-carousel-item class="sing-up-carousel justify-content-center">
-
-              <div class="row d-block">
-
-                <div class="md-form">
-                  <i style="color: #d1f1ff" class="fa fa-user-circle-o prefix input-img-style">
-                  </i>
-                  <input mdbInputDirective
-                         id="username"
-                         name="username"
-                         [mdbValidate]="false"
-                         style="border-bottom-color: white; box-shadow: unset"
-                         [(ngModel)]="model.username"
-                         #usernameControl="ngModel"
-                         #username
-                         required
-                         minlength="5"
-                         maxlength="25"
-                         pattern="^[a-zA-Z0-9]+$"
-                         class="form-control input-text-style"
-                         [class.isInvalid]="usernameControl.invalid && usernameControl.touched"
-                         type="text">
-                  <small class="character-counter">{{username.value.length}} / 25</small>
-                  <label style="color: white"
-                         class="input-label-text-style"
-                         for="username">Username...</label>
-                  <p style="height: 20px">
-                    <small class="help-block error-text input-under-text-margin-style"
-                           *ngIf="usernameControl.invalid && usernameControl.touched && usernameControl.value != '' &&usernameControl.value != null">
-                      Please enter a valid first name.
+                  <div class="md-form">
+                    <i class="fa fa-user-circle-o prefix input-img-style"></i>
+                    <input mdbInputDirective
+                           id="username"
+                           name="username"
+                           [mdbValidate]="false"
+                           style="box-shadow: unset"
+                           class="form-control input-text-style"
+                           [(ngModel)]="model.username"
+                           #usernameControl="ngModel"
+                           #username
+                           required
+                           minlength="5"
+                           maxlength="20"
+                           pattern="^[a-zA-Z0-9]+$"
+                           [style.border-bottom-color]="!usernameControl.invalid ? '#88FF67' :
+                        !usernameControl.touched || usernameControl.value == '' || usernameControl.value == null ? 'white' : '#ff6d6d'"
+                           [class.isInvalid]="usernameControl.invalid && usernameControl.touched"
+                           type="text">
+                    <small [class]="username.value.length >= 5 ? 'valid-color-counter' :
+                !usernameControl.touched || usernameControl.value == '' || usernameControl.value == null ? 'character-counter-white' : 'character-counter-error'">
+                      {{username.value.length}} / 20
                     </small>
-                    <small class="input-under-text-style"
-                           *ngIf="usernameControl.value == null || usernameControl.value == ''">
-                      Must contain only numbers and letters.
+                    <label style="color: white"
+                           class="input-label-text-style"
+                           for="username">Username...</label>
+                    <p style="height: 20px">
+                      <small class="help-block error-text input-under-text-margin-style"
+                             *ngIf="usernameControl.invalid && usernameControl.touched && usernameControl.value != '' &&usernameControl.value != null">
+                        Please enter a valid username.
+                      </small>
+                      <small class="input-under-text-style"
+                             *ngIf="usernameControl.value == null || usernameControl.value == ''">
+                        Must contain letters and characters.
+                      </small>
+                      <small class="input-under-text-style valid-color" *ngIf="usernameControl.valid">
+                        Valid username.
+                      </small>
+                    </p>
+                  </div>
+
+                  <div class="md-form">
+                    <i style="left: 0.1em"
+                       class="fa fa-lock prefix input-img-style"></i>
+                    <input mdbInputDirective
+                           id="password"
+                           name="password"
+                           [mdbValidate]="false"
+                           style="box-shadow: unset"
+                           class="form-control input-text-style"
+                           [(ngModel)]="model.password"
+                           #passwordControl="ngModel"
+                           #password
+                           required
+                           minlength="4"
+                           maxlength="20"
+                           pattern="^[a-zA-Z0-9]+$"
+                           [style.border-bottom-color]="!passwordControl.invalid ? '#88FF67' :
+                        !passwordControl.touched || passwordControl.value == '' || passwordControl.value == null ? 'white' : '#ff6d6d'"
+                           [class.isInvalid]="passwordControl.invalid && passwordControl.touched"
+                           type="password">
+                    <small [class]="password.value.length >= 4 ? 'valid-color-counter' :
+                !passwordControl.touched || passwordControl.value == '' || passwordControl.value == null ? 'character-counter-white' : 'character-counter-error'">
+                      {{password.value.length}} / 20
                     </small>
-                    <small class="input-under-text-style" *ngIf="usernameControl.valid">
-                      Valid first name.
+                    <label style="color: white"
+                           class="input-label-text-style"
+                           for="password">Password...</label>
+                    <p style="height: 20px">
+                      <small class="help-block error-text input-under-text-margin-style"
+                             *ngIf="passwordControl.invalid && passwordControl.touched && passwordControl.value != '' &&passwordControl.value != null">
+                        Please enter a valid password.
+                      </small>
+                      <small class="input-under-text-style"
+                             *ngIf="passwordControl.value == null || passwordControl.value == ''">
+                        Must contain letters and characters.
+                      </small>
+                      <small class="input-under-text-style valid-color" *ngIf="passwordControl.valid">
+                        Valid password.
+                      </small>
+                    </p>
+                  </div>
+
+                  <div class="md-form">
+                    <i style="left: 0.1em"
+                       class="fa fa-lock prefix input-img-style"></i>
+                    <input mdbInputDirective
+                           id="rePassword"
+                           name="rePassword"
+                           [mdbValidate]="false"
+                           style="box-shadow: unset"
+                           class="form-control input-text-style"
+                           [(ngModel)]="rePass"
+                           #rePasswordControl="ngModel"
+                           #rePassword
+                           required
+                           [pattern]="'^' + passwordControl.value + '$' "
+                           pattern="^[a-zA-Z0-9]+$"
+                           [style.border-bottom-color]="!rePasswordControl.invalid ? '#88FF67' :
+                        !rePasswordControl.touched || rePasswordControl.value == '' || rePasswordControl.value == null ? 'white' : '#ff6d6d'"
+                           type="password">
+                    <small [class]="rePassword.value.length >= 4 ? 'valid-color-counter' :
+                !rePasswordControl.touched || rePasswordControl.value == '' || rePasswordControl.value == null ? 'character-counter-white' : 'character-counter-error'">
+                      {{rePassword.value.length}} / 20
                     </small>
-                  </p>
+                    <label style="color: white"
+                           class="input-label-text-style"
+                           for="rePassword">Enter the password again...</label>
+                    <p style="height: 20px">
+                      <small class="help-block error-text input-under-text-margin-style"
+                             *ngIf="rePasswordControl.invalid && rePasswordControl.touched && rePasswordControl.value != '' &&rePasswordControl.value != null">
+                        Passwords do not match.
+                      </small>
+                      <small class="input-under-text-style"
+                             *ngIf="rePasswordControl.value == null || rePasswordControl.value == ''">
+                        Must be the same password.
+                      </small>
+                      <small class="input-under-text-style valid-color" *ngIf="rePasswordControl.valid">
+                        Valid password.
+                      </small>
+                    </p>
+                  </div>
+
+                  <div class="md-form">
+                    <i class="fa fa-map-o prefix input-img-style"></i>
+                    <input mdbInputDirective
+                           id="country"
+                           name="country"
+                           [mdbValidate]="false"
+                           style="box-shadow: unset"
+                           class="form-control input-text-style"
+                           [(ngModel)]="model.homeLocation.country"
+                           #countryControl="ngModel"
+                           #country
+                           required
+                           pattern="^[a-z \-A-Z]+$"
+                           [style.border-bottom-color]="!countryControl.invalid ? '#88FF67' :
+                        !countryControl.touched || countryControl.value == '' || countryControl.value == null ? 'white' : '#ff6d6d'"
+                           [class.isInvalid]="countryControl.invalid && countryControl.touched"
+                           type="text">
+                    <label style="color: white"
+                           class="input-label-text-style"
+                           for="country">Country...</label>
+                    <p style="height: 20px">
+                      <small class="help-block error-text input-under-text-margin-style"
+                             *ngIf="countryControl.invalid && countryControl.touched && countryControl.value != '' &&countryControl.value != null">
+                        Please enter a valid country.
+                      </small>
+                      <small class="input-under-text-style"
+                             *ngIf="countryControl.value == null || countryControl.value == ''">
+                        Must contain only letters.
+                      </small>
+                      <small class="input-under-text-style valid-color" *ngIf="countryControl.valid">
+                        Valid country name.
+                      </small>
+                    </p>
+                  </div>
+
+                  <div class="md-form">
+                    <i class="fa fa-map-signs prefix input-img-style"></i>
+                    <input mdbInputDirective
+                           id="county"
+                           name="county"
+                           [mdbValidate]="false"
+                           style="box-shadow: unset"
+                           class="form-control input-text-style"
+                           [(ngModel)]="model.homeLocation.county"
+                           #countyControl="ngModel"
+                           #county
+                           required
+                           pattern="^[a-z \-A-Z]+$"
+                           [style.border-bottom-color]="!countyControl.invalid ? '#88FF67' :
+                        !countyControl.touched || countyControl.value == '' || countyControl.value == null ? 'white' : '#ff6d6d'"
+                           [class.isInvalid]="countyControl.invalid && countyControl.touched"
+                           type="text">
+                    <label style="color: white"
+                           class="input-label-text-style"
+                           for="county">County...</label>
+                    <p style="height: 20px">
+                      <small class="help-block error-text input-under-text-margin-style"
+                             *ngIf="countyControl.invalid && countyControl.touched && countyControl.value != '' &&countyControl.value != null">
+                        Please enter a valid county.
+                      </small>
+                      <small class="input-under-text-style"
+                             *ngIf="countyControl.value == null || countyControl.value == ''">
+                        Must contain only letters.
+                      </small>
+                      <small class="input-under-text-style valid-color" *ngIf="countyControl.valid">
+                        Valid county name.
+                      </small>
+                    </p>
+                  </div>
+
+                  <div class="md-form">
+                    <i class="fa fa-building prefix input-img-style"></i>
+                    <input mdbInputDirective
+                           id="city"
+                           name="city"
+                           [mdbValidate]="false"
+                           style="box-shadow: unset"
+                           class="form-control input-text-style"
+                           [(ngModel)]="model.homeLocation.city"
+                           #cityControl="ngModel"
+                           #city
+                           required
+                           pattern="^[a-z \-A-Z]+$"
+                           [style.border-bottom-color]="!cityControl.invalid ? '#88FF67' :
+                        !cityControl.touched || cityControl.value == '' || cityControl.value == null ? 'white' : '#ff6d6d'"
+                           [class.isInvalid]="cityControl.invalid && cityControl.touched"
+                           type="text">
+                    <label style="color: white"
+                           class="input-label-text-style"
+                           for="city">City...</label>
+                    <p style="height: 20px">
+                      <small class="help-block error-text input-under-text-margin-style"
+                             *ngIf="cityControl.invalid && cityControl.touched && cityControl.value != '' &&cityControl.value != null">
+                        Please enter a valid city.
+                      </small>
+                      <small class="input-under-text-style"
+                             *ngIf="cityControl.value == null || cityControl.value == ''">
+                        Must contain only letters.
+                      </small>
+                      <small class="input-under-text-style valid-color" *ngIf="cityControl.valid">
+                        Valid city name.
+                      </small>
+                    </p>
+                  </div>
+
                 </div>
-
               </div>
+            </mat-step>
 
-            </mdb-carousel-item>
+            <mat-step>
+              <div class="row justify-content-center">
+                <div class="col-md-9">
 
-          </mdb-carousel>
+                  <ng-template matStepLabel>
+                    <span class="input-text-style">Last step</span>
+                  </ng-template>
+
+                  <!--<div class="md-form">-->
+                  <!--<div class="row justify-content-center">-->
+                  <!--<div class="col-md-9">-->
+                  <!--<image-upload [class]="'img-upload-custom'"></image-upload>-->
+                  <!--</div>-->
+                  <!--</div>-->
+                  <!--</div>-->
+
+                  <div class="row justify-content-center">
+                    <label mdbBtn
+                           style="margin-top: 5vh"
+                           class="login-button"
+                           for="profilePicture">
+                      <i class="fa fa-image"></i>
+                      Choose a profile picture
+                    </label>
+                    <input type="file"
+                           class="input-file"
+                           id="profilePicture"
+                           name="profilePicture"
+                           (change)="uploadImg($event)"
+                           accept="image/*">
+                    <div class="img-upload-custom"
+                         [style.background-image]=" imageSrc ? 'url(' + imageSrc + ')' : 'url(\'../../assets/img/placeholder_profile_picture.jpg\')'">
+                      <div class="inner-circle-custom"></div>
+                    </div>
+                  </div>
+
+                  <div class="row justify-content-center">
+                    <button mdbBtn
+                            style="margin-top: 5vh"
+                            class="login-button"
+                            (click)="signUp()">SignUp</button>
+                  </div>
+
+
+                  <!--<button [disabled]="signUpForm.invalid" class="btn btn-primary" (click)="signUp()">clickMe</button>-->
+
+
+                </div>
+              </div>
+            </mat-step>
+
+          </mat-horizontal-stepper>
+
 
         </form>
       </div>
@@ -239,3 +544,4 @@
   </div>
 
 </div>
+
