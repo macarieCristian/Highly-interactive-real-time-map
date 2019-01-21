@@ -25,7 +25,7 @@ public class AuthenticationController {
     private TokenProvider tokenProvider;
 
     @PostMapping(value = "/login")
-    public ResponseEntity<TokenDto> register(@RequestBody AppUserCredentialsDto appUserCredentialsDto) {
+    public ResponseEntity<TokenDto> login(@RequestBody AppUserCredentialsDto appUserCredentialsDto) {
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         appUserCredentialsDto.getUsername(),

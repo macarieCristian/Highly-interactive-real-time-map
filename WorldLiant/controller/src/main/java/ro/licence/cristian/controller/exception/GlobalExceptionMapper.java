@@ -1,5 +1,6 @@
 package ro.licence.cristian.controller.exception;
 
+import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -14,12 +15,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
+@Log4j2
 public class GlobalExceptionMapper extends ResponseEntityExceptionHandler {
-    private final Logger log = LoggerFactory.getLogger(GlobalExceptionMapper.class);
 
     @ExceptionHandler({Exception.class})
     protected ResponseEntity<Object> handleConflict(Exception ex, WebRequest request) {
         log.warn("Caught exception={}", ex.getMessage());
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 }

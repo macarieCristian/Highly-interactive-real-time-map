@@ -3,7 +3,10 @@ import {AppUser} from '../shared/model/app-user';
 import {Constants} from '../shared/constants/constants';
 import {LocationCustom} from '../shared/model/location-custom';
 import {LoginService} from '../shared/service/login.service';
-import {AttachmentCustom} from '../shared/model/attachment-custom';
+import {ToastrUtilService} from '../shared/service/toastr-util.service';
+import {Router} from '@angular/router';
+import {ClientUrls} from '../shared/constants/client-urls';
+import {UtilityService} from '../shared/service/utility.service';
 
 @Component({
   selector: 'app-singup',
@@ -17,7 +20,10 @@ export class SingupComponent implements OnInit {
   imageSrc: string;
   imageFile: File;
 
-  constructor(private loginService: LoginService) {
+  constructor(private loginService: LoginService,
+              private router: Router,
+              private utilityService: UtilityService,
+              private toastrUtil: ToastrUtilService) {
   }
 
   ngOnInit() {
@@ -26,19 +32,22 @@ export class SingupComponent implements OnInit {
   }
 
   signUp() {
-    this.loginService.getReverseGeocoding(this.model.homeLocation.country,
-                                          this.model.homeLocation.county,
-                                          this.model.homeLocation.city)
+    this.utilityService.getReverseGeocoding(this.model.homeLocation.country,
+      this.model.homeLocation.county,
+      this.model.homeLocation.city)
       .subscribe(res => {
         console.log(res);
         if (res.length === 0) {
-          alert('Your location does not exists!');
+          this.toastrUtil.displayErrorToastr('Location error', 'The location you entered does not exist.');
         } else {
           this.model.homeLocation.longitude = res[0].lon;
           this.model.homeLocation.latitude = res[0].lat;
           console.log(this.model);
           this.loginService.signUp(this.model, this.imageFile)
-            .subscribe(result => console.log(result),
+            .subscribe(result => {
+              console.log(result);
+              this.router.navigateByUrl(ClientUrls.LOGIN_PAGE);
+            },
               err => console.log(err));
         }
       });
@@ -53,5 +62,9 @@ export class SingupComponent implements OnInit {
       };
       reader.readAsDataURL(this.imageFile);
     }
+  }
+
+  displayFormError() {
+    this.toastrUtil.displayErrorToastr('Input not valid', 'Some fields are not valid, please cheek them again.');
   }
 }

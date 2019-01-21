@@ -18,6 +18,7 @@
       <div class="col-md-5">
         <form autocomplete="off"
               #signUpForm="ngForm"
+              (ngSubmit)="signUpForm.form.valid && signUp()"
               class="form-container">
 
           <div class="row justify-content-center" style="margin-bottom: 3vh">
@@ -492,14 +493,6 @@
                     <span class="input-text-style">Last step</span>
                   </ng-template>
 
-                  <!--<div class="md-form">-->
-                  <!--<div class="row justify-content-center">-->
-                  <!--<div class="col-md-9">-->
-                  <!--<image-upload [class]="'img-upload-custom'"></image-upload>-->
-                  <!--</div>-->
-                  <!--</div>-->
-                  <!--</div>-->
-
                   <div class="row justify-content-center">
                     <label mdbBtn
                            style="margin-top: 5vh"
@@ -522,14 +515,15 @@
 
                   <div class="row justify-content-center">
                     <button mdbBtn
+                            *ngIf="signUpForm.form.valid"
                             style="margin-top: 5vh"
-                            class="login-button"
-                            (click)="signUp()">SignUp</button>
+                            class="login-button">SignUp</button>
+                    <button mdbBtn
+                            *ngIf="!signUpForm.form.valid"
+                            style="margin-top: 5vh"
+                            (click)="displayFormError()"
+                            class="login-button">SignUp</button>
                   </div>
-
-
-                  <!--<button [disabled]="signUpForm.invalid" class="btn btn-primary" (click)="signUp()">clickMe</button>-->
-
 
                 </div>
               </div>

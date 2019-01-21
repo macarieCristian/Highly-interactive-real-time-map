@@ -3,6 +3,11 @@ import {Router} from '@angular/router';
 import {AppUserCredentials} from '../shared/model/app-user-credentials';
 import {LoginService} from '../shared/service/login.service';
 import * as jwt_decode from 'jwt-decode';
+import {ClientUrls} from '../shared/constants/client-urls';
+import {TransportService} from '../shared/service/transport.service';
+import {UtilityService} from '../shared/service/utility.service';
+import {LocalStorageConstants} from '../shared/constants/local-storage-constants';
+import {WebSocketCommand} from '../shared/constants/web-socket-command';
 
 @Component({
   selector: 'app-login',
@@ -15,11 +20,13 @@ export class LoginComponent implements OnInit {
   recaptcha: boolean;
 
   constructor(private router: Router,
+              private transportService: TransportService,
+              private utilityService: UtilityService,
               private loginService: LoginService) {
   }
 
   ngOnInit() {
-    this.loginService.getCarouselData()
+    this.utilityService.getCarouselData()
       .subscribe((data) => {
         this.imgList = this.shuffle(data.slidesData);
       });
@@ -50,14 +57,13 @@ export class LoginComponent implements OnInit {
       this.loginService.login(this.model)
         .subscribe((token) => {
           const res = jwt_decode(token.token);
-          localStorage.setItem('user', res.sub);
-          localStorage.setItem('auth', res.auth);
-          localStorage.setItem('token', token.token);
+          localStorage.setItem(LocalStorageConstants.USERNAME, res.sub);
+          localStorage.setItem(LocalStorageConstants.ROLE, res.auth);
+          localStorage.setItem(LocalStorageConstants.TOKEN, token.token);
+          this.router.navigateByUrl(ClientUrls.HOME_PAGE);
+          this.transportService.webSocketCommandSink(WebSocketCommand.CONNECT_AND_SUBSCRIBE_ALL);
         });
     }
   }
 
-  dummyFun() {
-
-  }
 }

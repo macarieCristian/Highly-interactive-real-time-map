@@ -18,4 +18,8 @@ public interface UserRepository extends BaseRepository<AppUser, Long> {
     Optional<AppUser> findAppUserByUsernameLocationsLoaded(final String username);
 
     Boolean existsAppUserByUsernameEqualsAndAccountStatusTypeEquals(String username, AccountStatusType accountStatusType);
+
+    Boolean existsAppUserByUsernameEquals(String username);
+
+    Optional<AppUser> findAppUserByUsernameEquals(String username);
 }

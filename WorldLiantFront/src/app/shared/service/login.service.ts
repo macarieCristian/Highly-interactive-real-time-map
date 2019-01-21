@@ -15,11 +15,6 @@ export class LoginService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getCarouselData(): any {
-    return this.httpClient
-      .get<any>('assets/carouseldata/carouseldata.json');
-  }
-
   login(body: AppUserCredentials): Observable<Token> {
     return this.httpClient
       .post<Token>(ServerUrls.LOGIN, body);
@@ -38,10 +33,5 @@ export class LoginService {
       return this.httpClient
         .post<boolean>(ServerUrls.REGISTER, formData);
     }
-  }
-
-  getReverseGeocoding(country: string, county: string, city: string): Observable<any[]> {
-    return this.httpClient
-      .get<any[]>(Constants.REVERSE_GEOCODING_URL, { params: { country: country, county: county, city: city, format: 'json' } });
   }
 }

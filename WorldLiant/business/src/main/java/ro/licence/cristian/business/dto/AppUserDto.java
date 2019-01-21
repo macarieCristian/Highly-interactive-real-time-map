@@ -29,6 +29,5 @@ public class AppUserDto extends BaseDto {
     private AccountStatusType accountStatusType;
     private Set<RoleDto> roles;
     private LocationDto homeLocation;
-    private AttachmentDto profilePicture;
     private Set<LocationDto> desiredLocations;
 }

@@ -22,11 +22,14 @@ import ro.licence.cristian.security.jwtfilter.JwtAuthorizationFilter;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
     private CustomUserDetailsService userDetailsService;
+    private JwtAuthenticationUnauthorizedEntryPoint unauthorizedHandler;
 
     @Autowired
-    private JwtAuthenticationUnauthorizedEntryPoint unauthorizedHandler;
+    public WebSecurityConfig(CustomUserDetailsService userDetailsService, JwtAuthenticationUnauthorizedEntryPoint unauthorizedHandler) {
+        this.userDetailsService = userDetailsService;
+        this.unauthorizedHandler = unauthorizedHandler;
+    }
 
     @Bean
     @Override
@@ -50,6 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 authorizeRequests()
                 .antMatchers(HttpMethod.POST,"/authentication/login").permitAll()
                 .antMatchers(HttpMethod.POST,"/users/register").permitAll()
+                .antMatchers("/ws/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
