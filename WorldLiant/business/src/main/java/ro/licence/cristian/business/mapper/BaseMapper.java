@@ -1,17 +1,25 @@
 package ro.licence.cristian.business.mapper;
 
+import org.mapstruct.IterableMapping;
 import ro.licence.cristian.business.dto.BaseDto;
+import ro.licence.cristian.business.mapper.annotation.Custom;
+import ro.licence.cristian.business.mapper.annotation.Simple;
 import ro.licence.cristian.persistence.model.BaseEntity;
 
 import java.util.List;
 
 public interface BaseMapper<E extends BaseEntity, DTO extends BaseDto> {
 
+    @Simple
     DTO entityToDto(E entity);
 
     E dtoToEntity(DTO dto);
 
+    @IterableMapping(qualifiedBy = Simple.class)
     List<DTO> entitiesToDtos(List<E> entities);
+
+    @IterableMapping(qualifiedBy = Custom.class)
+    List<DTO> entitiesToDtosCustom(List<E> entities);
 
     List<E> dtosToEntities(List<DTO> dtos);
 }

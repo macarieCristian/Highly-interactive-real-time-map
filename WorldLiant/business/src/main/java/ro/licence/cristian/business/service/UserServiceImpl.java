@@ -1,8 +1,6 @@
 package ro.licence.cristian.business.service;
 
 import lombok.extern.log4j.Log4j2;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,11 +47,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<AppUserDto> getUsers() {
-        log.info("getUsers -- entered");
-        List<AppUser> appUsers = userRepository.findAll();
-        List<AppUserDto> appUserDtos = appUserMapper.entitiesToDtos(appUsers);
-        log.info("getUsers: result={}", appUserDtos);
+    public List<AppUserDto> getUsersForScan(Double latitude, Double longitude, Double radius) {
+        log.info("getUsersForScan: latitude={}, longitude={}, radius={}", latitude, longitude, radius);
+        List<AppUser> appUsers = userRepository.getAppUsersByScanCriteria(latitude, longitude, radius);
+        List<AppUserDto> appUserDtos = appUserMapper.entitiesToDtosCustom(appUsers);
+        log.info("getUsersForScan: result={}", appUserDtos);
         return appUserDtos;
     }
 
@@ -63,8 +61,7 @@ public class UserServiceImpl implements UserService {
         Optional<AppUser> optionalAppUser = userRepository.findAppUserByUsernameLocationsLoaded(username);
         AppUser appUser = optionalAppUser
                 .orElseThrow(() -> new BusinessException(BusinessExceptionCode.USER_WITH_USERNAME_DOES_NOT_EXIST));
-        appUser.setRoles(new HashSet<>());
-        AppUserDto appUserDto = appUserMapper.entityToDto(appUser);
+        AppUserDto appUserDto = appUserMapper.entityToDtoProjectionNoLazy(appUser);
         log.info("findUserByUsername: result={}", appUserDto);
         return appUserDto;
     }
@@ -80,10 +77,16 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Override
     public Attachment getProfilePicture(String username) throws BusinessException {
         Optional<Attachment> attachmentOptional = attachmentRepository.findByOwnerUsernameEquals(username);
         return attachmentOptional
                 .orElseThrow(() -> new BusinessException(BusinessExceptionCode.ATTACHMENT_FOR_USERNAME_DOES_NOT_EXIST));
+    }
+
+    @Override
+    public Long getUserId(String username) {
+        return userRepository.findAppUserIdByUsername(username);
     }
 
     private void checkAppUserForRegister(AppUser appUser) throws BusinessException {
@@ -112,7 +115,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private Attachment buildProfilePicAttachment(MultipartFile profilePicture) throws BusinessException {
-        Attachment profilePic = null;
+        Attachment profilePic;
         try {
             profilePic = Attachment.builder()
                     .name("ProfilePicture")

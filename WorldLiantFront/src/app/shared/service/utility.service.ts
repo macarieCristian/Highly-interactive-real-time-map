@@ -25,10 +25,6 @@ export class UtilityService {
     return this.httpClient
       .get<any>('assets/carouseldata/carouseldata.json');
   }
-
-  getImage(imageUrl: string): Observable<Blob> {
-    return this.httpClient.get(imageUrl, { responseType: 'blob' });
-  }
 }
 
 

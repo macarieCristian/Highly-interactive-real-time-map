@@ -11,6 +11,7 @@ public enum BusinessExceptionCode {
     CAN_NOT_SAVE_PHOTO(500, "Photo can't be saved"),
     CAN_NOT_READ_PHOTO(501, "Photo can't be red"),
     ATTACHMENT_FOR_USERNAME_DOES_NOT_EXIST(505, "No attachment available for given username"),
+    LOCATION_DOES_NOT_EXIST(550, "Location you're looking for does not exist"),
 
 
 

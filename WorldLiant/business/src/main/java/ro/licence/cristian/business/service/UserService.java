@@ -10,14 +10,11 @@ import java.util.List;
 
 public interface UserService {
 
-    /**
-     * @return All users without lazy loading fields.
-     */
-    List<AppUserDto> getUsers();
+    List<AppUserDto> getUsersForScan(Double latitude, Double longitude, Double radius);
 
     /**
      * @param username
-     * @return The user having all roles loaded.
+     * @return The user having locations loaded.
      * @throws BusinessException
      */
     AppUserDto findUserByUsername(@NotNull String username) throws BusinessException;
@@ -25,4 +22,6 @@ public interface UserService {
     Boolean saveNewAppUser(@NotNull AppUserDto appUserDto, MultipartFile profilePicture) throws BusinessException;
 
     Attachment getProfilePicture(String username) throws BusinessException;
+
+    Long getUserId(String username);
 }

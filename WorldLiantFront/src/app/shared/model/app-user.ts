@@ -9,6 +9,9 @@ export class AppUser {
   email: string;
   phone: string;
   gender: string;
+  statusType: string;
+  accountStatusType: string;
   dateOfBirth: Date;
   homeLocation: LocationCustom;
+  desiredLocations: LocationCustom[];
 }

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AppUser} from '../shared/model/app-user';
 import {Constants} from '../shared/constants/constants';
 import {LocationCustom} from '../shared/model/location-custom';
-import {LoginService} from '../shared/service/login.service';
+import {LoginService} from '../shared/service/user/login.service';
 import {ToastrUtilService} from '../shared/service/toastr-util.service';
 import {Router} from '@angular/router';
 import {ClientUrls} from '../shared/constants/client-urls';

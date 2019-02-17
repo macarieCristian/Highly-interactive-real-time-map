@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import {ErrorHandler, NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -7,7 +7,7 @@ import {MDBBootstrapModule} from 'angular-bootstrap-md';
 import {LoginComponent} from './login/login.component';
 import {ErrorComponent} from './error/error.component';
 import {FormsModule} from '@angular/forms';
-import {LoginService} from './shared/service/login.service';
+import {LoginService} from './shared/service/user/login.service';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {RecaptchaModule} from 'angular-google-recaptcha';
 import {Constants} from './shared/constants/constants';
@@ -22,6 +22,8 @@ import {WebSocketService} from './shared/service/web-socket.service';
 import {UtilityService} from './shared/service/utility.service';
 import {TransportService} from './shared/service/transport.service';
 import {TokenHttpInterceptor} from './shared/util/token-http-interceptor';
+import {UserService} from './shared/service/user/user.service';
+import {CustomExceptionHandler} from './shared/util/custom-exception-handler';
 
 @NgModule({
   declarations: [
@@ -54,7 +56,9 @@ import {TokenHttpInterceptor} from './shared/util/token-http-interceptor';
     WebSocketService,
     UtilityService,
     TransportService,
-    {provide: HTTP_INTERCEPTORS, useClass: TokenHttpInterceptor, multi: true}
+    UserService,
+    {provide: HTTP_INTERCEPTORS, useClass: TokenHttpInterceptor, multi: true},
+    {provide: ErrorHandler, useClass: CustomExceptionHandler},
   ],
   bootstrap: [AppComponent]
 })

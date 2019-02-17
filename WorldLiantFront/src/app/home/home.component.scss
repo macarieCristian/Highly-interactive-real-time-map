@@ -1,0 +1,29 @@
+.map-size {
+  height: 100vh;
+}
+
+.img-custom {
+  height: 45px;
+  width: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.menu-item-custom > a:hover {
+  background-color: #6351ce;
+  color: white;
+}
+
+.my-custom-background {
+  background-image: linear-gradient(to right, #6351ce 0%, #86bbf0 51%, #6351ce 100%);
+}
+
+.selected-aria {
+
+}
+
+.custom-marker {
+  height: 50px;
+  width: 50px;
+  background-color: #841439;
+}

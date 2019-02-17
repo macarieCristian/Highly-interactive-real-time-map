@@ -48,15 +48,15 @@ export class AppComponent implements OnInit, OnDestroy {
     console.log('destroyed');
   }
 
-  disconnect() {
-    this.transportService.webSocketCommandSink(WebSocketCommand.DISCONNECT);
-  }
-
-  sendPrivateMess(to: string, message: string) {
-    this.socketService.sendPrivateMessage({destination: to, content: message});
-  }
-
-  sendBroadcastMess(message: string) {
-    this.socketService.sendBroadcastMessage({content: message});
-  }
+  // disconnect() {
+  //   this.transportService.webSocketCommandSink(WebSocketCommand.DISCONNECT);
+  // }
+  //
+  // sendPrivateMess(to: string, message: string) {
+  //   this.socketService.sendPrivateMessage({destination: to, content: message});
+  // }
+  //
+  // sendBroadcastMess(message: string) {
+  //   this.socketService.sendBroadcastMessage({content: message});
+  // }
 }

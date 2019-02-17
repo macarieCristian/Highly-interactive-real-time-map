@@ -1,7 +1,6 @@
 package ro.licence.cristian.business.dto;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import ro.licence.cristian.persistence.model.enums.AccountStatusType;
 import ro.licence.cristian.persistence.model.enums.GenderType;
 import ro.licence.cristian.persistence.model.enums.StatusType;
@@ -30,4 +29,5 @@ public class AppUserDto extends BaseDto {
     private Set<RoleDto> roles;
     private LocationDto homeLocation;
     private Set<LocationDto> desiredLocations;
+    private AttachmentDto profilePicture;
 }

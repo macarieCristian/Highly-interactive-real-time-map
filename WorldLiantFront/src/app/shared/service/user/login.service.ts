@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {AppUserCredentials} from '../model/app-user-credentials';
-import {ServerUrls} from '../constants/server-urls';
-import {Token} from '../model/token';
+import {AppUserCredentials} from '../../model/app-user-credentials';
+import {ServerUrls} from '../../constants/server-urls';
+import {Token} from '../../model/token';
 import {Observable} from 'rxjs';
-import {AppUser} from '../model/app-user';
-import {Constants} from '../constants/constants';
+import {AppUser} from '../../model/app-user';
+import {Constants} from '../../constants/constants';
 
 @Injectable({
   providedIn: 'root'
