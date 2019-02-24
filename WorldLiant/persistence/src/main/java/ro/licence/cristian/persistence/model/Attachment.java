@@ -13,11 +13,11 @@ import javax.persistence.OneToOne;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true, exclude = "owner")
-@ToString(callSuper = true, exclude = "owner")
+@EqualsAndHashCode(callSuper = true, exclude = {"owner", "content"})
+@ToString(callSuper = true, exclude = {"owner", "content"})
 @Builder
 public class Attachment extends BaseEntity<Long> {
-    private MediaType type;
+    private String type;
     private String name;
 
     @Lob

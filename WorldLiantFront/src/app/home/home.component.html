@@ -1,8 +1,9 @@
-<mdb-navbar SideClass="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar intro-fixed-nav"
+<mdb-navbar [SideClass]="'navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar intro-fixed-nav'"
             class="custom-navbar"
+            #navbar
             [containerInside]="false">
   <mdb-navbar-brand style="margin-left: 3vw">
-    <a class="logo navbar-brand" href="#">
+    <a class="logo navbar-brand" href="/home">
       <strong>World Liant</strong>
     </a>
   </mdb-navbar-brand>
@@ -44,9 +45,144 @@
     </ul>
   </links>
 </mdb-navbar>
+<!-->
+<!-->
+<!-->
+<!-->
+<!-->
+<!-->
+<div style="position: relative; overflow-x: hidden">
+  <div id="mapid" class="map-size"></div>
+  <div class="modal-dialog modal-full-height modal-right modal-side-chat"
+       [class.slide-in]="sideChat"
+       role="document">
+    <div class="modal-content" style="height: 100%">
+      <div class="modal-header">
+        <h4 class="modal-title w-100" id="myModalLabel1">Get in touch</h4></div>
+      <div class="modal-body custom-modal-body">
 
-<div id="mapid" class="map-size"></div>
+        <mat-list>
+          <h3 mat-subheader><strong>Scan area</strong></h3>
+          <mat-list-item *ngFor="let user of scanAreaUsers" (click)="openChat = true;">
+            <div mat-list-icon class="side-chat-img-wrapper">
+              <img *ngIf="user.profilePicture"
+                   [src]="setUpPicture(user.profilePicture)"
+                   class="side-chat-img">
+              <div class="grey-dot"></div>
+            </div>
+            <h4 mat-line>{{user.lastName}} {{user.firstName}}</h4>
+            <mdb-badge pill="true" color="red">
+              13
+            </mdb-badge>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <h3 mat-subheader><strong>Contacts</strong></h3>
+          <mat-list-item *ngFor="let note of notes">
+            <div mat-list-icon class="side-chat-img-wrapper">
+              <img *ngIf="profilePictureUrl"
+                   [src]="profilePictureUrl"
+                   class="side-chat-img">
+              <div class="green-dot"></div>
+            </div>
+            <h4 mat-line>{{note.name}}</h4>
+            <mdb-badge pill="true" color="red">
+              2
+            </mdb-badge>
+          </mat-list-item>
+        </mat-list>
 
+      </div>
+    </div>
+  </div>
+
+
+
+  <div id="chat-box-container"
+       [class.appear]="!openChat"
+       [class.slide-away]="sideChat">
+    <div class="chat-box">
+      <div class="chat-box-header">
+        <div class="chat-close" (click)="openChat = false;">x</div>
+        <div>
+          <div class="chat-img-wrapper">
+            <img *ngIf="profilePictureUrl"
+                 [src]="profilePictureUrl"
+                 class="chat-img">
+            <div class="green-dot-chat"></div>
+          </div>
+          <span class="chat-header-text-wrapper">
+            <span class="chat-header-text">Macarie Cristian</span>
+          </span>
+        </div>
+      </div>
+      <div class="chats">
+        <ul>
+          <li>
+            <div class="msg him">
+              <span class="partner">ionut</span>
+              mesageee fasf asf sa fas fa sf as fas f sa fsa f as f saf as fa sf asf as f asf
+              <span class="time"> timeee </span>
+            </div>
+          </li>
+          <li>
+            <div class="msg you">
+              <span class="partner">ionut</span>
+              mesageee
+              <span class="time"> timeee </span>
+            </div>
+          </li>
+          <li>
+            <div class="msg you">
+              <span class="partner">ionut</span>
+              mesageee
+              <span class="time"> timeee </span>
+            </div>
+          </li>
+          <li class="pending">
+            <div class="msg load">
+              <div class="dot-anim"></div>
+              <div class="dot-anim"></div>
+              <div class="dot-anim"></div>
+            </div>
+          </li>
+          <li>
+            <div class="msg you">
+              <span class="partner">ionut</span>
+              mesageee
+              <span class="time"> timeee </span>
+            </div>
+          </li>
+          <li>
+            <div class="msg you">
+              <span class="partner">ionut</span>
+              mesageee
+              <span class="time"> timeee </span>
+            </div>
+          </li>
+          <li>
+            <div class="msg you">
+              <span class="partner">ionut</span>
+              mesageee
+              <span class="time"> timeee </span>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="sendBox">
+        <input type="text" placeholder="enter next line...">
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+<!-->
+<!-->
+<!-->
+<!-->
+<!-->
+<!-->
 <footer class="page-footer font-small unique-color-dark">
 
   <div class="my-custom-background">
@@ -197,3 +333,4 @@
   <!-- Copyright -->
 
 </footer>
+

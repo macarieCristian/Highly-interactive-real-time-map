@@ -7,11 +7,11 @@ import org.springframework.http.MediaType;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "content")
+@ToString(callSuper = true, exclude = "content")
 @Builder
 public class AttachmentDto extends BaseDto {
-    private MediaType type;
+    private String type;
     private String name;
     private byte[] content;
 }

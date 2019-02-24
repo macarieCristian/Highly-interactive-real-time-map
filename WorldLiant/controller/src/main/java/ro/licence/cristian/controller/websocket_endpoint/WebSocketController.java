@@ -5,7 +5,10 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import ro.licence.cristian.business.dto.websocket_dto.MarkerEventDto;
 import ro.licence.cristian.business.dto.websocket_dto.SimpleMessageDto;
+
+import java.util.Set;
 
 @Controller
 public class WebSocketController {
@@ -19,8 +22,13 @@ public class WebSocketController {
     @MessageMapping("/broadcast/send")
     @SendTo("/topic/broadcast")
     public SimpleMessageDto greeting(SimpleMessageDto message) {
-        message.setContent(message.getContent());
         return message;
+    }
+
+    @MessageMapping("/broadcast/marker-events/send")
+    @SendTo("/topic/broadcast/marker-events")
+    public Set<MarkerEventDto> handleMarkerEvent(Set<MarkerEventDto> markerEventDtos) {
+        return markerEventDtos;
     }
 
     @MessageMapping("/private/send")

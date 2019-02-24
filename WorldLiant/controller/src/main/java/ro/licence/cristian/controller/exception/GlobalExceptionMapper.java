@@ -16,9 +16,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @Log4j2
 public class GlobalExceptionMapper extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({Exception.class})
-    protected ResponseEntity<Object> handleConflict(Exception ex, WebRequest request) {
-        log.warn("Caught exception={}", ex.getMessage());
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-    }
+//    @ExceptionHandler({Exception.class})
+//    protected ResponseEntity<Object> handleConflict(Exception ex, WebRequest request) {
+//        log.warn("Caught exception={}", ex.getMessage());
+//        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+//    }
 }

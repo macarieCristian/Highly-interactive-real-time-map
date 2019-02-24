@@ -3,6 +3,7 @@ import {WebSocketService} from './shared/service/web-socket.service';
 import {UtilityService} from './shared/service/utility.service';
 import {TransportService} from './shared/service/transport.service';
 import {WebSocketCommand} from './shared/constants/web-socket-command';
+import {EventType} from './shared/model/web-socket-model/event-type';
 
 @Component({
   selector: 'app-root',
@@ -33,6 +34,25 @@ export class AppComponent implements OnInit, OnDestroy {
                 err => console.log(err));
             this.socketService.broadcastChannel()
               .subscribe(message => console.log(message),
+                err => console.log(err));
+            this.socketService.broadcastMarkerEventsChannel()
+              .subscribe(wrapper => {
+                  console.log(wrapper);
+                  const messages = JSON.parse(wrapper.body);
+                  messages.forEach(message => {
+                    switch (message.eventType) {
+                      case EventType.MARKER_CREATED:
+                      case EventType.MARKER_DELETED:
+                      case EventType.MARKER_UPDATED: {
+                        this.transportService.markerEventsSink(message);
+                        break;
+                      }
+                      default: {
+                        break;
+                      }
+                    }
+                  });
+                },
                 err => console.log(err));
             break;
           }

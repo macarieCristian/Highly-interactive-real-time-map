@@ -3,6 +3,7 @@ package ro.licence.cristian.business.service;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
 @Service
 @Log4j2
@@ -47,22 +49,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<AppUserDto> getUsersForScan(Double latitude, Double longitude, Double radius) {
+    public List<AppUserDto> getUsersForScan(Double latitude, Double longitude, Double radius, Authentication authentication) {
         log.info("getUsersForScan: latitude={}, longitude={}, radius={}", latitude, longitude, radius);
-        List<AppUser> appUsers = userRepository.getAppUsersByScanCriteria(latitude, longitude, radius);
+        List<AppUser> appUsers = userRepository
+                .getUsersWithLocationsSatisfyingScanCriteria(latitude, longitude, radius, authentication.getName());
         List<AppUserDto> appUserDtos = appUserMapper.entitiesToDtosCustom(appUsers);
         log.info("getUsersForScan: result={}", appUserDtos);
         return appUserDtos;
     }
 
     @Override
-    public AppUserDto findUserByUsername(final String username) throws BusinessException {
-        log.info("findUserByUsername: username={}", username);
-        Optional<AppUser> optionalAppUser = userRepository.findAppUserByUsernameLocationsLoaded(username);
-        AppUser appUser = optionalAppUser
-                .orElseThrow(() -> new BusinessException(BusinessExceptionCode.USER_WITH_USERNAME_DOES_NOT_EXIST));
-        AppUserDto appUserDto = appUserMapper.entityToDtoProjectionNoLazy(appUser);
-        log.info("findUserByUsername: result={}", appUserDto);
+    public AppUserDto findUserByUsernameLocationsLoaded(final String username) throws BusinessException {
+        log.info("findUserByUsernameLocationsLoaded: username={}", username);
+        AppUserDto appUserDto = fetchUser(username,
+                userRepository::findAppUserByUsernameLocationsLoaded,
+                appUserMapper::entityToDtoProjectionDesiredLocationsLoaded);
+        log.info("findUserByUsernameLocationsLoaded: result={}", appUserDto);
+        return appUserDto;
+    }
+
+    @Override
+    public AppUserDto findUserByUsernameProfilePicLoaded(final String username) throws BusinessException {
+        log.info("findUserByUsernameProfilePicLoaded: username={}", username);
+        AppUserDto appUserDto = fetchUser(username,
+                userRepository::findAppUserByUsernameProfilePicLoaded,
+                appUserMapper::entityToDtoProjectionProfilePicLoaded);
+        log.info("findUserByUsernameProfilePicLoaded: result={}", appUserDto);
         return appUserDto;
     }
 
@@ -87,6 +99,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public Long getUserId(String username) {
         return userRepository.findAppUserIdByUsername(username);
+    }
+
+    private AppUserDto fetchUser(String username, Function<String, Optional<AppUser>> getFromDb, Function<AppUser, AppUserDto> convertToDto) throws BusinessException {
+        Optional<AppUser> optionalAppUser = getFromDb.apply(username);
+        AppUser appUser = optionalAppUser
+                .orElseThrow(() -> new BusinessException(BusinessExceptionCode.USER_WITH_USERNAME_DOES_NOT_EXIST));
+        return convertToDto.apply(appUser);
     }
 
     private void checkAppUserForRegister(AppUser appUser) throws BusinessException {
@@ -119,7 +138,7 @@ public class UserServiceImpl implements UserService {
         try {
             profilePic = Attachment.builder()
                     .name("ProfilePicture")
-                    .type(MediaType.valueOf(profilePicture.getContentType()))
+                    .type(profilePicture.getContentType())
                     .content(profilePicture.getBytes())
                     .build();
         } catch (IOException e) {

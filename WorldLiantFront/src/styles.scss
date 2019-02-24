@@ -155,3 +155,68 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   border-top: 20px solid #4275e4;
   z-index: -1;
 }
+
+.link-custom {
+  color: #4285f4 !important;
+  cursor: pointer;
+}
+
+.link-custom:hover {
+  color: #94caff !important;
+}
+
+.leaflet-popup-content,
+.custom-popup-content {
+  margin: 13px 13px !important;
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip,
+.custom-popup-wrapper {
+  background-image: linear-gradient(to right, #4285f4 0%, #95caff 51%, #4285f4 100%);
+  background-size: 200% auto;
+  transition: 0.5s;
+}
+
+.leaflet-popup-tip:hover,
+.leaflet-popup-content-wrapper:hover,
+.custom-popup-wrapper:hover {
+  background-position: right center;
+}
+
+.leaflet-popup-close-button,
+.custom-close-button {
+  color: black !important;
+  padding: 2px 2px 0 0 !important;
+}
+
+@media only screen and (max-width: 991px) {
+  .dropdown-menu,
+  .custom-dropdown-menu-position {
+    left: 0 !important;
+  }
+}
+
+.leaflet-control-custom {
+  height: 30px;
+  width: 30px;
+  background-color: white;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: bottom;
+  font-size: 20px;
+}
+
+.leaflet-control-custom:hover {
+  background-color: #f4f4f4;
+}
+
+.mat-list-item,
+.list-item-custom {
+  cursor: pointer;
+}
+
+.mat-list-item:hover,
+.list-item-custom:hover {
+  background-color: #8dc2f7;
+}

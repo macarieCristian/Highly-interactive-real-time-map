@@ -20,16 +20,15 @@ public interface UserRepository extends BaseRepository<AppUser, Long> {
     @EntityGraph(value = "appUserWithDesiredLocations", type = EntityGraph.EntityGraphType.LOAD)
     Optional<AppUser> findAppUserByUsernameLocationsLoaded(final String username);
 
+    @Transactional
+    Optional<AppUser> findAppUserByUsernameProfilePicLoaded(@Param("username") String username);
+
     @Query("select u.id from AppUser u where u.username = ?1")
     Long findAppUserIdByUsername(final String username);
 
     @Transactional
-    @Query("select distinct u " +
-            "from AppUser u " +
-            "inner join fetch u.profilePicture " +
-            "inner join fetch u.desiredLocations dl " +
-            "where function('haversinedistance', :lat, :lng, dl.latitude, dl.longitude) <= :rad")
-    List<AppUser> getAppUsersByScanCriteria(@Param("lat") Double lat, @Param("lng") Double lng, @Param("rad") Double rad);
+    List<AppUser> getUsersWithLocationsSatisfyingScanCriteria(@Param("lat") Double lat, @Param("lng") Double lng,
+                                                              @Param("rad") Double rad, @Param("username") String username);
 
 
     Boolean existsAppUserByUsernameEqualsAndAccountStatusTypeEquals(String username, AccountStatusType accountStatusType);

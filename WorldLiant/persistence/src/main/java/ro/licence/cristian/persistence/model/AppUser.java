@@ -16,6 +16,11 @@ import java.util.Set;
         @NamedEntityGraph(name = "appUserWithDesiredLocations",
         attributeNodes = @NamedAttributeNode(value = "desiredLocations"))
 })
+@NamedQuery(name = "AppUser.findAppUserByUsernameProfilePicLoaded",
+query = "select distinct u from AppUser u inner join fetch u.profilePicture where u.username = :username")
+@NamedQuery(name = "AppUser.getUsersWithLocationsSatisfyingScanCriteria",
+        query = "select distinct u from AppUser u inner join fetch u.profilePicture inner join fetch u.desiredLocations dl " +
+                "where function('haversinedistance', :lat, :lng, dl.latitude, dl.longitude) <= :rad and u.username <> :username")
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -43,7 +48,7 @@ public class AppUser extends BaseEntity<Long> {
     private AccountStatusType accountStatusType;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.LAZY)
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private Location homeLocation;
@@ -52,5 +57,5 @@ public class AppUser extends BaseEntity<Long> {
     private Attachment profilePicture;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "appUser")
-    private Set<Location> desiredLocations = new HashSet<>();
+    private Set<Location> desiredLocations;
 }

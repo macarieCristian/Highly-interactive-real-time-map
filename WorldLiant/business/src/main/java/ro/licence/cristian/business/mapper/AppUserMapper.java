@@ -1,12 +1,12 @@
 package ro.licence.cristian.business.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.NullValueCheckStrategy;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 import ro.licence.cristian.business.dto.AppUserDto;
 import ro.licence.cristian.business.mapper.annotation.Custom;
+import ro.licence.cristian.business.mapper.annotation.Simple;
 import ro.licence.cristian.persistence.model.AppUser;
+
+import java.util.List;
 
 @Mapper(
         uses = {LocationMapper.class, RoleMapper.class, AttachmentMapper.class},
@@ -24,7 +24,21 @@ public interface AppUserMapper extends BaseMapper<AppUser, AppUserDto> {
     @Mapping(source = "password", target = "password", ignore = true)
     @Mapping(source = "roles", target = "roles", ignore = true)
     @Mapping(source = "profilePicture", target = "profilePicture", ignore = true)
-    AppUserDto entityToDtoProjectionNoLazy(AppUser appUser);
+    AppUserDto entityToDtoProjectionDesiredLocationsLoaded(AppUser appUser);
 
+    @Mapping(source = "password", target = "password", ignore = true)
+    @Mapping(source = "roles", target = "roles", ignore = true)
+    @Mapping(source = "desiredLocations", target = "desiredLocations", ignore = true)
+    AppUserDto entityToDtoProjectionProfilePicLoaded(AppUser appUser);
 
+    @Simple
+    @Override
+    AppUserDto entityToDto(AppUser entity);
+
+    @Override
+    @IterableMapping(qualifiedBy = Simple.class)
+    List<AppUserDto> entitiesToDtos(List<AppUser> entities);
+
+    @IterableMapping(qualifiedBy = Custom.class)
+    List<AppUserDto> entitiesToDtosCustom(List<AppUser> entities);
 }

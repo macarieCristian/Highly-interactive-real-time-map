@@ -5,9 +5,7 @@ import {AppUser} from '../../model/app-user';
 import {ServerUrls} from '../../constants/server-urls';
 import {LocationCustom} from '../../model/location-custom';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class UserService {
 
   constructor(private httpClient: HttpClient) {
@@ -17,8 +15,12 @@ export class UserService {
     return this.httpClient.get(imageUrl, {responseType: 'blob'});
   }
 
-  getPersonalInfo(username: string): Observable<AppUser> {
-    return this.httpClient.get<AppUser>(`${ServerUrls.PERSONAL_INFO}${username}`);
+  getPersonalInfoWithLocations(username: string): Observable<AppUser> {
+    return this.httpClient.get<AppUser>(`${ServerUrls.PERSONAL_INFO_DL}${username}`);
+  }
+
+  getPersonalInfoWithPic(username: string): Observable<AppUser> {
+    return this.httpClient.get<AppUser>(`${ServerUrls.PERSONAL_INFO_PIC}${username}`);
   }
 
   getUsersScan(lat: number, lng: number, rad: number): Observable<AppUser[]> {

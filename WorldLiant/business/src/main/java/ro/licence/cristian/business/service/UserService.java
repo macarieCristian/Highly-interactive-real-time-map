@@ -1,5 +1,6 @@
 package ro.licence.cristian.business.service;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 import ro.licence.cristian.business.dto.AppUserDto;
 import ro.licence.cristian.business.exception.BusinessException;
@@ -10,14 +11,16 @@ import java.util.List;
 
 public interface UserService {
 
-    List<AppUserDto> getUsersForScan(Double latitude, Double longitude, Double radius);
+    List<AppUserDto> getUsersForScan(Double latitude, Double longitude, Double radius, Authentication authentication);
 
     /**
      * @param username
      * @return The user having locations loaded.
      * @throws BusinessException
      */
-    AppUserDto findUserByUsername(@NotNull String username) throws BusinessException;
+    AppUserDto findUserByUsernameLocationsLoaded(@NotNull String username) throws BusinessException;
+
+    AppUserDto findUserByUsernameProfilePicLoaded(String username) throws BusinessException;
 
     Boolean saveNewAppUser(@NotNull AppUserDto appUserDto, MultipartFile profilePicture) throws BusinessException;
 

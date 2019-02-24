@@ -1,4 +1,5 @@
 import {LocationCustom} from './location-custom';
+import {AttachmentCustom} from './attachment-custom';
 
 export class AppUser {
   id: number;
@@ -9,6 +10,7 @@ export class AppUser {
   email: string;
   phone: string;
   gender: string;
+  profilePicture: AttachmentCustom;
   statusType: string;
   accountStatusType: string;
   dateOfBirth: Date;

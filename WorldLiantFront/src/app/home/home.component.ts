@@ -11,6 +11,11 @@ import {TransportService} from '../shared/service/transport.service';
 import {WebSocketCommand} from '../shared/constants/web-socket-command';
 import {LocationCustom} from '../shared/model/location-custom';
 import {ToastrUtilService} from '../shared/service/toastr-util.service';
+import {MarkerEventMessage} from '../shared/model/web-socket-model/marker-event-message';
+import {WebSocketService} from '../shared/service/web-socket.service';
+import {EventType} from '../shared/model/web-socket-model/event-type';
+import {HaversineDistanceUtil} from '../shared/util/haversine-distance-util';
+import {AttachmentCustom} from '../shared/model/attachment-custom';
 
 declare let L;
 export let mapGlobal;
@@ -28,18 +33,37 @@ export class HomeComponent implements OnInit {
   profilePictureUrl: string;
   appUser: AppUser;
   homeCoordinates: number[];
-  locationLeafletIdMap: Map<string, number>;
+  // key: leaflet_id value: id
+  locationLeafletIdIdMap: Map<string, number>;
+  scanAreaMarkers: Set<string>;
+  scanArea: any = null;
+  scanAreaUsers: AppUser[];
+  contactUsers: AppUser[];
+  sideChat = false;
+  openChat = false;
+  notes = [
+    {
+      name: 'Andrei Numefoartelung',
+      updated: new Date('1/17/16'),
+    },
+    {
+      name: 'Salam Florin',
+      updated: new Date('1/28/16'),
+    }
+  ];
 
   constructor(private utilityService: UtilityService,
               private userService: UserService,
               private router: Router,
               private toastrUtilService: ToastrUtilService,
+              private webSocketService: WebSocketService,
               private transportService: TransportService) {
   }
 
   ngOnInit() {
-    this.computeDistance();
-    this.locationLeafletIdMap = new Map<string, number>();
+    this.locationLeafletIdIdMap = new Map<string, number>();
+    this.scanAreaMarkers = new Set<string>();
+    this.scanAreaUsers = [];
     thisObject = this;
     this.getProfileInfo();
   }
@@ -47,7 +71,7 @@ export class HomeComponent implements OnInit {
   getProfileInfo() {
     const username = localStorage.getItem(LocalStorageConstants.USERNAME);
     if (username) {
-      this.userService.getPersonalInfo(username)
+      this.userService.getPersonalInfoWithLocations(username)
         .subscribe(result => {
           this.appUser = result;
           this.homeCoordinates = [+this.appUser.homeLocation.latitude, +this.appUser.homeLocation.longitude];
@@ -56,8 +80,8 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  getProfilePicture() {
-    const url = ServerUrls.PROFILE_PIC + localStorage.getItem(LocalStorageConstants.USERNAME);
+  private getProfilePicture() {
+    const url = `${ServerUrls.PROFILE_PIC}${localStorage.getItem(LocalStorageConstants.USERNAME)}`;
     this.userService.getImage(url)
       .subscribe(img => {
         const reader = new FileReader();
@@ -81,12 +105,12 @@ export class HomeComponent implements OnInit {
     personalMarkerImage = L.divIcon({
       popupAnchor: [0, -40],
       iconSize: null,
-      html: `<div class="pin2"><img class="img-inside" src="${profilePicUrl}"></div>`
+      html: `<div class="pin2 animated fadeIn"><img class="img-inside" src="${profilePicUrl}"></div>`
     });
 
-    this.addDesiredLocationMarkers();
+    this.addSelfDesiredLocationMarkers();
     const options = {
-      position: 'topright',
+      position: 'topleft',
       draw: {
         polyline: false,
         polygon: false,
@@ -100,7 +124,7 @@ export class HomeComponent implements OnInit {
             fill: true,
             fillColor: 'red', // same as color by default
             fillOpacity: 0.4,
-            clickable: true
+            clickable: true,
           },
           showRadius: true,
           metric: true, // Whether to use the metric measurement system or imperial
@@ -120,9 +144,27 @@ export class HomeComponent implements OnInit {
     const drawControl = new L.Control.Draw(options);
     mapGlobal.addControl(drawControl);
 
+    const customControl = L.Control.extend({
+      options: {
+        position: 'topleft'
+      },
+      onAdd: function (map) {
+        const wrapper = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+        const container = L.DomUtil.create('div', 'leaflet-control-custom', wrapper);
+        container.onclick = function () {
+          thisObject.sideChat = !thisObject.sideChat;
+        };
+        const icon = L.DomUtil.create('i', 'fa fa-comments-o', container);
+        return wrapper;
+      }
+    });
+    mapGlobal.addControl(new customControl());
+
     mapGlobal.on(L.Draw.Event.CREATED, this.editableLayersCreate);
     mapGlobal.on(L.Draw.Event.EDITED, this.editableLayersUpdate);
     mapGlobal.on(L.Draw.Event.DELETED, this.editableLayersDelete);
+
+    this.setupMarkerEventsListener();
   }
 
   // Create layers callback
@@ -132,14 +174,17 @@ export class HomeComponent implements OnInit {
 
     switch (type) {
       case 'marker': {
-        // layer.bindPopup('A popup!');
         thisObject.saveDesiredLocation(layer);
         break;
       }
       case 'circle': {
-        thisObject.deleteAllCircles();
+        thisObject.cleanSearchArea();
         const addedLayer = thisObject.addScanCircle(layer);
-        thisObject.processScan(addedLayer);
+        thisObject.scanArea = addedLayer;
+        const animatedLayer = L.circle(addedLayer.getLatLng(),
+          {radius: addedLayer.getRadius(), className: 'animated fadeIn infinite'})
+          .addTo(mapGlobal);
+        thisObject.processScan(addedLayer, animatedLayer);
         break;
       }
       default: {
@@ -151,20 +196,32 @@ export class HomeComponent implements OnInit {
   // Update layers callback
   private editableLayersUpdate(e: any) {
     const updatedLocations = [];
+    const updatedLocationsMessages = [];
     const layers = e.layers;
     layers.eachLayer(function (l) {
       if (l instanceof L.Marker) {
         const newLocation = new LocationCustom();
-        newLocation.id = thisObject.locationLeafletIdMap.get(editableLayers.getLayerId(l));
+        newLocation.id = thisObject.locationLeafletIdIdMap.get(editableLayers.getLayerId(l));
         const latlng = l.getLatLng();
         newLocation.longitude = latlng.lng;
         newLocation.latitude = latlng.lat;
         updatedLocations.push(newLocation);
+        const message = thisObject.prepareBroadcastMarkerMessage(
+          newLocation.latitude, newLocation.longitude, EventType.MARKER_UPDATED, newLocation.id);
+        updatedLocationsMessages.push(message);
+      } else if (l instanceof L.Circle) {
+        thisObject.scanArea = l;
+        thisObject.cleanScanAreaMarkers();
+        const animatedLayer = L.circle(l.getLatLng(),
+          {radius: l.getRadius(), className: 'animated fadeIn infinite'})
+          .addTo(mapGlobal);
+        thisObject.processScan(l, animatedLayer);
       }
     });
     if (updatedLocations.length > 0) {
       thisObject.userService.updateDesiredLocations(thisObject.appUser.id, updatedLocations)
         .subscribe(res => {
+          thisObject.webSocketService.sendBroadcastMarkerEvents(updatedLocationsMessages);
           thisObject.toastrUtilService
             .displaySuccessToastr('Update complete!', 'Your desired locations were updated successfully.');
         });
@@ -174,60 +231,105 @@ export class HomeComponent implements OnInit {
   // Delete layers callback
   private editableLayersDelete(e: any) {
     const deleteLayersIds = [];
+    const deletedLocationsMessages = [];
     const layers = e.layers;
     layers.eachLayer(function (l) {
       if (l instanceof L.Marker) {
-        const id = thisObject.locationLeafletIdMap.get(editableLayers.getLayerId(l));
+        const id = thisObject.locationLeafletIdIdMap.get(editableLayers.getLayerId(l));
         deleteLayersIds.push(id);
+        const message = thisObject.prepareBroadcastMarkerMessage(null, null, EventType.MARKER_DELETED, id);
+        deletedLocationsMessages.push(message);
+      } else if (l instanceof L.Circle) {
+        thisObject.scanArea = null;
+        thisObject.cleanScanAreaMarkers();
       }
     });
     if (deleteLayersIds.length > 0) {
       thisObject.userService.deleteDesiredLocations(thisObject.appUser.id, deleteLayersIds)
         .subscribe(res => {
+          thisObject.webSocketService.sendBroadcastMarkerEvents(deletedLocationsMessages);
           thisObject.toastrUtilService
             .displaySuccessToastr('Delete complete!', 'Your desired locations were deleted successfully.');
         });
     }
   }
 
+  // Save newly added location
   private saveDesiredLocation(layer: any) {
+    layer.bindPopup(this.userPopup(profilePicUrl, this.appUser));
     const wrapper = layer.getLatLng();
     const location = new LocationCustom();
     location.longitude = wrapper.lng;
     location.latitude = wrapper.lat;
-
-    layer.bindPopup(`lat: ${wrapper.lat},  lng: ${wrapper.lng}`);
-
     this.userService.saveDesiredLocation(this.appUser.id, location)
       .subscribe(res => {
         editableLayers.addLayer(layer);
-        this.locationLeafletIdMap.set(editableLayers.getLayerId(layer), res);
+        this.locationLeafletIdIdMap.set(editableLayers.getLayerId(layer), res);
         location.id = res;
         this.appUser.desiredLocations.push(location);
+        const message = this.prepareBroadcastMarkerMessage(location.latitude, location.longitude, EventType.MARKER_CREATED, location.id);
+        this.webSocketService.sendBroadcastMarkerEvents([message]);
       });
   }
 
 
   // UTIL functions
+  private userPopup(picUrl: string, appUser: AppUser): string {
+    return `
+<div class="card" style="width: 14rem;">
+  <img class="card-img-top" src=${picUrl} alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title text-center">${appUser.lastName} ${appUser.firstName}</h5>
+    <p class="card-text text-center"><span class="link-custom">View profile</span></p>
+  </div>
+</div>
+`;
+  }
 
   // Populate map with saved markers
-  private addDesiredLocationMarkers() {
+  private addSelfDesiredLocationMarkers() {
     this.appUser.desiredLocations.forEach(location => {
       const marker = L.marker([location.latitude, location.longitude],
         {
           icon: personalMarkerImage
         }).addTo(editableLayers);
-      marker.bindPopup('A popup!');
-      this.locationLeafletIdMap.set(editableLayers.getLayerId(marker), location.id);
+      marker.bindPopup(this.userPopup(profilePicUrl, this.appUser));
+      this.locationLeafletIdIdMap.set(editableLayers.getLayerId(marker), location.id);
     });
   }
 
-  private deleteAllCircles() {
-    editableLayers.eachLayer(function (el) {
-      if (el instanceof L.Circle) {
-        editableLayers.removeLayer(el);
+  private cleanSearchArea() {
+    editableLayers.eachLayer(function (layer) {
+      if (layer instanceof L.Circle) {
+        editableLayers.removeLayer(layer);
       }
     });
+    thisObject.cleanScanAreaMarkers();
+    // thisObject.scanAreaUsers = [];
+  }
+
+  private cleanScanAreaMarkers() {
+    mapGlobal.eachLayer(function (layer) {
+      if (layer instanceof L.Marker && thisObject.scanAreaMarkers.has(layer._leaflet_id)) {
+        thisObject.removeMarkerFromGlobalMap(layer);
+      }
+    });
+  }
+
+  private removeMarkerFromGlobalMap(layer: any) {
+    mapGlobal.removeLayer(layer);
+    thisObject.scanAreaMarkers.delete(layer._leaflet_id);
+    thisObject.locationLeafletIdIdMap.delete(layer._leaflet_id);
+  }
+
+  private getGlobalLayerById(leaflet_id: string): any {
+    let result;
+    mapGlobal.eachLayer(function (layer) {
+      if (layer._leaflet_id === leaflet_id) {
+        result = layer;
+      }
+    });
+    return result;
   }
 
   private addScanCircle(layer: any): any {
@@ -240,15 +342,33 @@ export class HomeComponent implements OnInit {
     return layer;
   }
 
-  private processScan(layer: any) {
-    console.log(layer);
-    console.log(layer.getRadius());
-    console.log(layer.getLatLng());
+  private processScan(layer: any, animatedLayer: any) {
     const latlng = layer.getLatLng();
     thisObject.userService.getUsersScan(latlng.lat, latlng.lng, layer.getRadius())
       .subscribe(res => {
-        console.log(res);
+        mapGlobal.removeLayer(animatedLayer);
+        res.forEach(user => {
+          thisObject.addUserMarkersForScanResult(user);
+          // thisObject.scanAreaUsers.push(user);
+        });
       });
+  }
+
+  private addUserMarkersForScanResult(user: AppUser) {
+    if (user && user.username && user.desiredLocations && user.desiredLocations.length > 0) {
+      const pictureUrl = thisObject.setUpPicture(user.profilePicture);
+      const pictureMarker = L.divIcon({
+        popupAnchor: [0, -40],
+        iconSize: null,
+        html: `<div class="pin2 animated fadeInDown"><img class="img-inside" src="${pictureUrl}"></div>`
+      });
+      user.desiredLocations.forEach(location => {
+        const marker = L.marker([location.latitude, location.longitude], {icon: pictureMarker}).addTo(mapGlobal);
+        marker.bindPopup(thisObject.userPopup(pictureUrl, user));
+        thisObject.scanAreaMarkers.add(marker._leaflet_id);
+        thisObject.locationLeafletIdIdMap.set(marker._leaflet_id, location.id);
+      });
+    }
   }
 
   addFAMarker(latlng: number[], iconName: string, color: string) {
@@ -258,7 +378,7 @@ export class HomeComponent implements OnInit {
           icon: L.AwesomeMarkers.icon({
             icon: iconName,
             prefix: 'fa',
-            markerColor: color
+            markerColor: color,
           })
         }).addTo(mapGlobal);
     marker.bindPopup('<b>Hello!</b><br>Here is your home.');
@@ -274,55 +394,123 @@ export class HomeComponent implements OnInit {
     this.router.navigateByUrl(ClientUrls.LOGIN_PAGE);
   }
 
-
-  // Haversine Formula
-  // dlon = lon2 - lon1
-  // dlat = lat2 - lat1
-  // a = (sin(dlat/2))^2 + cos(lat1) * cos(lat2) * (sin(dlon/2))^2
-  // c = 2 * atan2( sqrt(a), sqrt(1-a) )
-  // d = R * c (where R is the radius of the Earth) 6373 km
-  // lat: 46.81110426881619, lng: 23.564815521240238
-  // lat: 46.809224459253954, lng: 23.64480972290039
-  computeDistance() {
-    // var Rk = 6373; // mean radius of the earth (km) at 39 degrees from the equator
-
-    let lat1 = 46.81110426881619;
-    let lng1 = 23.564815521240238;
-    let lat2 = 46.809224459253954;
-    let lng2 = 23.64480972290039;
-
-    // convert coordinates to radians
-    lat1 = this.deg2rad(lat1);
-    lng1 = this.deg2rad(lng1);
-    lat2 = this.deg2rad(lat2);
-    lng2 = this.deg2rad(lng2);
-
-    const dlng = lng2 - lng1;
-    const dlat = lat2 - lat1;
-
-    const a = Math.pow(Math.sin(dlat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dlng / 2), 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // great circle distance in radians
-    const dk = 6373 * c; // great circle distance in km
-    const km = this.round(dk); // round the results down to the nearest 1/1000
-    console.log(km);
+  private prepareBroadcastMarkerMessage(lat: string, lng: string, eventType: string, locationId: number): MarkerEventMessage {
+    const message = new MarkerEventMessage();
+    message.location = new LocationCustom();
+    message.source = localStorage.getItem(LocalStorageConstants.USERNAME);
+    message.eventType = eventType;
+    message.location.id = locationId;
+    message.location.latitude = `${lat}`;
+    message.location.longitude = `${lng}`;
+    return message;
   }
 
-  // round to the nearest 1/1000
-  round(x) {
-    return Math.round(x * 1000) / 1000;
+
+  private setupMarkerEventsListener() {
+    this.transportService.markerEventsStream()
+      .subscribe(message => {
+        switch (message.eventType) {
+          case (EventType.MARKER_CREATED): {
+            this.handleMarkerCreatedEvent(message);
+            break;
+          }
+          case (EventType.MARKER_UPDATED): {
+            this.handleMarkerUpdatedEvent(message);
+            break;
+          }
+          case (EventType.MARKER_DELETED): {
+            this.handleMarkerDeletedEvent(message);
+            break;
+          }
+          default: {
+            break;
+          }
+        }
+      });
   }
 
-  // convert degrees to radians
-  deg2rad(deg) {
-    const rad = deg * Math.PI / 180; // radians = degrees * pi/180
-    return rad;
+
+  private addUserMarkerAtPointInsideScanArea(point: LocationCustom, user: AppUser) {
+    const pictureUrl = thisObject.setUpPicture(user.profilePicture);
+    const pictureMarker = L.divIcon({
+      popupAnchor: [0, -40],
+      iconSize: null,
+      html: `<div class="pin2 animated fadeInDown"><img class="img-inside" src="${pictureUrl}"></div>`
+    });
+    const marker = L.marker([point.latitude, point.longitude], {icon: pictureMarker}).addTo(mapGlobal);
+    marker.bindPopup(thisObject.userPopup(pictureUrl, user));
+    thisObject.scanAreaMarkers.add(marker._leaflet_id);
+    thisObject.locationLeafletIdIdMap.set(marker._leaflet_id, point.id);
   }
 
-  // dlon = lon2 - lon1
-  // dlat = lat2 - lat1
-  // a = (sin(dlat/2))^2 + cos(lat1) * cos(lat2) * (sin(dlon/2))^2
-  // c = 2 * atan2( sqrt(a), sqrt(1-a) )
-  // d = R * c (where R is the radius of the Earth)
+  private getLeafletIdByRealId(id: number): string {
+    for (const key of Array.from(this.locationLeafletIdIdMap.keys())) {
+      const value = this.locationLeafletIdIdMap.get(key);
+      if (id === value) {
+        return key;
+      }
+    }
+    return undefined;
+  }
+
+  private setUpPicture(attachement: AttachmentCustom): string {
+    return `data:${attachement.type};base64,${attachement.content}`;
+  }
 
 
+  private handleMarkerCreatedEvent(message: MarkerEventMessage) {
+    if (this.scanArea && message.source && message.location && this.appUser.username !== message.source) {
+      const center = this.scanArea.getLatLng();
+      const rad = this.scanArea.getRadius();
+      const point = message.location;
+      if (HaversineDistanceUtil.pointInsideCircle(+point.latitude, +point.longitude, +center.lat, +center.lng, rad)) {
+        this.userService.getPersonalInfoWithPic(message.source)
+          .subscribe(user => {
+            if (user && user.profilePicture) {
+              thisObject.addUserMarkerAtPointInsideScanArea(point, user);
+            }
+          });
+      }
+    }
+  }
+
+  private handleMarkerUpdatedEvent(message: MarkerEventMessage) {
+    if (this.scanArea && message.source && message.location && this.appUser.username !== message.source) {
+      const center = this.scanArea.getLatLng();
+      const rad = this.scanArea.getRadius();
+      const point = message.location;
+      const existingMarkerInScanAreaId = this.getLeafletIdByRealId(point.id); // marker existed in scan area before update or not
+      // if new location in scan area
+      if (HaversineDistanceUtil.pointInsideCircle(+point.latitude, +point.longitude, +center.lat, +center.lng, rad)) {
+        if (existingMarkerInScanAreaId) {
+          const layer = this.getGlobalLayerById(existingMarkerInScanAreaId);
+          const icon = layer.options.icon;
+          layer.setLatLng(L.latLng(point.latitude, point.longitude));
+          layer.setIcon(icon);
+        } else {
+          this.userService.getPersonalInfoWithPic(message.source)
+            .subscribe(user => {
+              if (user && user.profilePicture) {
+                thisObject.addUserMarkerAtPointInsideScanArea(point, user);
+              }
+            });
+        }
+      } else {
+        if (existingMarkerInScanAreaId) {
+          const layer = this.getGlobalLayerById(existingMarkerInScanAreaId);
+          this.removeMarkerFromGlobalMap(layer);
+        }
+      }
+    }
+  }
+
+  private handleMarkerDeletedEvent(message: MarkerEventMessage) {
+    if (this.scanArea && message.source && message.location && this.appUser.username !== message.source) {
+      const existingMarkerInScanAreaId = this.getLeafletIdByRealId(message.location.id);
+      if (existingMarkerInScanAreaId) {
+        const layer = this.getGlobalLayerById(existingMarkerInScanAreaId);
+        this.removeMarkerFromGlobalMap(layer);
+      }
+    }
+  }
 }

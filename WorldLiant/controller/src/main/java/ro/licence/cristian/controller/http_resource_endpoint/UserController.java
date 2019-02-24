@@ -30,29 +30,35 @@ public class UserController {
     // GET
 
     @GetMapping(value = "/profile-pic/{username}")
-    @PreAuthorize("@userSecurityConstraints.ownerOfAccount(#username, authentication)")
     public ResponseEntity<byte[]> getProfilePicture(@PathVariable String username, Authentication authentication) throws BusinessException {
         log.info("getProfilePicture: username={}", username);
         Attachment attachment = userService.getProfilePicture(username);
         return ResponseEntity.ok()
                 .header("Content-Disposition", "inline; filename=" + attachment.getName())
-                .contentType(attachment.getType())
+                .contentType(MediaType.valueOf(attachment.getType()))
                 .body(attachment.getContent());
     }
 
-    @GetMapping(value = "/personal-info/{username}")
+    @GetMapping(value = "/personal-info-dl/{username}")
     @PreAuthorize("@userSecurityConstraints.ownerOfAccount(#username, authentication)")
-    public ResponseEntity<AppUserDto> getPersonalInfo(@PathVariable String username, Authentication authentication) throws BusinessException {
-        log.info("getPersonalInfo: username={}", username);
-        return ResponseEntity.ok(userService.findUserByUsername(username));
+    public ResponseEntity<AppUserDto> getPersonalInfoWithDL(@PathVariable String username, Authentication authentication) throws BusinessException {
+        log.info("getPersonalInfoWithDL: username={}", username);
+        return ResponseEntity.ok(userService.findUserByUsernameLocationsLoaded(username));
+    }
+
+    @GetMapping(value = "/personal-info-pic/{username}")
+    public ResponseEntity<AppUserDto> getPersonalInfoWithProfilePic(@PathVariable String username) throws BusinessException {
+        log.info("getPersonalInfoWithProfilePic: username={}", username);
+        return ResponseEntity.ok(userService.findUserByUsernameProfilePicLoaded(username));
     }
 
     @GetMapping(value = "/scan")
     public ResponseEntity<List<AppUserDto>> getUsersWithLocationsInside(
             @RequestParam("lat") Double latitude,
             @RequestParam("lng") Double longitude,
-            @RequestParam("rad") Double radius) {
-        return ResponseEntity.ok(userService.getUsersForScan(latitude, longitude, radius));
+            @RequestParam("rad") Double radius,
+            Authentication authentication) {
+        return ResponseEntity.ok(userService.getUsersForScan(latitude, longitude, radius, authentication));
     }
 
     // POST

@@ -4,6 +4,7 @@ import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import {ServerUrls} from '../constants/server-urls';
 import {LocalStorageConstants} from '../constants/local-storage-constants';
+import {MarkerEventMessage} from '../model/web-socket-model/marker-event-message';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class WebSocketService {
   private stompClient;
   private privateSubject = new Subject<any>();
   private broadcastSubject = new Subject<any>();
+  private broadcastSubjectMarkerEvents = new Subject<any>();
 
   constructor() {
   }
@@ -36,6 +38,13 @@ export class WebSocketService {
           (error) => {
             console.log(error);
           });
+
+        this.stompClient.subscribe(`/topic/broadcast/marker-events`, (message) => {
+            this.broadcastSubjectMarkerEvents.next(message);
+          },
+          (error) => {
+            console.log(error);
+          });
       },
       (error) => {
         console.log(error);
@@ -51,6 +60,10 @@ export class WebSocketService {
     return this.broadcastSubject.asObservable();
   }
 
+  broadcastMarkerEventsChannel(): Observable<any> {
+    return this.broadcastSubjectMarkerEvents.asObservable();
+  }
+
   disconnectSocket() {
     console.log('Disconnecting...');
     this.stompClient.disconnect();
@@ -62,5 +75,9 @@ export class WebSocketService {
 
   sendBroadcastMessage(message: any) {
     this.stompClient.send('/app/broadcast/send', {}, JSON.stringify(message));
+  }
+
+  sendBroadcastMarkerEvents(messages: MarkerEventMessage[]) {
+    this.stompClient.send('/app/broadcast/marker-events/send', {}, JSON.stringify(messages));
   }
 }

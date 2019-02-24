@@ -13,17 +13,19 @@ import {RecaptchaModule} from 'angular-google-recaptcha';
 import {Constants} from './shared/constants/constants';
 import {SingupComponent} from './sing-up/singup.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatDatepickerModule, MatNativeDateModule, MatStepperModule} from '@angular/material';
+import {MatDatepickerModule, MatListModule, MatNativeDateModule, MatStepperModule} from '@angular/material';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ToastrModule} from 'ngx-toastr';
 import {ToastrUtilService} from './shared/service/toastr-util.service';
-import { HomeComponent } from './home/home.component';
+import {HomeComponent} from './home/home.component';
 import {WebSocketService} from './shared/service/web-socket.service';
 import {UtilityService} from './shared/service/utility.service';
 import {TransportService} from './shared/service/transport.service';
 import {TokenHttpInterceptor} from './shared/util/token-http-interceptor';
 import {UserService} from './shared/service/user/user.service';
 import {CustomExceptionHandler} from './shared/util/custom-exception-handler';
+import {NgxLoadingModule} from 'ngx-loading';
+import {MapService} from './home/service/map.service';
 
 @NgModule({
   declarations: [
@@ -42,12 +44,14 @@ import {CustomExceptionHandler} from './shared/util/custom-exception-handler';
     MatStepperModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatListModule,
     RecaptchaModule.forRoot({
       siteKey: Constants.SITE_KEY,
     }),
     BrowserAnimationsModule,
     NgSelectModule,
     ToastrModule.forRoot(),
+    NgxLoadingModule.forRoot({})
   ],
   providers: [
     LoginService,
@@ -57,6 +61,7 @@ import {CustomExceptionHandler} from './shared/util/custom-exception-handler';
     UtilityService,
     TransportService,
     UserService,
+    MapService,
     {provide: HTTP_INTERCEPTORS, useClass: TokenHttpInterceptor, multi: true},
     {provide: ErrorHandler, useClass: CustomExceptionHandler},
   ],

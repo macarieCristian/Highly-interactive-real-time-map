@@ -1,6 +1,7 @@
 package ro.licence.cristian.business.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.ReportingPolicy;
 import ro.licence.cristian.business.dto.AttachmentDto;
