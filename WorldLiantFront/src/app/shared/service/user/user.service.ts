@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {AppUser} from '../../model/app-user';
 import {ServerUrls} from '../../constants/server-urls';
 import {LocationCustom} from '../../model/location-custom';
@@ -42,5 +42,9 @@ export class UserService {
 
   deleteDesiredLocations(userId: number, locationsIds: number[]): Observable<boolean> {
     return this.httpClient.delete<boolean>(`${ServerUrls.DESIRED_LOCATIONS}${userId}/${locationsIds}`);
+  }
+
+  logout(username: string): Observable<boolean> {
+    return this.httpClient.post<boolean>(`${ServerUrls.LOGOUT}${username}`, {});
   }
 }

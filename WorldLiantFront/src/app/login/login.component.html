@@ -23,86 +23,85 @@
 
   <div style="margin-top: 15vh" class="container-fluid">
     <div class="row justify-content-center">
-      <div class="col-sm-3">
-        <form autocomplete="off"
-              (ngSubmit)="submitLogin()"
-              #loginForm="ngForm"
-              class="form-container">
+      <form autocomplete="off"
+            (ngSubmit)="submitLogin()"
+            #loginForm="ngForm"
+            class="form-container">
 
-          <div class="row justify-content-center">
-            <div class="logo">
-              <img class="globe-animation" src="../../assets/img/globe-logo.gif">
-            </div>
+        <div class="row justify-content-center">
+          <div class="logo">
+            <img class="globe-animation" src="../../assets/img/globe-logo.gif">
           </div>
+        </div>
 
-          <div class="row justify-content-center">
-            <span class="title"><b>World Liant</b></span>
-          </div>
+        <div class="row justify-content-center">
+          <span class="title"><b>World Liant</b></span>
+        </div>
 
-          <div class="md-form custom-margin">
-            <i style="color: black"
-               class="fa fa-user-circle-o prefix input-img-style">
-            </i>
-            <input mdbInputDirective
-                   id="username"
-                   name="username"
-                   [mdbValidate]="false"
-                   style="border-bottom-color: white; box-shadow: unset"
-                   [(ngModel)]="model.username"
-                   #usernameControl="ngModel"
-                   #username
-                   required
-                   pattern="^[a-zA-Z0-9]+$"
-                   class="form-control input-text-style"
-                   type="text">
-            <label style="color: white"
-                   class="input-label-text-style"
-                   for="username">Type your username</label>
-          </div>
+        <div class="md-form custom-margin">
+          <i style="color: black"
+             class="fa fa-user-circle-o prefix input-img-style">
+          </i>
+          <input mdbInputDirective
+                 id="username"
+                 name="username"
+                 [mdbValidate]="false"
+                 style="border-bottom-color: white; box-shadow: unset"
+                 [(ngModel)]="model.username"
+                 #usernameControl="ngModel"
+                 #username
+                 required
+                 pattern="^[a-zA-Z0-9]+$"
+                 class="form-control input-text-style"
+                 type="text">
+          <label style="color: white"
+                 class="input-label-text-style"
+                 for="username">Type your username</label>
+        </div>
 
-          <div class="md-form">
-            <i style="left: 0.1em; color: black"
-               class="fa fa-lock prefix input-img-style">
-            </i>
-            <input mdbInputDirective
-                   id="password"
-                   name="password"
-                   [mdbValidate]="false"
-                   style="border-bottom-color: white; box-shadow: unset"
-                   [(ngModel)]="model.password"
-                   #passwordControl="ngModel"
-                   required
-                   pattern="^[a-zA-Z0-9.@*&$]+$"
-                   class="form-control input-text-style"
-                   type="password">
-            <label style="color: white"
-                   class="input-label-text-style"
-                   for="password">Type your password</label>
-          </div>
+        <div class="md-form">
+          <i style="left: 0.1em; color: black"
+             class="fa fa-lock prefix input-img-style">
+          </i>
+          <input mdbInputDirective
+                 id="password"
+                 name="password"
+                 [mdbValidate]="false"
+                 style="border-bottom-color: white; box-shadow: unset"
+                 [(ngModel)]="model.password"
+                 #passwordControl="ngModel"
+                 required
+                 pattern="^[a-zA-Z0-9.@*&$]+$"
+                 class="form-control input-text-style"
+                 type="password">
+          <label style="color: white"
+                 class="input-label-text-style"
+                 for="password">Type your password</label>
+        </div>
 
-          <div class="row justify-content-center custom-margin">
-            <recaptcha
-              style="opacity: 0.8"
-              name="recaptcha"
-              [(ngModel)]="recaptcha">
-            </recaptcha>
-          </div>
+        <div class="row justify-content-center custom-margin">
+          <recaptcha
+            style="opacity: 0.8"
+            name="recaptcha"
+            [(ngModel)]="recaptcha">
+          </recaptcha>
+        </div>
 
-          <div class="md-form text-center">
-            <button mdbBtn
-                    type="submit"
-                    [disabled]="loginForm.invalid || !recaptcha"
-                    class="btn login-button">Login
-            </button>
-          </div>
+        <div class="md-form text-center">
+          <button mdbBtn
+                  type="submit"
+                  [disabled]="loginForm.invalid || !recaptcha"
+                  class="btn login-button">Login
+          </button>
+        </div>
 
-          <div class="text-center">
-            <small class="login-text">Don't have an account? <a routerLink="/sign-up"><b class="sign-up">Sign Up</b></a></small>
-          </div>
+        <div class="text-center">
+          <small class="login-text">Don't have an account? <a routerLink="/sign-up"><b class="sign-up">Sign Up</b></a>
+          </small>
+        </div>
 
-        </form>
-      </div>
+      </form>
     </div>
   </div>
-
 </div>
+

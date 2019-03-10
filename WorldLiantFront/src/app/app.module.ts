@@ -26,6 +26,7 @@ import {UserService} from './shared/service/user/user.service';
 import {CustomExceptionHandler} from './shared/util/custom-exception-handler';
 import {NgxLoadingModule} from 'ngx-loading';
 import {MapService} from './home/service/map.service';
+import {ChatService} from './shared/service/chat.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import {MapService} from './home/service/map.service';
     LoginComponent,
     ErrorComponent,
     SingupComponent,
-    HomeComponent
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,6 +63,7 @@ import {MapService} from './home/service/map.service';
     TransportService,
     UserService,
     MapService,
+    ChatService,
     {provide: HTTP_INTERCEPTORS, useClass: TokenHttpInterceptor, multi: true},
     {provide: ErrorHandler, useClass: CustomExceptionHandler},
   ],

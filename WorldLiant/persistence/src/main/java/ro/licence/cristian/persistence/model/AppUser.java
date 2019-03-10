@@ -16,6 +16,10 @@ import java.util.Set;
         @NamedEntityGraph(name = "appUserWithDesiredLocations",
         attributeNodes = @NamedAttributeNode(value = "desiredLocations"))
 })
+@NamedQuery(name = "AppUser.changeUserStatus",
+query = "update AppUser u set u.statusType = :status where u.username = :username")
+@NamedQuery(name = "AppUser.findAppUserIdByUsername",
+query = "select u.id from AppUser u where u.username = :username")
 @NamedQuery(name = "AppUser.findAppUserByUsernameProfilePicLoaded",
 query = "select distinct u from AppUser u inner join fetch u.profilePicture where u.username = :username")
 @NamedQuery(name = "AppUser.getUsersWithLocationsSatisfyingScanCriteria",
@@ -58,4 +62,8 @@ public class AppUser extends BaseEntity<Long> {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "appUser")
     private Set<Location> desiredLocations;
+
+    public AppUser(String username) {
+        this.username = username;
+    }
 }

@@ -28,12 +28,36 @@
   background-color: #841439;
 }
 
+.modal-header,
+.modal-header-custom {
+  border-bottom-color: #4275e4;
+}
+
+.modal-search-options {
+  position: absolute;
+  left: -285px;
+  bottom: 0;
+  margin: 0;
+  height: 30%;
+  width: 280px;
+  z-index: 1030;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+.slide-right {
+  left: 0;
+}
+
 .modal-side-chat {
   position: absolute;
   right: -285px;
   top: 69px;
   z-index: 1029;
   height: calc(100% - 69px);
+  width: 280px;
   margin: 0;
   -webkit-box-shadow: -4px 5px 5px 0px rgba(0,0,0,0.4);
   -moz-box-shadow: -4px 5px 5px 0px rgba(0,0,0,0.4);
@@ -42,7 +66,6 @@
   -moz-transition: all 1s ease;
   -o-transition: all 1s ease;
   transition: all 1s ease;
-  width: 280px;
 }
 
 .slide-in {
@@ -157,9 +180,10 @@
 .sendBox > input:-moz-placeholder { color: #818f96; }
 
 #chat-box-container {
+  display: flex;
   position: absolute;
   bottom: 0;
-  right: 0;
+  right: 285px;
   z-index: 1029;
   -webkit-transition: all 1s ease;
   -moz-transition: all 1s ease;
@@ -168,11 +192,7 @@
 }
 
 .slide-away {
-  right: 285px !important;
-}
-
-.appear {
-  display: none;
+  right: 0 !important;
 }
 
 #chat-box-container > .chat-box {
@@ -247,11 +267,11 @@
   border-radius: 1rem;
   margin-bottom: 0.5rem;
   word-break: break-all;
-  text-transform: capitalize;
+  text-transform: none;
 }
 .msg.him {
   float: left;
-  background-color: #6a64d4;
+  background-color: #4275e4;
   color: #fff;
   border-bottom-left-radius: 0.125rem;
 }
@@ -263,7 +283,7 @@
   border-bottom-right-radius: 0.125rem;
 }
 .msg.load {
-  background-color: #6a64d4;
+  background-color: #4275e4;
   border-bottom-left-radius: 0.125rem;
 }
 .msg > span {
@@ -300,14 +320,14 @@
   border: none;
   padding: 0.75rem 0.75rem;
   line-height: 1.25rem;
-  border-top: 0.125rem solid #ECEFF1;
+  border-top: 0.125rem solid #d8d8d8;
   transition: 0.5s ease-in-out;
 }
 .sendBox >input:hover,
 .sendBox >input:focus,
 .sendBox >input:active {
   outline: none!important;
-  border-top: 0.125rem solid #6a64d4;
+  border-top: 0.125rem solid #4275e4;
 }
 
 /*  LOADING MESSAGE CSS */
@@ -328,6 +348,70 @@
 0% {transform: translate(0,0);}
 25% {transform: translate(0,-0.25rem);}
 50% {transform: translate(0,0);}
+}
+
+/*Checkboxes styles*/
+input[type="checkbox"] { display: none; }
+
+input[type="checkbox"] + label {
+  display: inline;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 20px;
+  font: 17px 'Open Sans', Arial, sans-serif;
+  color: black;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+input[type="checkbox"] + label:last-child { margin-bottom: 0; }
+
+input[type="checkbox"] + label:hover {
+  color: #4275e4;
+}
+
+input[type="checkbox"] + label:before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #4275e4;
+  position: absolute;
+  left: 0;
+  top: 0;
+  -webkit-transition: all .12s, border-color .08s;
+  transition: all .12s, border-color .08s;
+}
+
+input[type="checkbox"]:checked + label:before {
+  width: 10px;
+  top: -5px;
+  left: 5px;
+  border-radius: 0;
+  opacity: 1;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+// Search options list
+.search-option-list {
+  list-style: none;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.search-option-list > li {
+  margin-bottom: 1.3rem;
+}
+
+.search-option-list > li > i {
+  float: right;
+  margin-right: 2rem;
 }
 
 

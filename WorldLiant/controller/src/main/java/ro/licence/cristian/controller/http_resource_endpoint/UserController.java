@@ -70,5 +70,11 @@ public class UserController {
         return ResponseEntity.ok(userService.saveNewAppUser(appUserDto, profilePicture));
     }
 
+    @PostMapping(value = "/logout/{username}")
+    @PreAuthorize("@userSecurityConstraints.ownerOfAccount(#username, authentication)")
+    public ResponseEntity<Boolean> logout(@PathVariable String username, Authentication authentication) {
+        return ResponseEntity.ok(userService.logout(username));
+    }
+
 
 }

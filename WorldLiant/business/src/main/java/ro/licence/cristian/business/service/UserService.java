@@ -27,4 +27,6 @@ public interface UserService {
     Attachment getProfilePicture(String username) throws BusinessException;
 
     Long getUserId(String username);
+
+    Boolean logout(String username);
 }

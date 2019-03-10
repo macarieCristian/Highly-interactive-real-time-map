@@ -1,6 +1,6 @@
 package ro.licence.cristian.persistence.model.enums;
 
-public enum StatusType {
-    ONLINE,
-    OFFLINE
+public enum MessageStatusType {
+    SEEN,
+    UNSEEN
 }

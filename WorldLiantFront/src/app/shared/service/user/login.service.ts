@@ -7,9 +7,7 @@ import {Observable} from 'rxjs';
 import {AppUser} from '../../model/app-user';
 import {Constants} from '../../constants/constants';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class LoginService {
 
   constructor(private httpClient: HttpClient) {

@@ -18,11 +18,14 @@ import ro.licence.cristian.security.util.TokenProvider;
 @RequestMapping("/authentication")
 public class AuthenticationController {
 
-    @Autowired
     private AuthenticationManager authenticationManager;
+    private TokenProvider tokenProvider;
 
     @Autowired
-    private TokenProvider tokenProvider;
+    public AuthenticationController(AuthenticationManager authenticationManager, TokenProvider tokenProvider) {
+        this.authenticationManager = authenticationManager;
+        this.tokenProvider = tokenProvider;
+    }
 
     @PostMapping(value = "/login")
     public ResponseEntity<TokenDto> login(@RequestBody AppUserCredentialsDto appUserCredentialsDto) {

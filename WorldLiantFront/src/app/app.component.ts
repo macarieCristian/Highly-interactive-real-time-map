@@ -4,6 +4,9 @@ import {UtilityService} from './shared/service/utility.service';
 import {TransportService} from './shared/service/transport.service';
 import {WebSocketCommand} from './shared/constants/web-socket-command';
 import {EventType} from './shared/model/web-socket-model/event-type';
+import {LocalStorageConstants} from './shared/constants/local-storage-constants';
+import {StandardMessageType} from './shared/model/web-socket-model/standard-message-type';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -11,33 +14,68 @@ import {EventType} from './shared/model/web-socket-model/event-type';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
+  private privateChannelSubscription: Subscription;
+  private broadcastChannelSubscription: Subscription;
+  private markerEventsChannelSubscription: Subscription;
+  private transportServiceSubscription: Subscription;
 
   constructor(private socketService: WebSocketService,
               private transportService: TransportService) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.connectIfRequired();
     if (UtilityService.isUserLoggedIn()) {
       this.transportService.webSocketCommandSink(WebSocketCommand.CONNECT_AND_SUBSCRIBE_ALL);
     }
   }
 
+  ngOnDestroy() {
+    this.privateChannelSubscription.unsubscribe();
+    this.broadcastChannelSubscription.unsubscribe();
+    this.markerEventsChannelSubscription.unsubscribe();
+    this.transportServiceSubscription.unsubscribe();
+  }
+
   private connectIfRequired() {
-    this.transportService.webSocketCommandStream()
+    this.transportServiceSubscription = this.transportService.webSocketCommandStream()
       .subscribe(command => {
         switch (command) {
           case (WebSocketCommand.CONNECT_AND_SUBSCRIBE_ALL): {
             this.socketService.connectToSocket();
-            this.socketService.privateChannel()
-              .subscribe(message => console.log(message),
-                err => console.log(err));
-            this.socketService.broadcastChannel()
-              .subscribe(message => console.log(message),
-                err => console.log(err));
-            this.socketService.broadcastMarkerEventsChannel()
+            this.privateChannelSubscription = this.socketService.privateChannel()
               .subscribe(wrapper => {
-                  console.log(wrapper);
+                  const message = JSON.parse(wrapper.body);
+                  switch (message.eventType) {
+                    case EventType.CHAT_MESSAGE:
+                    case EventType.TYPING_STOP:
+                    case EventType.TYPING: {
+                      this.transportService.chatEventsSink(message);
+                      break;
+                    }
+                    default: {
+                      break;
+                    }
+                  }
+                },
+                err => console.log(err));
+            this.broadcastChannelSubscription = this.socketService.broadcastChannel()
+              .subscribe(wrapper => {
+                  const message = JSON.parse(wrapper.body);
+                  switch (message.standardMessageType) {
+                    case StandardMessageType.LOGGED_IN:
+                    case StandardMessageType.LOGGED_OUT: {
+                      this.transportService.broadcastMessagesSink(message);
+                      break;
+                    }
+                    default: {
+                      break;
+                    }
+                  }
+                },
+                err => console.log(err));
+            this.markerEventsChannelSubscription = this.socketService.broadcastMarkerEventsChannel()
+              .subscribe(wrapper => {
                   const messages = JSON.parse(wrapper.body);
                   messages.forEach(message => {
                     switch (message.eventType) {
@@ -57,26 +95,14 @@ export class AppComponent implements OnInit, OnDestroy {
             break;
           }
           case (WebSocketCommand.DISCONNECT): {
-            this.socketService.disconnectSocket();
+            this.privateChannelSubscription.unsubscribe();
+            this.broadcastChannelSubscription.unsubscribe();
+            this.markerEventsChannelSubscription.unsubscribe();
+            const username = localStorage.getItem(LocalStorageConstants.USERNAME);
+            this.socketService.disconnectSocket(username);
             break;
           }
         }
       });
   }
-
-  ngOnDestroy(): void {
-    console.log('destroyed');
-  }
-
-  // disconnect() {
-  //   this.transportService.webSocketCommandSink(WebSocketCommand.DISCONNECT);
-  // }
-  //
-  // sendPrivateMess(to: string, message: string) {
-  //   this.socketService.sendPrivateMessage({destination: to, content: message});
-  // }
-  //
-  // sendBroadcastMess(message: string) {
-  //   this.socketService.sendBroadcastMessage({content: message});
-  // }
 }

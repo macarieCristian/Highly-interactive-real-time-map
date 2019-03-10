@@ -1,17 +1,22 @@
 package ro.licence.cristian.business.dto.websocket_dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import ro.licence.cristian.business.dto.BaseDto;
+import ro.licence.cristian.business.dto.websocket_dto.enums.EventType;
+import ro.licence.cristian.persistence.model.enums.MessageStatusType;
 
-import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class SimpleMessageDto implements Serializable {
+public class SimpleMessageDto extends BaseDto {
     private String source;
     private String destination;
     private String message;
     private EventType eventType;
+    private MessageStatusType statusType;
+    private LocalDateTime date;
 }

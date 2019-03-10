@@ -6,13 +6,15 @@ import {ClientUrls} from '../constants/client-urls';
 import {UtilExceptionMessage} from '../constants/util-exception-message';
 import {TransportService} from '../service/transport.service';
 import {WebSocketCommand} from '../constants/web-socket-command';
+import {WebSocketService} from '../service/web-socket.service';
+import {LocalStorageConstants} from '../constants/local-storage-constants';
 
 
 @Injectable()
 export class CustomExceptionHandler implements ErrorHandler {
   private router: Router;
   private toastrUtilService;
-  private transportService;
+  private webSocketService;
 
   constructor(private injector: Injector,
               private ngZone: NgZone) {
@@ -20,7 +22,7 @@ export class CustomExceptionHandler implements ErrorHandler {
 
   handleError(error: any): void {
     this.router = this.injector.get(Router);
-    this.transportService = this.injector.get(TransportService);
+    this.webSocketService = this.injector.get(WebSocketService);
     const httpErrorCode = error.status;
     if (httpErrorCode !== 0) {
       this.toastrUtilService = this.injector.get(ToastrUtilService);
@@ -43,8 +45,8 @@ export class CustomExceptionHandler implements ErrorHandler {
         }
       }
     } else {
+      this.webSocketService.disconnectSocket(localStorage.getItem(LocalStorageConstants.USERNAME));
       localStorage.clear();
-      this.transportService.webSocketCommandSink(WebSocketCommand.DISCONNECT);
       this.router.navigateByUrl(ClientUrls.LOGIN_PAGE);
     }
   }

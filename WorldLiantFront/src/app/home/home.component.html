@@ -12,7 +12,7 @@
       <li class="nav-item active waves-light" mdbWavesEffect>
         <a class="nav-link" (click)="goToCoordinates(homeCoordinates, 13)"><i class="fa fa-home"></i>Home</a>
       </li>
-      <li class="nav-item waves-light" mdbWavesEffect>
+      <li class="nav-item waves-light">
         <a class="nav-link">Link</a>
       </li>
       <li class="nav-item waves-light" mdbWavesEffect>
@@ -32,7 +32,7 @@
                mdbDropdownToggle
                class="img-custom z-depth-0">
 
-          <div class="dropdown-menu menu-item-custom dropdown-menu-right">
+          <div class="dropdown-menu menu-item-custom dropdown-menu-right" id="dada">
             <a class="dropdown-item" href="#">Action</a>
             <a class="dropdown-item" href="#">Another action</a>
             <a class="dropdown-item" href="#">Something else here</a>
@@ -63,17 +63,17 @@
 
         <mat-list>
           <h3 mat-subheader><strong>Scan area</strong></h3>
-          <mat-list-item *ngFor="let user of scanAreaUsers" (click)="openChat = true;">
+          <mat-list-item *ngFor="let user of scanAreaUsers" (click)="openChat(user)">
             <div mat-list-icon class="side-chat-img-wrapper">
               <img *ngIf="user.profilePicture"
                    [src]="setUpPicture(user.profilePicture)"
                    class="side-chat-img">
-              <div class="grey-dot"></div>
+              <div [class]="user.statusType === 'OFFLINE' ? 'grey-dot' : 'green-dot'"></div>
             </div>
             <h4 mat-line>{{user.lastName}} {{user.firstName}}</h4>
-            <mdb-badge pill="true" color="red">
-              13
-            </mdb-badge>
+            <!--<mdb-badge pill="true" color="red">-->
+            <!--13-->
+            <!--</mdb-badge>-->
           </mat-list-item>
           <mat-divider></mat-divider>
           <h3 mat-subheader><strong>Contacts</strong></h3>
@@ -85,95 +85,83 @@
               <div class="green-dot"></div>
             </div>
             <h4 mat-line>{{note.name}}</h4>
-            <mdb-badge pill="true" color="red">
-              2
-            </mdb-badge>
+            <!--<mdb-badge pill="true" color="red">-->
+            <!--2-->
+            <!--</mdb-badge>-->
           </mat-list-item>
         </mat-list>
 
       </div>
     </div>
   </div>
-
-
-
   <div id="chat-box-container"
-       [class.appear]="!openChat"
-       [class.slide-away]="sideChat">
-    <div class="chat-box">
+       *ngIf="openChatList.length > 0"
+       [class.slide-away]="!sideChat">
+    <div class="chat-box" *ngFor="let user of openChatList">
       <div class="chat-box-header">
-        <div class="chat-close" (click)="openChat = false;">x</div>
+        <div class="chat-close" (click)="closeChat(user)">x</div>
         <div>
           <div class="chat-img-wrapper">
-            <img *ngIf="profilePictureUrl"
-                 [src]="profilePictureUrl"
+            <img *ngIf="user.profilePicture"
+                 [src]="setUpPicture(user.profilePicture)"
                  class="chat-img">
-            <div class="green-dot-chat"></div>
+            <div [class]="user.statusType === 'OFFLINE' ? 'grey-dot-chat' : 'green-dot-chat'"></div>
           </div>
           <span class="chat-header-text-wrapper">
-            <span class="chat-header-text">Macarie Cristian</span>
+            <span class="chat-header-text">{{user.lastName}} {{user.firstName}}</span>
           </span>
         </div>
       </div>
+      <!--<div class="chats" #scrollMe [scrollTop]="scrollMe.scrollHeight">-->
       <div class="chats">
-        <ul>
-          <li>
-            <div class="msg him">
-              <span class="partner">ionut</span>
-              mesageee fasf asf sa fas fa sf as fas f sa fsa f as f saf as fa sf asf as f asf
-              <span class="time"> timeee </span>
+        <ul *ngIf="chatListMessagesMap.get(user.username)">
+          <li *ngFor="let message of chatListMessagesMap.get(user.username).messages">
+            <div class="msg"
+                 [class.him]="message.source === user.username"
+                 [class.you]="message.source === appUser.username">
+              <span class="partner">{{message.source === user.username ? user.firstName : appUser.firstName}}</span>
+              {{message.message}}
+              <span class="time">{{message.date | date: 'medium'}}</span>
             </div>
           </li>
           <li>
-            <div class="msg you">
-              <span class="partner">ionut</span>
-              mesageee
-              <span class="time"> timeee </span>
-            </div>
-          </li>
-          <li>
-            <div class="msg you">
-              <span class="partner">ionut</span>
-              mesageee
-              <span class="time"> timeee </span>
-            </div>
-          </li>
-          <li class="pending">
-            <div class="msg load">
+            <div class="msg load" *ngIf="chatListMessagesMap.get(user.username).typing === true">
               <div class="dot-anim"></div>
               <div class="dot-anim"></div>
               <div class="dot-anim"></div>
-            </div>
-          </li>
-          <li>
-            <div class="msg you">
-              <span class="partner">ionut</span>
-              mesageee
-              <span class="time"> timeee </span>
-            </div>
-          </li>
-          <li>
-            <div class="msg you">
-              <span class="partner">ionut</span>
-              mesageee
-              <span class="time"> timeee </span>
-            </div>
-          </li>
-          <li>
-            <div class="msg you">
-              <span class="partner">ionut</span>
-              mesageee
-              <span class="time"> timeee </span>
             </div>
           </li>
         </ul>
       </div>
       <div class="sendBox">
-        <input type="text" placeholder="enter next line...">
+        <input type="text"
+               #messageInput
+               (keyup)="onKeyUpEventHandler(user.username, messageInput.value)"
+               placeholder="type something..."
+               (keyup.enter)="sendChatMessage(user.username, 'CHAT_MESSAGE', messageInput.value); messageInput.value = ''; onKeyUpEventHandler(user.username, '')">
       </div>
     </div>
   </div>
 
+
+  <div class="modal-dialog modal-full-height modal-left modal-search-options"
+       [class.slide-right]="sideOptions"
+       role="document">
+    <div class="modal-content" style="height: 100%">
+      <div class="modal-header">
+        <h4 class="modal-title w-100">Looking for...?</h4></div>
+      <div class="modal-body custom-modal-body">
+        <ul class="search-option-list">
+          <li *ngFor="let option of searchOptions; let i = index">
+            <input type="checkbox" [id]="i" [(ngModel)]="option.value">
+            <label [for]="i">{{option.name}}</label>
+            <i [class]="option.icon"></i>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
 
 
 </div>

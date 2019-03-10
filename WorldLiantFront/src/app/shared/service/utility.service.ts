@@ -1,12 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Constants} from '../constants/constants';
-import {HttpClient} from '@angular/common/http';
-import {ResponseContentType} from '@angular/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {AppUser} from '../model/app-user';
+import {ServerUrls} from '../constants/server-urls';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class UtilityService {
 
   constructor(private httpClient: HttpClient) {

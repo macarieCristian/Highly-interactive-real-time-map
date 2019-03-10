@@ -2,7 +2,6 @@ package ro.licence.cristian.business.service;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -118,7 +117,7 @@ public class UserServiceImpl implements UserService {
     private void prepareNewAppUser(@NotNull AppUser appUser, MultipartFile profilePicture) throws BusinessException {
         appUser.setPassword(bCryptPasswordEncoder.encode(appUser.getPassword()));
         appUser.setAccountStatusType(AccountStatusType.ACTIVE);
-        appUser.setStatusType(StatusType.AVAILABLE);
+        appUser.setStatusType(StatusType.OFFLINE);
         Set<Role> roles = new HashSet<>();
         Role basicRole = Role.builder().roleType(RoleType.ROLE_REGULAR_USER).build();
         basicRole.setId(RoleType.ROLE_REGULAR_USER.getId());
@@ -145,5 +144,12 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(BusinessExceptionCode.CAN_NOT_SAVE_PHOTO);
         }
         return profilePic;
+    }
+
+    @Override
+    public Boolean logout(final String username) {
+        userRepository.changeUserStatus(username, StatusType.OFFLINE);
+        log.info("logout successful: username={}", username);
+        return true;
     }
 }

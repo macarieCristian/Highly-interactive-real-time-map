@@ -16,8 +16,9 @@
 }
 
 .form-container {
+  z-index: 2000;
   border: 0 solid;
-  padding: 8%;
+  padding: 2% 3% 2% 3%;
   min-width: 445px;
   -webkit-box-shadow: -1px 4px 26px 11px rgba(0,0,0,0.75);
   -moz-box-shadow: -1px 4px 26px 11px rgba(0,0,0,0.75);

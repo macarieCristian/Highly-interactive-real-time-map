@@ -3,4 +3,6 @@ export class UtilExceptionMessage {
   static GENERIC_MESSAGE = 'An error occurred.';
 
   static LOGIN_FAILED = 'Looks like your password or your username is wrong.';
+
+  static RADIUS_ADJUSTED = 'Looks like you exceeded the maximum radius of 50 km so we did a little adjustment :).';
 }

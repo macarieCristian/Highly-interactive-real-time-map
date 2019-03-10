@@ -3,4 +3,7 @@ export class EventType {
   static MARKER_UPDATED = 'MARKER_UPDATED';
   static MARKER_DELETED = 'MARKER_DELETED';
   static NOTIFICATION = 'NOTIFICATION';
+  static CHAT_MESSAGE = 'CHAT_MESSAGE';
+  static TYPING = 'TYPING';
+  static TYPING_STOP = 'TYPING_STOP';
 }

@@ -19,10 +19,19 @@
   text-shadow: 2px 2px black;
 }
 
+.mat-horizontal-content-container,
+.mat-horizontal-content-container-custom {
+  padding: 0 !important;
+}
 
+html, body {
+  height: 100%;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 .mat-step-icon,
 .mat-step-icon-state-edit,
@@ -39,13 +48,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .mat-vertical-stepper-header:hover {
-  background-color: rgba(255,255,255,0.3);
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 .mat-vertical-stepper-header {
   border-bottom-left-radius: 25px;
   border-top-left-radius: 25px;
-  background-color: rgba(0,0,0,0.1);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .ng-placeholder,
@@ -72,18 +81,18 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-step-header,
 .step-header-custom {
   border-radius: 25px;
-  background-color: rgba(0,0,0,0.3) !important;
+  background-color: rgba(0, 0, 0, 0.3) !important;
 }
 
 .mat-step-header:hover,
 .step-header-custom:hover {
-  background-color: rgba(0,0,0,0.4) !important;
+  background-color: rgba(0, 0, 0, 0.4) !important;
 }
 
 .mat-stepper-horizontal-line,
 .mat-stepper-horizontal-line-custom {
   border-top-width: 1px !important;
-  border-top-color: rgba(0,0,0,.22) !important;
+  border-top-color: rgba(0, 0, 0, .22) !important;
 }
 
 .img-upload-custom .img-ul-upload {
@@ -197,18 +206,49 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   }
 }
 
+.leaflet-search-option-control-wrapper {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.leaflet-bar a:hover {
+  background-color: #c7e1ff;
+}
+
 .leaflet-control-custom {
   height: 30px;
   width: 30px;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
   background-color: white;
   cursor: pointer;
-  text-align: center;
-  vertical-align: bottom;
-  font-size: 20px;
+  //border-bottom: 1px solid #ccc;
+}
+
+.leaflet-control-wrapper > div {
+  border-bottom: 1px solid #ccc;
+}
+
+.leaflet-control-wrapper:last-child {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.open-chat-icon {
+  color: #464646;
+  font-size: 1.6em !important;
+}
+
+.search-option-icon {
+  color: #464646;
+  font-size: 1.4em !important;
 }
 
 .leaflet-control-custom:hover {
-  background-color: #f4f4f4;
+  background-color: #c7e1ff;
 }
 
 .mat-list-item,
@@ -219,4 +259,84 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-list-item:hover,
 .list-item-custom:hover {
   background-color: #8dc2f7;
+}
+
+.pulse {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  height: 14px;
+  width: 14px;
+  position: absolute;
+  left: -7.5px;
+  top: -6px;
+  transform: rotateX(55deg);
+  z-index: -2;
+
+  &:after {
+    content: "";
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    margin: -13px 0 0 -13px;
+    animation: pulsate 2.5s ease-out;
+    animation-iteration-count: 3;
+    opacity: 0.0;
+    background: rgba(94, 190, 255, 0.5);
+    box-shadow: 0 0 1px 2px #2D99D3;
+    animation-delay: 1.1s;
+  }
+}
+
+@keyframes pulsate {
+
+  0% {
+    transform: scale(0.1, 0.1);
+    opacity: 0.0;
+  }
+  50% {
+    opacity: 1.0;
+  }
+  100% {
+    transform: scale(1.2, 1.2);
+    opacity: 0;
+  }
+}
+
+.custom-button {
+  border-radius: 25px;
+  text-transform: capitalize;
+  text-shadow: 1px 1px black;
+  font-size: 1.2em;
+  color: white;
+  background-image: linear-gradient(to right, #7873f5 0%, #95caff 51%, #7873f5 100%);
+  transition: 0.5s;
+  background-size: 200% auto;
+  border: 0;
+  padding: 5px 10px 5px 10px;
+  cursor: pointer;
+  width: 120px;
+  position: absolute;
+  top: -15px;
+  left: calc(50% - 60px);
+}
+
+.custom-button:hover {
+  background-position: right center;
+}
+
+.custom-button:active {
+  background: #95caff;
+}
+
+.card-body-custom {
+  position: relative !important;
+}
+
+.card-title-pos {
+  margin-top: 0.5rem;
+}
+
+.disappear {
+  display: none;
 }
