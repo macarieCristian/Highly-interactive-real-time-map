@@ -11,7 +11,6 @@ import {Observable} from 'rxjs';
 import {StandardMessage} from '../../shared/model/web-socket-model/standard-message';
 import {SearchOption} from '../../shared/model/util-model/search-option';
 import {SearchResultPinData} from '../../shared/model/util-model/search-result-pin-data';
-import {AttachmentCustom} from '../../shared/model/attachment-custom';
 
 @Injectable()
 export class MapService {
@@ -56,6 +55,12 @@ export class MapService {
       }
     });
     return result;
+  }
+
+  static addInListByUsernameDistinct(list: AppUser[], user: AppUser) {
+    if (!list.find(u => u.username === user.username)) {
+      list.push(user);
+    }
   }
 
   static getUserPopup(picUrl: string, appUser: AppUser): string {
@@ -118,13 +123,5 @@ export class MapService {
       .set(Constants.INTENT_PARAM, Constants.INTENT)
       .set(Constants.VERSION_PARAM, Constants.VERSION);
     return this.httpClient.get(ServerUrls.FORSQUARE_VENUSE_IN_CIRCLE, {params: params});
-  }
-
-  getCat(): Observable<any> {
-    const params = new HttpParams()
-      .set(Constants.CLIENT_ID_PARAM, Constants.CLIENT_ID)
-      .set(Constants.CLIENT_SECRET_PARAM, Constants.CLIENT_SECRET)
-      .set(Constants.VERSION_PARAM, Constants.VERSION);
-    return this.httpClient.get('https://api.foursquare.com/v2/venues/categories', {params: params});
   }
 }

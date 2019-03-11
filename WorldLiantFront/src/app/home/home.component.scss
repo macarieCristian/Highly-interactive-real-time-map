@@ -2,6 +2,11 @@
   height: 100vh;
 }
 
+.nav-bar-title {
+  text-shadow: 1px 1px black;
+  font-family: 'wild-youth', 'arial', sans-serif;
+}
+
 .img-custom {
   height: 45px;
   width: 45px;
@@ -124,232 +129,6 @@
 .custom-modal-body::-webkit-scrollbar-thumb { background: #c1c1c1; }
 .custom-modal-body::-webkit-scrollbar-thumb:hover { background: #c1c1c1; }
 
-
-.grey-dot,
-.green-dot,
-.red-dot,
-.dot {
-  height: 10px;
-  width: 10px;
-  border-radius: 50%;
-  position: absolute;
-  bottom: 3px;
-  right: 5px;
-}
-
-.grey-dot-chat,
-.green-dot-chat,
-.red-dot-chat,
-.chat-dot {
-  height: 10px;
-  width: 10px;
-  border-radius: 50%;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-}
-
-.red-dot-chat,
-.red-dot {
-  background-color: red;
-}
-.red-dot-chat {}
-
-.green-dot-chat,
-.green-dot {
-  background-color: #42b72a;
-}
-.green-dot-chat {}
-
-.grey-dot-chat,
-.grey-dot {
-  background-color: #ababab;
-}
-.grey-dot-chat{}
-
-// chat-box styles
-
-/* CUSTOM SCROLLBAR FOR CHATBOX */
-.chats::-webkit-scrollbar { width: 0.4rem; }
-.chats::-webkit-scrollbar-thumb { background: #c1c1c1; }
-.chats::-webkit-scrollbar-thumb:hover { background: #c1c1c1; }
-/* INPUT TEXT PLACEHOLDER CUSTOMIZE */
-.sendBox > input::-webkit-input-placeholder { color: #818f96; }
-.sendBox > input::-moz-placeholder { color: #818f96; }
-.sendBox > input:-ms-input-placeholder { color: #818f96; }
-.sendBox > input:-moz-placeholder { color: #818f96; }
-
-#chat-box-container {
-  display: flex;
-  position: absolute;
-  bottom: 0;
-  right: 285px;
-  z-index: 1029;
-  -webkit-transition: all 1s ease;
-  -moz-transition: all 1s ease;
-  -o-transition: all 1s ease;
-  transition: all 1s ease;
-}
-
-.slide-away {
-  right: 0 !important;
-}
-
-#chat-box-container > .chat-box {
-  border-radius: 8px 8px 0 0;
-  position: relative;
-  display: table;
-  float: left;
-  margin: 1rem 1rem 0 1rem;
-  width: 20rem;
-  height: 25rem;
-  background-color: white;
-  box-shadow: 0 0.25rem 2rem rgba(38,50,56, 0.1);
-  overflow: hidden;
-}
-
-.chat-close {
-  position: absolute;
-  top: 3px;
-  right: 5px;
-  color: black;
-  font: 16px/14px Tahoma, Verdana, sans-serif;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-#chat-box-container > .chat-box > .chat-box-header {
-  position: relative;
-  height: 3rem;
-  width: 100%;
-  background-color: #4275e4;
-  border-radius: 8px 8px 0 0;
-  display: flex;
-  flex-direction: row;
-  align-items: center !important;
-}
-
-.chat-box-header > div {
-  display: flex;
-}
-
-
-
-#chat-box-container > .chat-box > .chats {
-  position: absolute;
-  top: 3rem; left: 0; bottom: 0; right: 0;
-  display: table-cell;
-  vertical-align: bottom;
-  padding: 1rem;
-  margin-bottom: 2.875rem;
-  overflow: auto;
-}
-.chats > ul { padding: 0; }
-.chats > ul > li {
-  position: relative;
-  list-style: none;
-  display: block;
-  margin: 1rem 0;
-  transition: 0.5s all;
-}
-.chats > ul > li:after {
-  display: table;
-  content: '';
-  clear: both;
-}
-.msg {
-  max-width: 85%;
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  line-height: 1rem;
-  min-height: 2rem;
-  font-size: 0.875rem;
-  border-radius: 1rem;
-  margin-bottom: 0.5rem;
-  word-break: break-all;
-  text-transform: none;
-}
-.msg.him {
-  float: left;
-  background-color: #4275e4;
-  color: #fff;
-  border-bottom-left-radius: 0.125rem;
-}
-.msg.you {
-  float: right;
-  background-color: #ECEFF1;
-  color: black;
-  font-weight: 400;
-  border-bottom-right-radius: 0.125rem;
-}
-.msg.load {
-  background-color: #4275e4;
-  border-bottom-left-radius: 0.125rem;
-}
-.msg > span {
-  font-weight: 500;
-  position: absolute;
-}
-.msg > span.partner {
-  color: #7e8e96;
-  top: 0;
-  font-size: 0.675rem;
-  margin-top: -1rem;
-}
-.msg > span.time {
-  color: #7e8e96;
-  font-size: 0.6rem;
-  bottom: -0.35rem;
-  display: none;
-}
-.msg:hover span.time { display: block; }
-.msg.him > span { left: 0;	 }
-.msg.you > span {	right: 0; }
-.sendBox {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: white;
-}
-.sendBox > input {
-  font-family: 'Lato', sans-serif;
-  font-size: 0.875rem;
-  display: block;
-  width: 100%;
-  border: none;
-  padding: 0.75rem 0.75rem;
-  line-height: 1.25rem;
-  border-top: 0.125rem solid #d8d8d8;
-  transition: 0.5s ease-in-out;
-}
-.sendBox >input:hover,
-.sendBox >input:focus,
-.sendBox >input:active {
-  outline: none!important;
-  border-top: 0.125rem solid #4275e4;
-}
-
-/*  LOADING MESSAGE CSS */
-.load .dot-anim {
-  display: inline-block;
-  width: 0.375rem;
-  height: 0.375rem;
-  border-radius: 0.25rem;
-  margin-right: 0.125rem;
-  background-color: rgba(255,255,255,0.75);
-}
-
-.load .dot-anim:nth-last-child(1) {animation: loadAnim 1s .2s linear infinite;}
-.load .dot-anim:nth-last-child(2) {animation: loadAnim 1s .4s linear infinite;}
-.load .dot-anim:nth-last-child(3) {animation: loadAnim 1s .6s linear infinite;}
-
-@keyframes loadAnim {
-0% {transform: translate(0,0);}
-25% {transform: translate(0,-0.25rem);}
-50% {transform: translate(0,0);}
-}
-
 /*Checkboxes styles*/
 input[type="checkbox"] { display: none; }
 
@@ -412,6 +191,44 @@ input[type="checkbox"]:checked + label:before {
 .search-option-list > li > i {
   float: right;
   margin-right: 2rem;
+}
+
+.popup-button-custom {
+  text-transform: capitalize;
+  background: linear-gradient(50deg,#45cafc,#303f9f);
+  margin-right: 0.5rem;
+}
+
+.popup-button-custom-o {
+  text-transform: capitalize;
+  border-color: #3877c4;
+  color: #3877c4;
+}
+
+.popup-header-custom {
+  background: linear-gradient(50deg,#45cafc,#303f9f);
+}
+
+.check-wrapper {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-custom-check-box {
+  font-size: 15px !important;
+}
+
+.custom-custom-check-box:before {
+  border-bottom-color: #3a7ec9 !important;
+  border-right-color: #3a7ec9 !important;
 }
 
 

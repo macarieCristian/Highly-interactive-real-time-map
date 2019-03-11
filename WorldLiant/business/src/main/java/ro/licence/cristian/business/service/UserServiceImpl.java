@@ -7,13 +7,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ro.licence.cristian.business.dto.AppUserDto;
+import ro.licence.cristian.business.dto.ScanAreaDto;
 import ro.licence.cristian.business.exception.BusinessException;
 import ro.licence.cristian.business.exception.BusinessExceptionCode;
 import ro.licence.cristian.business.mapper.AppUserMapper;
+import ro.licence.cristian.business.mapper.ScanAreaMapper;
 import ro.licence.cristian.business.validator.AppUserValidator;
 import ro.licence.cristian.persistence.model.AppUser;
 import ro.licence.cristian.persistence.model.Attachment;
 import ro.licence.cristian.persistence.model.Role;
+import ro.licence.cristian.persistence.model.ScanArea;
 import ro.licence.cristian.persistence.model.enums.AccountStatusType;
 import ro.licence.cristian.persistence.model.enums.RoleType;
 import ro.licence.cristian.persistence.model.enums.StatusType;
@@ -35,14 +38,16 @@ public class UserServiceImpl implements UserService {
     private AttachmentRepository attachmentRepository;
     private UserRepository userRepository;
     private AppUserMapper appUserMapper;
+    private ScanAreaMapper scanAreaMapper;
     private AppUserValidator appUserValidator;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserServiceImpl(AttachmentRepository attachmentRepository, UserRepository userRepository, AppUserMapper appUserMapper, AppUserValidator appUserValidator, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(AttachmentRepository attachmentRepository, UserRepository userRepository, AppUserMapper appUserMapper, AppUserValidator appUserValidator, BCryptPasswordEncoder bCryptPasswordEncoder, ScanAreaMapper scanAreaMapper) {
         this.attachmentRepository = attachmentRepository;
         this.userRepository = userRepository;
         this.appUserMapper = appUserMapper;
+        this.scanAreaMapper = scanAreaMapper;
         this.appUserValidator = appUserValidator;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
@@ -93,6 +98,13 @@ public class UserServiceImpl implements UserService {
         Optional<Attachment> attachmentOptional = attachmentRepository.findByOwnerUsernameEquals(username);
         return attachmentOptional
                 .orElseThrow(() -> new BusinessException(BusinessExceptionCode.ATTACHMENT_FOR_USERNAME_DOES_NOT_EXIST));
+    }
+
+    @Override
+    public List<ScanAreaDto> userScanAreas(String username) {
+        List<ScanArea> scanAreas = userRepository.getUserScanAreas(username);
+        log.info("userScanAreas: scanAreas={}", scanAreas);
+        return scanAreaMapper.entitiesToDtos(scanAreas);
     }
 
     @Override

@@ -3,10 +3,7 @@ package ro.licence.cristian.persistence.model;
 import lombok.*;
 import org.springframework.http.MediaType;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
@@ -23,6 +20,9 @@ public class Attachment extends BaseEntity<Long> {
     @Lob
     private byte[] content;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private AppUser owner;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Event event;
 }

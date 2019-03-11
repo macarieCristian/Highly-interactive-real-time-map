@@ -27,6 +27,9 @@ import {CustomExceptionHandler} from './shared/util/custom-exception-handler';
 import {NgxLoadingModule} from 'ngx-loading';
 import {MapService} from './home/service/map.service';
 import {ChatService} from './shared/service/chat.service';
+import {MapRepository} from './shared/repository/map-repository';
+import { ChatComponent } from './home/chat/chat.component';
+import {NgxAutoScrollModule} from 'ngx-auto-scroll';
 
 @NgModule({
   declarations: [
@@ -35,6 +38,7 @@ import {ChatService} from './shared/service/chat.service';
     ErrorComponent,
     SingupComponent,
     HomeComponent,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,7 +56,8 @@ import {ChatService} from './shared/service/chat.service';
     BrowserAnimationsModule,
     NgSelectModule,
     ToastrModule.forRoot(),
-    NgxLoadingModule.forRoot({})
+    NgxLoadingModule.forRoot({}),
+    NgxAutoScrollModule
   ],
   providers: [
     LoginService,
@@ -64,6 +69,7 @@ import {ChatService} from './shared/service/chat.service';
     UserService,
     MapService,
     ChatService,
+    MapRepository,
     {provide: HTTP_INTERCEPTORS, useClass: TokenHttpInterceptor, multi: true},
     {provide: ErrorHandler, useClass: CustomExceptionHandler},
   ],

@@ -30,4 +30,5 @@ public class AppUserDto extends BaseDto {
     private LocationDto homeLocation;
     private Set<LocationDto> desiredLocations;
     private AttachmentDto profilePicture;
+    private Set<ScanAreaDto> scanAreas;
 }

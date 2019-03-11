@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ServerUrls} from '../shared/constants/server-urls';
 import {UtilityService} from '../shared/service/utility.service';
 import {UserService} from '../shared/service/user/user.service';
@@ -18,63 +18,36 @@ import {HaversineDistanceUtil} from '../shared/util/haversine-distance-util';
 import {MapService} from './service/map.service';
 import {UtilExceptionMessage} from '../shared/constants/util-exception-message';
 import {AttachmentCustom} from '../shared/model/attachment-custom';
-import {ChatMessage} from '../shared/model/web-socket-model/chat-message';
-import {UserChat} from '../shared/model/util-model/user-chat';
 import {ChatService} from '../shared/service/chat.service';
-import {StandardMessageType} from '../shared/model/web-socket-model/standard-message-type';
-import {StandardMessage} from '../shared/model/web-socket-model/standard-message';
-import {UserStatusType} from '../shared/model/user-status-type';
 import {SearchOption} from '../shared/model/util-model/search-option';
 import {SearchResultPinData} from '../shared/model/util-model/search-result-pin-data';
+import {ScanAreaContainer} from '../shared/model/util-model/scan-area-container';
+import {MapRepository} from '../shared/repository/map-repository';
 
 declare let L;
 export let mapGlobal;
 export let editableLayers;
-export let profilePicUrl;
 export let thisObject;
-export let personalMarkerImage;
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit, OnDestroy {
-  // Subscriptions
+export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
+  sac: ScanAreaContainer;
+  @ViewChild('chat') chat;
+
   private markerEventsSubscription;
-  private chatEventsSubscription;
-  private broadcastMessagesSubscription;
 
   profilePictureUrl: string;
+  personalMarkerIcon: any;
+
   appUser: AppUser;
   homeCoordinates: number[];
 
-
-  cats = [];
-
-  // key: leaflet_id value: id
-  locationLeafletIdIdMap: Map<string, number>;
-  scanAreaMarkers: Set<string>;
-  venueMarkers: Set<string>;
-  scanArea: any = null;
-  scanAreaUsers: AppUser[];
-  contactUsers: AppUser[];
-
   sideOptions = false;
   searchOptions: SearchOption[];
-  sideChat = false;
-  openChatList: AppUser[];
-  chatListMessagesMap: Map<string, UserChat>;
-  notes = [
-    {
-      name: 'Andrei Numefoartelung',
-      updated: new Date('1/17/16'),
-    },
-    {
-      name: 'Bogdan Florina',
-      updated: new Date('1/28/16'),
-    }
-  ];
 
   constructor(private utilityService: UtilityService,
               private userService: UserService,
@@ -83,10 +56,15 @@ export class HomeComponent implements OnInit, OnDestroy {
               private chatService: ChatService,
               private toastrUtilService: ToastrUtilService,
               private webSocketService: WebSocketService,
-              private transportService: TransportService) {
+              private transportService: TransportService,
+              private mapRepo: MapRepository) {
   }
 
   ngOnInit() {
+    this.sac = new ScanAreaContainer();
+    this.sac.userMarkers = new Set<string>();
+    this.sac.venueMarkers = new Set<string>();
+
     // Forsquare search option
     this.searchOptions = [
       {
@@ -126,28 +104,25 @@ export class HomeComponent implements OnInit, OnDestroy {
         id: Constants.TRAVEL_AND_TRANSPORT_CATEGORY_ID,
       },
     ];
-    this.locationLeafletIdIdMap = new Map<string, number>();
-    this.scanAreaMarkers = new Set<string>();
-    this.venueMarkers = new Set<string>();
-    this.scanAreaUsers = [];
-    this.openChatList = [];
-    this.chatListMessagesMap = new Map<string, UserChat>();
     thisObject = this;
     this.getProfileInfo();
   }
 
+  ngAfterViewInit() {
+
+  }
+
   ngOnDestroy() {
-    this.broadcastMessagesSubscription.unsubscribe();
-    this.chatEventsSubscription.unsubscribe();
     this.markerEventsSubscription.unsubscribe();
   }
 
-  getProfileInfo() {
+  private getProfileInfo() {
     const username = localStorage.getItem(LocalStorageConstants.USERNAME);
     if (username) {
       this.userService.getPersonalInfoWithLocations(username)
         .subscribe(result => {
           this.appUser = result;
+          this.chat.appUser = result;
           this.homeCoordinates = [+this.appUser.homeLocation.latitude, +this.appUser.homeLocation.longitude];
           this.getProfilePicture();
         });
@@ -161,14 +136,13 @@ export class HomeComponent implements OnInit, OnDestroy {
         const reader = new FileReader();
         reader.onload = e => {
           this.profilePictureUrl = reader.result.toString();
-          profilePicUrl = this.profilePictureUrl;
           this.initMap();
         };
         reader.readAsDataURL(img);
       });
   }
 
-  initMap() {
+  private initMap() {
     mapGlobal = L.map('mapid').setView(this.homeCoordinates, 13);
     L.tileLayer(Constants.LEAFLET_URL, Constants.LEAFLET_MAP_PROPERTIES).addTo(mapGlobal);
     this.addFAMarker(this.homeCoordinates, 'fa-home', 'red', '<b>Hello!</b> Here is your home!');
@@ -176,10 +150,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     editableLayers = new L.FeatureGroup();
     mapGlobal.addLayer(editableLayers);
 
-    personalMarkerImage = L.divIcon({
+    this.personalMarkerIcon = L.divIcon({
       popupAnchor: [0, -40],
       iconSize: null,
-      html: `<div class="pin2 animated fadeIn"><img class="img-inside" src="${profilePicUrl}"></div><div class="pulse"></div>`
+      html: `<div class="pin2 animated fadeIn"><img class="img-inside" src="${this.profilePictureUrl}"></div><div class="pulse"></div>`
     });
 
     this.addSelfDesiredLocationMarkers();
@@ -207,7 +181,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         },
         rectangle: false,
         marker: {
-          icon: personalMarkerImage
+          icon: this.personalMarkerIcon
         }
       },
       edit: {
@@ -226,7 +200,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         const wrapper = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-wrapper');
         const openChatButton = L.DomUtil.create('div', 'leaflet-control-custom', wrapper);
         openChatButton.onclick = function () {
-          thisObject.sideChat = !thisObject.sideChat;
+          thisObject.chat.sideChat = !thisObject.chat.sideChat;
         };
         L.DomUtil.create('i', 'fa fa-comments-o open-chat-icon', openChatButton);
         const openSearchOptionsButton = L.DomUtil.create('div', 'leaflet-control-custom', wrapper);
@@ -244,8 +218,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     mapGlobal.on(L.Draw.Event.DELETED, this.editableLayersDelete);
 
     this.setupMarkerEventsListener();
-    this.setupChatEventsListener();
-    this.setupBroadcastMessagesListener();
   }
 
   // Create layers callback
@@ -262,7 +234,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         thisObject.removeCircles();
         thisObject.cleanScanAreaMarkers();
         const addedLayer = thisObject.addScanCircle(layer);
-        thisObject.scanArea = addedLayer;
+        thisObject.sac.scanArea = addedLayer;
         const animatedLayer = L.circle(addedLayer.getLatLng(),
           {radius: addedLayer.getRadius(), className: 'animated fadeIn infinite'})
           .addTo(mapGlobal);
@@ -283,7 +255,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     layers.eachLayer(function (l) {
       if (l instanceof L.Marker) {
         const newLocation = new LocationCustom();
-        newLocation.id = thisObject.locationLeafletIdIdMap.get(editableLayers.getLayerId(l));
+        newLocation.id = thisObject.mapRepo.leafletToRealId.get(editableLayers.getLayerId(l));
         const latlng = l.getLatLng();
         newLocation.longitude = latlng.lng;
         newLocation.latitude = latlng.lat;
@@ -292,7 +264,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           newLocation.latitude, newLocation.longitude, EventType.MARKER_UPDATED, newLocation.id);
         updatedLocationsMessages.push(message);
       } else if (l instanceof L.Circle) {
-        thisObject.scanArea = l;
+        thisObject.sac.scanArea = l;
         thisObject.cleanScanAreaMarkers();
         const animatedLayer = L.circle(l.getLatLng(),
           {radius: l.getRadius(), className: 'animated fadeIn infinite'})
@@ -317,12 +289,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     const layers = e.layers;
     layers.eachLayer(function (l) {
       if (l instanceof L.Marker) {
-        const id = thisObject.locationLeafletIdIdMap.get(editableLayers.getLayerId(l));
+        const id = thisObject.mapRepo.leafletToRealId.get(editableLayers.getLayerId(l));
         deleteLayersIds.push(id);
         const message = MapService.prepareBroadcastMarkerMessage(null, null, EventType.MARKER_DELETED, id);
         deletedLocationsMessages.push(message);
       } else if (l instanceof L.Circle) {
-        thisObject.scanArea = null;
+        thisObject.sac.scanArea = null;
         thisObject.cleanScanAreaMarkers();
       }
     });
@@ -336,25 +308,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-
-  openChat(user: AppUser) {
-    if (!this.openChatList.find(u => u.username === user.username)) {
-      this.openChatList.push(user);
-      this.chatService.getConversation(localStorage.getItem(LocalStorageConstants.USERNAME), user.username)
-        .subscribe(messages => {
-          this.chatListMessagesMap.set(user.username, new UserChat(messages));
-        });
-    }
-  }
-
-  closeChat(user: AppUser) {
-    this.openChatList = this.openChatList.filter(u => u.username !== user.username);
-    this.chatListMessagesMap.delete(user.username);
-  }
-
   // Save newly added location
   private saveDesiredLocation(layer: any) {
-    layer.bindPopup(MapService.getUserPopup(profilePicUrl, this.appUser));
+    layer.bindPopup(MapService.getUserPopup(this.profilePictureUrl, this.appUser));
     const wrapper = layer.getLatLng();
     const location = new LocationCustom();
     location.longitude = wrapper.lng;
@@ -362,7 +318,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.userService.saveDesiredLocation(this.appUser.id, location)
       .subscribe(res => {
         editableLayers.addLayer(layer);
-        this.locationLeafletIdIdMap.set(editableLayers.getLayerId(layer), res);
+        this.mapRepo.leafletToRealId.set(editableLayers.getLayerId(layer), res);
         location.id = res;
         this.appUser.desiredLocations.push(location);
         const message = MapService.prepareBroadcastMarkerMessage(location.latitude,
@@ -378,10 +334,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.appUser.desiredLocations.forEach(location => {
       const marker = L.marker([location.latitude, location.longitude],
         {
-          icon: personalMarkerImage
+          icon: this.personalMarkerIcon
         }).addTo(editableLayers);
-      marker.bindPopup(MapService.getUserPopup(profilePicUrl, this.appUser));
-      this.locationLeafletIdIdMap.set(editableLayers.getLayerId(marker), location.id);
+      marker.bindPopup(MapService.getUserPopup(this.profilePictureUrl, this.appUser));
+      this.mapRepo.leafletToRealId.set(editableLayers.getLayerId(marker), location.id);
     });
   }
 
@@ -396,18 +352,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   private cleanScanAreaMarkers() {
     mapGlobal.eachLayer(function (layer) {
       if (layer instanceof L.Marker &&
-        (thisObject.scanAreaMarkers.has(layer._leaflet_id) || thisObject.venueMarkers.has(layer._leaflet_id))) {
+        (thisObject.sac.userMarkers.has(layer._leaflet_id) || thisObject.sac.venueMarkers.has(layer._leaflet_id))) {
         thisObject.removeMarkerFromGlobalMap(layer);
       }
     });
-    thisObject.scanAreaUsers = [];
+    thisObject.chat.scanAreaUsers = [];
   }
 
   private removeMarkerFromGlobalMap(layer: any) {
     mapGlobal.removeLayer(layer);
-    thisObject.scanAreaMarkers.delete(layer._leaflet_id);
-    thisObject.venueMarkers.delete(layer._leaflet_id);
-    thisObject.locationLeafletIdIdMap.delete(layer._leaflet_id);
+    thisObject.sac.userMarkers.delete(layer._leaflet_id);
+    thisObject.sac.venueMarkers.delete(layer._leaflet_id);
+    thisObject.mapRepo.leafletToRealId.delete(layer._leaflet_id);
   }
 
   private addScanCircle(layer: any): any {
@@ -427,7 +383,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         mapGlobal.removeLayer(animatedLayer);
         res.forEach(user => {
           thisObject.addUserMarkersForScanResult(user);
-          thisObject.addInListByUsernameDistinct(thisObject.scanAreaUsers, user);
+          MapService.addInListByUsernameDistinct(thisObject.chat.scanAreaUsers, user);
         });
       });
     const selectedOptions = MapService.searchOptionSelected(thisObject.searchOptions);
@@ -442,7 +398,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             const colorAndIcon: SearchResultPinData = MapService.getColorAndIcon(venue, categories);
             const marker = thisObject
               .addFAMarker([+location.lat, +location.lng], colorAndIcon.iconName, colorAndIcon.pinColor, popupTemplate);
-            thisObject.venueMarkers.add(marker._leaflet_id);
+            thisObject.sac.venueMarkers.add(marker._leaflet_id);
           });
         });
     }
@@ -459,13 +415,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       user.desiredLocations.forEach(location => {
         const marker = L.marker([location.latitude, location.longitude], {icon: pictureMarker}).addTo(mapGlobal);
         marker.bindPopup(MapService.getUserPopup(pictureUrl, user));
-        thisObject.scanAreaMarkers.add(marker._leaflet_id);
-        thisObject.locationLeafletIdIdMap.set(marker._leaflet_id, location.id);
+        thisObject.sac.userMarkers.add(marker._leaflet_id);
+        thisObject.mapRepo.leafletToRealId.set(marker._leaflet_id, location.id);
       });
     }
   }
 
-  addFAMarker(latlng: number[], iconName: string, color: string, popupTemplate: string): any {
+  private addFAMarker(latlng: number[], iconName: string, color: string, popupTemplate: string): any {
     const marker =
       L.marker(latlng,
         {
@@ -483,93 +439,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     mapGlobal.setView(latlng, zoom);
   }
 
-  private addInListByUsernameDistinct(list: AppUser[], user: AppUser) {
-    if (!list.find(u => u.username === user.username)) {
-      list.push(user);
-    }
-  }
-
   logout() {
     this.userService.logout(localStorage.getItem(LocalStorageConstants.USERNAME))
       .subscribe(res => {
-        this.broadcastMessagesSubscription.unsubscribe();
-        this.chatEventsSubscription.unsubscribe();
+        this.chat.cleanUp();
+        this.mapRepo.cleanUp();
         this.markerEventsSubscription.unsubscribe();
         this.transportService.webSocketCommandSink(WebSocketCommand.DISCONNECT);
         localStorage.clear();
         this.router.navigateByUrl(ClientUrls.LOGIN_PAGE);
       });
-  }
-
-  private setupBroadcastMessagesListener() {
-    this.broadcastMessagesSubscription = this.transportService.broadcastMessagesStream()
-      .subscribe(message => {
-        switch (message.standardMessageType) {
-          case (StandardMessageType.LOGGED_IN): {
-            this.changeUserStatus(message, UserStatusType.ONLINE);
-            break;
-          }
-          case (StandardMessageType.LOGGED_OUT): {
-            this.changeUserStatus(message, UserStatusType.OFFLINE);
-            break;
-          }
-          default: {
-            break;
-          }
-        }
-      });
-  }
-
-  // logged in user can't be in this list
-  private changeUserStatus(message: StandardMessage, status: string) {
-    for (const user of this.scanAreaUsers) {
-      if (user.username === message.source) {
-        user.statusType = status;
-        break;
-      }
-    }
-  }
-
-  private setupChatEventsListener() {
-    this.chatEventsSubscription = this.transportService.chatEventsStream()
-      .subscribe(message => {
-        switch (message.eventType) {
-          case (EventType.CHAT_MESSAGE): {
-            this.handleChatMessageReceivedEvent(message);
-            break;
-          }
-          case (EventType.TYPING): {
-            this.handleReceivedTypingEvent(message);
-            break;
-          }
-          case (EventType.TYPING_STOP): {
-            this.handleReceivedTypingStopEvent(message);
-            break;
-          }
-          default: {
-            break;
-          }
-        }
-      });
-  }
-
-  private handleChatMessageReceivedEvent(message: ChatMessage) {
-    if (this.chatListMessagesMap.has(message.source)) {
-      // add notif
-      this.chatListMessagesMap.get(message.source).messages.push(message);
-    }
-  }
-
-  private handleReceivedTypingEvent(message: ChatMessage) {
-    if (this.openChatList.find(user => user.username === message.source)) {
-      this.chatListMessagesMap.get(message.source).typing = true;
-    }
-  }
-
-  private handleReceivedTypingStopEvent(message: ChatMessage) {
-    if (this.openChatList.find(user => user.username === message.source)) {
-      this.chatListMessagesMap.get(message.source).typing = false;
-    }
   }
 
   private setupMarkerEventsListener() {
@@ -596,7 +475,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   // Aux
-  setUpPicture(attachement: AttachmentCustom): string {
+  private setUpPicture(attachement: AttachmentCustom): string {
     return `data:${attachement.type};base64,${attachement.content}`;
   }
 
@@ -609,31 +488,21 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
     const marker = L.marker([point.latitude, point.longitude], {icon: pictureMarker}).addTo(mapGlobal);
     marker.bindPopup(MapService.getUserPopup(pictureUrl, user));
-    thisObject.scanAreaMarkers.add(marker._leaflet_id);
-    thisObject.locationLeafletIdIdMap.set(marker._leaflet_id, point.id);
-  }
-
-  private getLeafletIdByRealId(id: number): string {
-    for (const key of Array.from(this.locationLeafletIdIdMap.keys())) {
-      const value = this.locationLeafletIdIdMap.get(key);
-      if (id === value) {
-        return key;
-      }
-    }
-    return undefined;
+    thisObject.sac.userMarkers.add(marker._leaflet_id);
+    thisObject.mapRepo.leafletToRealId.set(marker._leaflet_id, point.id);
   }
 
   private handleMarkerCreatedEvent(message: MarkerEventMessage) {
-    if (this.scanArea && message.source && message.location && this.appUser.username !== message.source) {
-      const center = this.scanArea.getLatLng();
-      const rad = this.scanArea.getRadius();
+    if (this.sac.scanArea && message.source && message.location && this.appUser.username !== message.source) {
+      const center = this.sac.scanArea.getLatLng();
+      const rad = this.sac.scanArea.getRadius();
       const point = message.location;
       if (HaversineDistanceUtil.pointInsideCircle(+point.latitude, +point.longitude, +center.lat, +center.lng, rad)) {
         this.userService.getPersonalInfoWithPic(message.source)
           .subscribe(user => {
             if (user && user.profilePicture) {
               thisObject.addUserMarkerAtPointInsideScanArea(point, user);
-              thisObject.addInListByUsernameDistinct(thisObject.scanAreaUsers, user);
+              MapService.addInListByUsernameDistinct(thisObject.chat.scanAreaUsers, user);
             }
           });
       }
@@ -641,11 +510,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private handleMarkerUpdatedEvent(message: MarkerEventMessage) {
-    if (this.scanArea && message.source && message.location && this.appUser.username !== message.source) {
-      const center = this.scanArea.getLatLng();
-      const rad = this.scanArea.getRadius();
+    if (this.sac.scanArea && message.source && message.location && this.appUser.username !== message.source) {
+      const center = this.sac.scanArea.getLatLng();
+      const rad = this.sac.scanArea.getRadius();
       const point = message.location;
-      const existingMarkerInScanAreaId = this.getLeafletIdByRealId(point.id); // marker existed in scan area before update or not
+      const existingMarkerInScanAreaId = this.mapRepo.getLeafletIdByRealId(point.id); // marker existed in scan area before update or not
       // if new location in scan area
       if (HaversineDistanceUtil.pointInsideCircle(+point.latitude, +point.longitude, +center.lat, +center.lng, rad)) {
         if (existingMarkerInScanAreaId) {
@@ -658,7 +527,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             .subscribe(user => {
               if (user && user.profilePicture) {
                 thisObject.addUserMarkerAtPointInsideScanArea(point, user);
-                thisObject.addInListByUsernameDistinct(thisObject.scanAreaUsers, user);
+                MapService.addInListByUsernameDistinct(thisObject.chat.scanAreaUsers, user);
               }
             });
         }
@@ -672,34 +541,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private handleMarkerDeletedEvent(message: MarkerEventMessage) {
-    if (this.scanArea && message.source && message.location && this.appUser.username !== message.source) {
-      const existingMarkerInScanAreaId = this.getLeafletIdByRealId(message.location.id);
+    if (this.sac.scanArea && message.source && message.location && this.appUser.username !== message.source) {
+      const existingMarkerInScanAreaId = this.mapRepo.getLeafletIdByRealId(message.location.id);
       if (existingMarkerInScanAreaId) {
         const layer = MapService.getGlobalLayerById(mapGlobal, existingMarkerInScanAreaId);
         this.removeMarkerFromGlobalMap(layer);
       }
-    }
-  }
-
-  sendChatMessage(destination: string, eventType: string, message: string) {
-    const msg = MapService.prepareChatMessage(localStorage.getItem(LocalStorageConstants.USERNAME), destination, eventType, message);
-    this.webSocketService.sendPrivateMessage(msg);
-    this.chatListMessagesMap.get(destination).messages.push(msg);
-  }
-
-  onKeyUpEventHandler(destination: string, typing: string) {
-    const lastLen = this.chatListMessagesMap.get(destination).lastMsgLength;
-    const actualLen = typing.length;
-    const msg = MapService.prepareChatMessage(localStorage.getItem(LocalStorageConstants.USERNAME), destination, EventType.TYPING, '');
-    if (actualLen > 0 && lastLen === 0) {
-      console.log('send typing');
-      this.webSocketService.sendPrivateMessage(msg);
-      this.chatListMessagesMap.get(destination).lastMsgLength = actualLen;
-    } else if (actualLen === 0 && lastLen > 0) {
-      console.log('stop');
-      msg.eventType = EventType.TYPING_STOP;
-      this.webSocketService.sendPrivateMessage(msg);
-      this.chatListMessagesMap.get(destination).lastMsgLength = actualLen;
     }
   }
 }

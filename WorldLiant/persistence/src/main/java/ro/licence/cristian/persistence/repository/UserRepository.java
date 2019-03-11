@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import ro.licence.cristian.persistence.model.AppUser;
+import ro.licence.cristian.persistence.model.ScanArea;
 import ro.licence.cristian.persistence.model.enums.AccountStatusType;
 import ro.licence.cristian.persistence.model.enums.StatusType;
 
@@ -36,8 +37,9 @@ public interface UserRepository extends BaseRepository<AppUser, Long> {
     void changeUserStatus(@Param("username") String username,
                           @Param("status") StatusType status);
 
-
     Boolean existsAppUserByUsernameEqualsAndAccountStatusTypeEquals(String username, AccountStatusType accountStatusType);
 
     Boolean existsAppUserByUsernameEquals(String username);
+
+    List<ScanArea> getUserScanAreas(@Param("username") String username);
 }

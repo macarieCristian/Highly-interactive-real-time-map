@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ro.licence.cristian.business.dto.AppUserDto;
+import ro.licence.cristian.business.dto.ScanAreaDto;
 import ro.licence.cristian.business.exception.BusinessException;
 import ro.licence.cristian.business.service.UserService;
 import ro.licence.cristian.persistence.model.Attachment;
@@ -59,6 +60,12 @@ public class UserController {
             @RequestParam("rad") Double radius,
             Authentication authentication) {
         return ResponseEntity.ok(userService.getUsersForScan(latitude, longitude, radius, authentication));
+    }
+
+    @GetMapping(value = "/scan-areas/{username}")
+    @PreAuthorize("@userSecurityConstraints.ownerOfAccount(#username, authentication)")
+    public ResponseEntity<List<ScanAreaDto>> getUserScanAreas(@PathVariable String username, Authentication authentication) {
+        return ResponseEntity.ok(userService.userScanAreas(username));
     }
 
     // POST

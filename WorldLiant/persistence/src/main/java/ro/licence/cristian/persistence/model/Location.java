@@ -2,13 +2,10 @@ package ro.licence.cristian.persistence.model;
 
 import lombok.*;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-
+import javax.persistence.*;
 @Entity
 @Embeddable
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -23,6 +20,15 @@ public class Location extends BaseEntity<Long> {
     private String county;
     private String city;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private AppUser appUser;
+
+    public Location(Long id, Double longitude, Double latitude, String country, String county, String city) {
+        super(id);
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.country = country;
+        this.county = county;
+        this.city = city;
+    }
 }

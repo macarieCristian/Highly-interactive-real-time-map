@@ -16,6 +16,12 @@ import java.util.Set;
         @NamedEntityGraph(name = "appUserWithDesiredLocations",
         attributeNodes = @NamedAttributeNode(value = "desiredLocations"))
 })
+@NamedQuery(name = "AppUser.getUserScanAreas",
+query = "select new ro.licence.cristian.persistence.model.ScanArea( " +
+        "sa.id, sa.longitude, sa.latitude, sa.country, sa.county, sa.city, sa.name, sa.radius ) " +
+        "from AppUser u " +
+        "inner join u.scanAreas sa " +
+        "where u.username = :username")
 @NamedQuery(name = "AppUser.changeUserStatus",
 query = "update AppUser u set u.statusType = :status where u.username = :username")
 @NamedQuery(name = "AppUser.findAppUserIdByUsername",
@@ -62,6 +68,9 @@ public class AppUser extends BaseEntity<Long> {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "appUser")
     private Set<Location> desiredLocations;
+
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "appUser")
+    private Set<ScanArea> scanAreas;
 
     public AppUser(String username) {
         this.username = username;

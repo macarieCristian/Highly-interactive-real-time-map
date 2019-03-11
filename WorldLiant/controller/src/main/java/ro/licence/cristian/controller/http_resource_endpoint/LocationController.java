@@ -45,7 +45,7 @@ public class LocationController {
 
     @DeleteMapping(value = "/desired-locations/{userId}/{locationIds}")
     @PreAuthorize("@userSecurityConstraints.ownerOfAccountWithId(#userId, authentication)")
-    public ResponseEntity<Boolean> deleteDesiredLocations(@PathVariable Long userId, @PathVariable List<Long> locationIds) {
+    public ResponseEntity<Boolean> deleteDesiredLocations(@PathVariable Long userId, @PathVariable List<Long> locationIds, Authentication authentication) {
         return ResponseEntity.ok(locationService.deleteDesiredLocations(locationIds));
     }
 
