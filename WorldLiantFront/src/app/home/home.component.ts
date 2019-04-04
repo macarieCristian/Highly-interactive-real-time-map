@@ -1,7 +1,7 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ServerUrls} from '../shared/constants/server-urls';
 import {UtilityService} from '../shared/service/utility.service';
-import {UserService} from '../shared/service/user/user.service';
+import {UserService} from '../shared/service/user.service';
 import {AppUser} from '../shared/model/app-user';
 import {LocalStorageConstants} from '../shared/constants/local-storage-constants';
 import {Constants} from '../shared/constants/constants';
@@ -19,10 +19,10 @@ import {MapService} from './service/map.service';
 import {UtilExceptionMessage} from '../shared/constants/util-exception-message';
 import {AttachmentCustom} from '../shared/model/attachment-custom';
 import {ChatService} from '../shared/service/chat.service';
-import {SearchOption} from '../shared/model/util-model/search-option';
 import {SearchResultPinData} from '../shared/model/util-model/search-result-pin-data';
-import {ScanAreaContainer} from '../shared/model/util-model/scan-area-container';
 import {MapRepository} from '../shared/repository/map-repository';
+import {ScanAreaRepository} from '../shared/repository/scan-area-repository';
+import {Scan} from '../shared/model/scan';
 
 declare let L;
 export let mapGlobal;
@@ -34,9 +34,10 @@ export let thisObject;
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
-  sac: ScanAreaContainer;
+export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild('chat') chat;
+  @ViewChild('scanAreaComp') scanAreaComp;
+  @ViewChild('addEventComp') addEventComp;
 
   private markerEventsSubscription;
 
@@ -47,7 +48,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   homeCoordinates: number[];
 
   sideOptions = false;
-  searchOptions: SearchOption[];
 
   constructor(private utilityService: UtilityService,
               private userService: UserService,
@@ -57,59 +57,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
               private toastrUtilService: ToastrUtilService,
               private webSocketService: WebSocketService,
               private transportService: TransportService,
+              private sac: ScanAreaRepository,
               private mapRepo: MapRepository) {
   }
 
   ngOnInit() {
-    this.sac = new ScanAreaContainer();
-    this.sac.userMarkers = new Set<string>();
-    this.sac.venueMarkers = new Set<string>();
 
-    // Forsquare search option
-    this.searchOptions = [
-      {
-        name: 'Night Life',
-        icon: 'fa fa-glass',
-        value: false,
-        id: Constants.NIGHT_LIFE_CATEGORY_ID,
-      },
-      {
-        name: 'Eat&Drink',
-        icon: 'fa fa-cutlery',
-        value: false,
-        id: Constants.FOOD_CATEGORY_ID,
-      },
-      {
-        name: 'Universities',
-        icon: 'fa fa-university',
-        value: false,
-        id: Constants.UNIVERSITY_CATEGORY_ID,
-      },
-      {
-        name: 'Sports',
-        icon: 'fa fa-futbol-o',
-        value: false,
-        id: Constants.SPORTS_CATEGORY_ID,
-      },
-      {
-        name: 'Public events',
-        icon: 'fa fa-calendar',
-        value: false,
-        id: Constants.PUBLIC_EVENTS_CATEGORY_ID,
-      },
-      {
-        name: 'Travel&Transport',
-        icon: 'fa fa-suitcase',
-        value: false,
-        id: Constants.TRAVEL_AND_TRANSPORT_CATEGORY_ID,
-      },
-    ];
     thisObject = this;
     this.getProfileInfo();
-  }
-
-  ngAfterViewInit() {
-
   }
 
   ngOnDestroy() {
@@ -122,6 +77,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.userService.getPersonalInfoWithLocations(username)
         .subscribe(result => {
           this.appUser = result;
+          localStorage.setItem(LocalStorageConstants.ID, `${result.id}`);
           this.chat.appUser = result;
           this.homeCoordinates = [+this.appUser.homeLocation.latitude, +this.appUser.homeLocation.longitude];
           this.getProfilePicture();
@@ -144,8 +100,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private initMap() {
     mapGlobal = L.map('mapid').setView(this.homeCoordinates, 13);
+    mapGlobal.doubleClickZoom.disable();
     L.tileLayer(Constants.LEAFLET_URL, Constants.LEAFLET_MAP_PROPERTIES).addTo(mapGlobal);
-    this.addFAMarker(this.homeCoordinates, 'fa-home', 'red', '<b>Hello!</b> Here is your home!');
+    const m1 = this.addFAMarker(this.homeCoordinates, 'fa-home', 'red', '<b>Hello!</b> Here is your home!');
+    m1.on('click', function () {
+      console.log('haha');
+      // thisObject.mapService.getVenueDetails('4c08c8bba1b32d7f098996f0')
+      thisObject.mapService.getVenueDetails('4cb0cccfcbab236a54bda373')
+        .subscribe(details => console.log(details));
+    });
 
     editableLayers = new L.FeatureGroup();
     mapGlobal.addLayer(editableLayers);
@@ -167,10 +130,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
           shapeOptions: {
             stroke: true,
             color: 'black',
-            weight: 4,
+            weight: 3,
             opacity: 0.5,
             fill: true,
-            fillColor: 'red', // same as color by default
+            fillColor: 'red',
             fillOpacity: 0.4,
             clickable: true,
           },
@@ -220,6 +183,33 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.setupMarkerEventsListener();
   }
 
+  processGivenScan(scan: Scan) {
+    mapGlobal.setView([+scan.latitude, +scan.longitude], 13);
+    if (scan.scanOptions) {
+      this.sac.setSearchOptions(scan.scanOptions);
+      this.sideOptions = true;
+    } else {
+      this.sac.clearSearchOptionValues();
+    }
+    setTimeout(() => {
+      const scanArea = L.circle({lat: scan.latitude, lng: scan.longitude},
+        {
+          radius: scan.radius,
+          color: 'black',
+          weight: 3,
+          opacity: 0.5,
+          fill: true,
+          fillColor: 'red',
+          fillOpacity: 0.4,
+          clickable: true,
+        })
+        .addTo(editableLayers);
+      this.editableLayersCreate({layerType: 'circle', layer: scanArea});
+    }, 500);
+
+
+  }
+
   // Create layers callback
   private editableLayersCreate(e: any) {
     const type = e.layerType;
@@ -264,12 +254,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
           newLocation.latitude, newLocation.longitude, EventType.MARKER_UPDATED, newLocation.id);
         updatedLocationsMessages.push(message);
       } else if (l instanceof L.Circle) {
-        thisObject.sac.scanArea = l;
+        const addedLayer = thisObject.addScanCircle(l);
+        thisObject.sac.scanArea = addedLayer;
         thisObject.cleanScanAreaMarkers();
-        const animatedLayer = L.circle(l.getLatLng(),
-          {radius: l.getRadius(), className: 'animated fadeIn infinite'})
+        const animatedLayer = L.circle(addedLayer.getLatLng(),
+          {radius: addedLayer.getRadius(), className: 'animated fadeIn infinite'})
           .addTo(mapGlobal);
-        thisObject.processScan(l, animatedLayer);
+        thisObject.processScan(addedLayer, animatedLayer);
       }
     });
     if (updatedLocations.length > 0) {
@@ -290,6 +281,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     layers.eachLayer(function (l) {
       if (l instanceof L.Marker) {
         const id = thisObject.mapRepo.leafletToRealId.get(editableLayers.getLayerId(l));
+        thisObject.mapRepo.leafletToRealId.delete(l._leaflet_id);
         deleteLayersIds.push(id);
         const message = MapService.prepareBroadcastMarkerMessage(null, null, EventType.MARKER_DELETED, id);
         deletedLocationsMessages.push(message);
@@ -344,6 +336,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private removeCircles() {
     editableLayers.eachLayer(function (layer) {
       if (layer instanceof L.Circle) {
+        // thisObject.transportService.modalConfirmSink(layer);
         editableLayers.removeLayer(layer);
       }
     });
@@ -373,6 +366,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       layer = layer.setRadius(Constants.MAX_SCAN_AREA_RADIUS);
     }
     editableLayers.addLayer(layer);
+    layer.on('dblclick contextmenu', () => {
+      thisObject.scanAreaComp.startSaveProcess(layer);
+    });
     return layer;
   }
 
@@ -386,7 +382,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
           MapService.addInListByUsernameDistinct(thisObject.chat.scanAreaUsers, user);
         });
       });
-    const selectedOptions = MapService.searchOptionSelected(thisObject.searchOptions);
+    const selectedOptions = MapService.searchOptionSelected(thisObject.sac.searchOptions);
     if (selectedOptions.length > 0) {
       thisObject.mapService.getVenuesInArea(latlng.lat, latlng.lng, layer.getRadius(), selectedOptions)
         .subscribe(res => {
@@ -439,11 +435,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     mapGlobal.setView(latlng, zoom);
   }
 
+  openAddEventComp() {
+    this.addEventComp.openAddEventModal(mapGlobal.getBounds().getCenter());
+  }
+
   logout() {
     this.userService.logout(localStorage.getItem(LocalStorageConstants.USERNAME))
       .subscribe(res => {
         this.chat.cleanUp();
+        this.scanAreaComp.cleanUp();
         this.mapRepo.cleanUp();
+        this.sac.cleanUp();
         this.markerEventsSubscription.unsubscribe();
         this.transportService.webSocketCommandSink(WebSocketCommand.DISCONNECT);
         localStorage.clear();

@@ -13,6 +13,8 @@ import {StandardMessage} from '../../shared/model/web-socket-model/standard-mess
 import {UserStatusType} from '../../shared/model/user-status-type';
 import {StandardMessageType} from '../../shared/model/web-socket-model/standard-message-type';
 import {AttachmentCustom} from '../../shared/model/attachment-custom';
+import {thisObject} from '../home.component';
+import {UserService} from '../../shared/service/user.service';
 
 @Component({
   selector: 'app-chat',
@@ -51,6 +53,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   ];
 
   constructor(private chatService: ChatService,
+              private userService: UserService,
               private webSocketService: WebSocketService,
               private transportService: TransportService) {
   }
@@ -72,12 +75,16 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chatEventsSubscription.unsubscribe();
   }
 
-  openChat(user: AppUser) {
+  openChat(user: AppUser, messagesToAppend?: ChatMessage[]) {
     if (!this.openChatList.find(u => u.username === user.username)) {
       this.openChatList.push(user);
       this.chatService.getConversation(localStorage.getItem(LocalStorageConstants.USERNAME), user.username)
         .subscribe(messages => {
-          this.chatListMessagesMap.set(user.username, new UserChat(messages));
+          if (!messagesToAppend) {
+            this.chatListMessagesMap.set(user.username, new UserChat(messages));
+          } else {
+            this.chatListMessagesMap.set(user.username, new UserChat(messages.concat(messagesToAppend)));
+          }
         });
     }
   }
@@ -126,6 +133,11 @@ export class ChatComponent implements OnInit, OnDestroy {
     if (this.chatListMessagesMap.has(message.source)) {
       // add notif
       this.chatListMessagesMap.get(message.source).messages.push(message);
+    } else {
+      this.userService.getPersonalInfoWithPic(message.source)
+        .subscribe(user => {
+          this.openChat(user);
+        });
     }
   }
 
@@ -151,6 +163,12 @@ export class ChatComponent implements OnInit, OnDestroy {
   // logged in user can't be in this list
   private changeUserStatus(message: StandardMessage, status: string) {
     for (const user of this.scanAreaUsers) {
+      if (user.username === message.source) {
+        user.statusType = status;
+        break;
+      }
+    }
+    for (const user of this.openChatList) {
       if (user.username === message.source) {
         user.statusType = status;
         break;

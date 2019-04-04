@@ -193,43 +193,7 @@ input[type="checkbox"]:checked + label:before {
   margin-right: 2rem;
 }
 
-.popup-button-custom {
-  text-transform: capitalize;
-  background: linear-gradient(50deg,#45cafc,#303f9f);
-  margin-right: 0.5rem;
-}
 
-.popup-button-custom-o {
-  text-transform: capitalize;
-  border-color: #3877c4;
-  color: #3877c4;
-}
-
-.popup-header-custom {
-  background: linear-gradient(50deg,#45cafc,#303f9f);
-}
-
-.check-wrapper {
-  margin-top: 0.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.button-group {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.custom-custom-check-box {
-  font-size: 15px !important;
-}
-
-.custom-custom-check-box:before {
-  border-bottom-color: #3a7ec9 !important;
-  border-right-color: #3a7ec9 !important;
-}
 
 
 

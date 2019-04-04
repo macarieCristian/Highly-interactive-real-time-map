@@ -25,7 +25,7 @@ public class ScanAreaController {
 
     @PostMapping(value = "/{userId}")
     @PreAuthorize("@userSecurityConstraints.ownerOfAccountWithId(#userId, authentication)")
-    public ResponseEntity<Long> saveDesiredLocation(@PathVariable Long userId, @RequestBody ScanAreaDto scanAreaDto, Authentication authentication) {
+    public ResponseEntity<Long> saveScanArea(@PathVariable Long userId, @RequestBody ScanAreaDto scanAreaDto, Authentication authentication) {
         return ResponseEntity.ok(scanAreaService.saveScanArea(userId, scanAreaDto));
     }
 
@@ -33,9 +33,9 @@ public class ScanAreaController {
 
     // DELETE
 
-    @DeleteMapping(value = "/{userId}/{scanAreaId}")
-    @PreAuthorize("@userSecurityConstraints.ownerOfAccountWithId(#userId, authentication)")
-    public ResponseEntity<Boolean> deleteDesiredLocations(@PathVariable Long userId, @PathVariable Long scanAreaId, Authentication authentication) {
+    @DeleteMapping(value = "/{username}/{scanAreaId}")
+    @PreAuthorize("@userSecurityConstraints.ownerOfAccount(#username, authentication)")
+    public ResponseEntity<Boolean> deleteScanArea(@PathVariable String username, @PathVariable Long scanAreaId, Authentication authentication) {
         return ResponseEntity.ok(scanAreaService.deleteScanArea(scanAreaId));
     }
 }

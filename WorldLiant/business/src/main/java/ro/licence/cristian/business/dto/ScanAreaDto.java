@@ -1,6 +1,7 @@
 package ro.licence.cristian.business.dto;
 
 import lombok.*;
+import ro.licence.cristian.persistence.model.enums.ScanAreaNotificationStatusType;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,4 +12,6 @@ import lombok.*;
 public class ScanAreaDto extends LocationDto {
     private String name;
     private Double radius;
+    private String scanOptions;
+    private ScanAreaNotificationStatusType notificationStatus;
 }

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AppUserCredentials} from '../shared/model/app-user-credentials';
-import {LoginService} from '../shared/service/user/login.service';
+import {LoginService} from '../shared/service/login.service';
 import * as jwt_decode from 'jwt-decode';
 import {ClientUrls} from '../shared/constants/client-urls';
 import {TransportService} from '../shared/service/transport.service';

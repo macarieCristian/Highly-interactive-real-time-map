@@ -11,6 +11,7 @@ export class TransportService {
   private subjectMarkerEvents = new Subject<MarkerEventMessage>();
   private subjectChatEvents = new Subject<ChatMessage>();
   private subjectBroadcastMessages = new Subject<StandardMessage>();
+  private subjectModalConfirm = new Subject<any>();
 
   constructor() {
   }
@@ -45,6 +46,14 @@ export class TransportService {
 
   broadcastMessagesSink(message: StandardMessage) {
     this.subjectBroadcastMessages.next(message);
+  }
+
+  modalConfirmStream(): Observable<any> {
+    return this.subjectModalConfirm.asObservable();
+  }
+
+  modalConfirmSink(message: any) {
+    this.subjectModalConfirm.next(message);
   }
 
 }

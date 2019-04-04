@@ -1,0 +1,170 @@
+<div mdbModal #confirmModal="mdbModal"
+     class="modal fade"
+     id="frameModalTop"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="myModalLabel"
+     [config]="{backdrop: 'static'}"
+     aria-hidden="true">
+  <div class="modal-dialog modal-notify modal-info" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center popup-header-custom">
+        <p class="heading">
+          Let us manage your areas of interest
+        </p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <i class="fa fa-bookmark-o fa-4x animated rotateIn mb-4" style="color: #3a7ec9"></i>
+        <p class="question-text">Do you want us to save scan areas so you can get back to them later?</p>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer justify-content-center">
+        <div class="container">
+          <div class="row button-group">
+            <button mdbBtn type="button"
+                    class="popup-button-custom"
+                    (click)="affirmativeConfirm()"
+                    mdbWavesEffect>
+              Yes
+            </button>
+            <button mdbBtn type="button"
+                    color="primary"
+                    class="popup-button-custom-o"
+                    (click)="negativeConfirm()"
+                    outline="true"
+                    mdbWavesEffect>
+              No
+            </button>
+          </div>
+          <div class="row check-wrapper">
+            <input type="checkbox" [(ngModel)]="rememberChoice" id="saveGlobal">
+            <label for="saveGlobal" class="custom-custom-check-box">Remember my choice.</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+<div mdbModal #nameModal="mdbModal"
+     class="modal fade top"
+     tabindex="-1"
+     role="dialog"
+     [config]="{backdrop: 'static'}"
+     aria-labelledby="myModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog cascading-modal modal-avatar modal-sm" role="document">
+    <!--Content-->
+    <div class="modal-content">
+
+      <!--Header-->
+      <div class="modal-header">
+        <div class="close-modal-button" (click)="closeNameModal()">x</div>
+        <img src="../../../assets/img/scanArea.png" alt="avatar"
+             class="rounded-circle img-responsive popup-img-background">
+      </div>
+      <!--Body-->
+      <div class="modal-body mb-1">
+
+        <h5 class="mt-1 mb-2 text-center">Save scan</h5>
+
+        <div class="md-form">
+          <div class="md-form">
+            <input mdbInputDirective
+                   type="text"
+                   id="form1"
+                   [mdbValidate]="false"
+                   required
+                   maxlength="25"
+                   [(ngModel)]="name"
+                   #nameControl="ngModel"
+                   class="form-control">
+            <label for="form1" class="">Name...</label>
+            <small>
+              Please choose a name.
+            </small>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <button mdbBtn type="button"
+                  class="popup-button-custom"
+                  [disabled]="nameControl.invalid"
+                  (click)="saveScanArea();"
+                  mdbWavesEffect>
+            Save
+          </button>
+        </div>
+
+        <div class="row check-wrapper">
+          <input type="checkbox" [(ngModel)]="notification" id="notification">
+          <label for="notification" class="custom-custom-check-box">Keep me updated</label>
+        </div>
+      </div>
+
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+<div mdbModal #scanAreas="mdbModal"
+     class="modal fade"
+     id="scanAreas"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="myModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-notify modal-info" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center popup-header-custom">
+        <p class="heading">
+          Choose a scan area
+        </p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body scan-areas-modal-body-custom">
+        <div class="card-wrapper" *ngFor="let scan of scanAreasDisplay; let i = index">
+          <div class="trash-button">
+            <i class="fa fa-trash-o trash-icon"
+               (click)="deleteScanArea(scan, i)"
+               aria-hidden="true"></i>
+          </div>
+          <div class="card card-scan-area-custom" (click)="scanGivenArea(scan)">
+            <div class="card-body">
+              <h5 class="card-title">
+                <i class="fa fa-thumb-tack"
+                   style="margin-right: 5px;"
+                   aria-hidden="true"></i>
+                {{scan.name}}
+              </h5>
+              <dl class="attributes">
+                <dt>Center address</dt>
+                <dd>{{scan.country}}, {{scan.county}}, {{scan.city}}</dd>
+                <!--<dt>Area</dt>-->
+                <!--<dd>{{circleArea(scan.radius)}} km<sup>2</sup></dd>-->
+                <dt>Radius</dt>
+                <dd>{{radiusPreDisplay(scan.radius)}} km</dd>
+                <dt>Notifications</dt>
+                <dd style="text-transform: lowercase">{{scan.notificationStatus}}</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer justify-content-center scan-areas-modal-footer">
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>

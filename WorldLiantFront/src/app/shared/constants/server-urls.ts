@@ -1,5 +1,3 @@
-import {Constants} from './constants';
-
 export class ServerUrls {
   static BASE_URL = 'http://localhost:8080/';
 
@@ -16,20 +14,21 @@ export class ServerUrls {
   static ADD_DESIRED_LOCATION = `${ServerUrls.BASE_URL}locations/desired-location/`;
   static DESIRED_LOCATIONS = `${ServerUrls.BASE_URL}locations/desired-locations/`;
 
+  // Scan areas
+  static SCAN_AREA = `${ServerUrls.BASE_URL}scan-areas/`;
+  static SCAN_AREAS = `${ServerUrls.BASE_URL}users/scan-areas/`;
+
   // WebSocket
   static SOCKET_URL = `${ServerUrls.BASE_URL}ws`;
 
   // Chat
   static CONVERSATION = `${ServerUrls.BASE_URL}chat/conversation`;
 
+  // Events
+  static EVENTS = `${ServerUrls.BASE_URL}events`;
+
   // Forsquare
-  static FORSQUARE_VENUSE_IN_CIRCLE = 'https://api.foursquare.com/v2/venues/search';
-  // +
-  //   `client_id=${Constants.CLIENT_ID}&` +
-  //   `client_secret=${Constants.CLIENT_SECRET}&` +
-  //   'll=LAT,LNG&' +
-  //   'radius=RADIUS&' +
-  //   'categoryId=CATEGORY_ID&' +
-  //   'intent=browse&' +
-  //   `v=${Constants.VERSION}`;
+  static FORSQUARE_VENUES_IN_CIRCLE = 'https://api.foursquare.com/v2/venues/search';
+  static FORSQUARE_VENUE_DETAILS = 'https://api.foursquare.com/v2/venues/';
+
 }

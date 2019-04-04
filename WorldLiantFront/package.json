@@ -37,6 +37,7 @@
     "leaflet-draw": "^1.0.4",
     "leaflet.awesome-markers": "^2.0.5",
     "net": "^1.0.2",
+    "ng-pick-datetime": "^7.0.0",
     "ngx-auto-scroll": "^1.1.0",
     "ngx-loading": "^3.0.1",
     "ngx-toastr": "^9.1.1",

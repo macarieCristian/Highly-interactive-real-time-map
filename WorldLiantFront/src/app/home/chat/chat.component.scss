@@ -191,7 +191,12 @@
   margin-bottom: 2.875rem;
   overflow: auto;
 }
-.chats > ul { padding: 0; }
+
+.chats > ul {
+  padding: 0;
+  margin-bottom: 0;
+}
+
 .chats > ul > li {
   position: relative;
   list-style: none;
@@ -199,11 +204,17 @@
   margin: 1rem 0;
   transition: 0.5s all;
 }
+
+.chats > ul > li:last-child {
+  margin: 1rem 0 0 0;
+}
+
 .chats > ul > li:after {
   display: table;
   content: '';
   clear: both;
 }
+
 .msg {
   max-width: 85%;
   display: inline-block;
@@ -295,4 +306,9 @@
   0% {transform: translate(0,0);}
   25% {transform: translate(0,-0.25rem);}
   50% {transform: translate(0,0);}
+}
+
+.modal-header,
+.modal-header-custom {
+  border-bottom-color: #4275e4;
 }

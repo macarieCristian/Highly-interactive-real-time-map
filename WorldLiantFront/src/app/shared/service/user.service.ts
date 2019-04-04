@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {AppUser} from '../../model/app-user';
-import {ServerUrls} from '../../constants/server-urls';
-import {LocationCustom} from '../../model/location-custom';
+import {AppUser} from '../model/app-user';
+import {ServerUrls} from '../constants/server-urls';
+import {LocationCustom} from '../model/location-custom';
+import {Scan} from '../model/scan';
 
 @Injectable()
 export class UserService {
@@ -42,6 +43,10 @@ export class UserService {
 
   deleteDesiredLocations(userId: number, locationsIds: number[]): Observable<boolean> {
     return this.httpClient.delete<boolean>(`${ServerUrls.DESIRED_LOCATIONS}${userId}/${locationsIds}`);
+  }
+
+  getScanAreas(username: string): Observable<Scan[]> {
+    return this.httpClient.get<Scan[]>(`${ServerUrls.SCAN_AREAS}${username}`);
   }
 
   logout(username: string): Observable<boolean> {

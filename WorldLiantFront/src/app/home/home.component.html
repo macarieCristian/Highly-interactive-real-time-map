@@ -13,10 +13,13 @@
         <a class="nav-link" (click)="goToCoordinates(homeCoordinates, 13)"><i class="fa fa-home"></i>Home</a>
       </li>
       <li class="nav-item waves-light" mdbWavesEffect>
-        <a class="nav-link" (click)="frame.show()" >Scan</a>
+        <a class="nav-link" (click)="scanAreaComp.startSaveProcess(sac.scanArea)" ><i class="fa fa-floppy-o"></i>Scan</a>
       </li>
       <li class="nav-item waves-light" mdbWavesEffect>
-        <a class="nav-link">Profile</a>
+        <a class="nav-link" (click)="scanAreaComp.openScanAreasModal()">Saved scans</a>
+      </li>
+      <li class="nav-item waves-light" mdbWavesEffect>
+      <a class="nav-link" (click)="openAddEventComp()">Add event</a>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto nav-flex-icons" style="margin-right: 1vw">
@@ -59,10 +62,11 @@
        role="document">
     <div class="modal-content" style="height: 100%">
       <div class="modal-header">
+        <div class="close-modal-button" (click)="sideOptions = false;">x</div>
         <h4 class="modal-title w-100">Looking for...?</h4></div>
       <div class="modal-body custom-modal-body">
         <ul class="search-option-list">
-          <li *ngFor="let option of searchOptions; let i = index">
+          <li *ngFor="let option of sac.searchOptions; let i = index">
             <input type="checkbox" [id]="i" [(ngModel)]="option.value">
             <label [for]="i">{{option.name}}</label>
             <i [class]="option.icon"></i>
@@ -72,59 +76,8 @@
       </div>
     </div>
   </div>
-
-  <div mdbModal #frame="mdbModal"
-       class="modal fade"
-       id="frameModalTop"
-       tabindex="-1"
-       role="dialog"
-       aria-labelledby="myModalLabel"
-       [config]="{backdrop: 'static'}"
-       aria-hidden="true">
-    <div class="modal-dialog modal-notify modal-info" role="document">
-      <!--Content-->
-      <div class="modal-content text-center">
-        <!--Header-->
-        <div class="modal-header d-flex justify-content-center popup-header-custom">
-          <p class="heading">Let us manage your areas of interest</p>
-        </div>
-
-        <!--Body-->
-        <div class="modal-body">
-          <i class="fa fa-bookmark-o fa-4x animated rotateIn mb-4" style="color: #3a7ec9"></i>
-          <p>Do you want us to save scanned areas for later?</p>
-        </div>
-
-        <!--Footer-->
-        <div class="modal-footer justify-content-center">
-          <div class="container">
-            <div class="row button-group">
-              <button mdbBtn type="button"
-                      class="popup-button-custom"
-                      mdbWavesEffect>
-                Yes
-              </button>
-              <button mdbBtn type="button"
-                      color="primary"
-                      class="popup-button-custom-o"
-                      (click)="frame.hide()"
-                      outline="true"
-                      mdbWavesEffect>
-                No
-              </button>
-            </div>
-            <div class="row check-wrapper">
-              <input type="checkbox"  id="saveGlobal">
-              <label for="saveGlobal" class="custom-custom-check-box">Remember my choice.</label>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--/.Content-->
-    </div>
-  </div>
-
-
+  <app-scan-area #scanAreaComp (doScan)="processGivenScan($event)"></app-scan-area>
+  <app-add-event #addEventComp></app-add-event>
 </div>
 <!-->
 <!-->

@@ -40,7 +40,8 @@ export class Constants {
   ];
 
   // Reverse geocoding endpoint
-  static REVERSE_GEOCODING_URL = 'https://nominatim.openstreetmap.org/search';
+  static SEARCH_GEOCODING_URL = 'https://nominatim.openstreetmap.org/search';
+  static REVERSE_GEOCODING_URL = 'https://nominatim.openstreetmap.org/reverse';
 
   // Leaflet map
   static LEAFLET_URL = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}';

@@ -5,7 +5,6 @@ import lombok.*;
 import javax.persistence.*;
 @Entity
 @Embeddable
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

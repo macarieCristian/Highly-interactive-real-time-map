@@ -2,7 +2,7 @@ package ro.licence.cristian.business.dto;
 
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -15,8 +15,8 @@ import java.util.Set;
 public class EventDto extends BaseDto {
     private String name;
     private String description;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private AppUserDto contactPerson;
     private LocationDto location;
     private AttachmentDto profilePicture;

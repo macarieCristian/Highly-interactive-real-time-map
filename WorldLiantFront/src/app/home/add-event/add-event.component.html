@@ -1,0 +1,191 @@
+<div mdbModal
+     #addEventModal="mdbModal"
+     (opened)="setupMap()"
+     class="modal fade top"
+     id="frameModalTop"
+     tabindex="-1"
+     role="dialog"
+     [config]="{backdrop: 'static'}"
+     aria-labelledby="myModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center modal-header-custom">
+        <h4 class="modal-title w-100 modal-title-custom">New event</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeAddEventModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="formGroup" (submit)="addEvent()">
+        <div class="modal-body custom-body" style="background-color: #ffefd7">
+
+          <mdb-carousel [interval]="'0'"
+                        [activeSlideIndex]="0"
+                        #carousel
+                        class="carousel carousel-slide carousel-custom"
+                        [animation]="'slide'">
+
+            <mdb-carousel-item>
+              <div class="carousel-page-wrapper">
+                <div class="md-form form-item-custom">
+                  <i class="fa fa-address-card-o prefix prefix-icon-custom"></i>
+                  <input mdbInputDirective
+                         data-error="Title must be at least 5 characters long and contain only letters and numbers."
+                         data-success="Title looks amazing."
+                         formControlName="title"
+                         maxlength="30"
+                         type="text"
+                         class="form-control input-custom-style"
+                         [class.border-bottom-wide]="title.untouched && !title.dirty"
+                         id="eventTitle">
+                  <label for="eventTitle" class="label-custom">Event title goes here...</label>
+                </div>
+
+                <div class="md-form form-item-custom">
+                  <i class="fa fa-pencil prefix prefix-icon-custom"></i>
+                  <textarea formControlName="description"
+                            data-error="Description must be at least 5 characters long."
+                            data-success="Description looks amazing."
+                            type="text"
+                            id="eventDescription"
+                            maxlength="255"
+                            class="md-textarea form-control input-custom-style"
+                            [class.border-bottom-wide]="description.untouched && !description.dirty"
+                            rows="2"
+                            mdbInputDirective></textarea>
+                  <label for="eventDescription" class="label-custom">Event description goes here...</label>
+                </div>
+
+                <div class="inline-form-item-group-custom">
+                  <div class="md-form inline-form-item-custom">
+                    <i class="fa fa-calendar prefix prefix-icon-custom"
+                       [owlDateTimeTrigger]="dtstart"
+                       style="cursor: pointer"></i>
+                    <input mdbInputDirective
+                           data-error="Start date is required."
+                           data-success="Start date is valid."
+                           formControlName="startDate"
+                           readonly
+                           type="text"
+                           [min]="today"
+                           [owlDateTime]="dtstart"
+                           [owlDateTimeTrigger]="dtstart"
+                           class="form-control input-custom-style"
+                           [class.border-bottom-wide]="startDate.untouched && !startDate.dirty"
+                           id="eventStartDate">
+                    <label for="eventStartDate" class="label-custom">Event start date...</label>
+                    <owl-date-time #dtstart></owl-date-time>
+                  </div>
+
+                  <div class="md-form inline-form-item-custom">
+                    <i class="fa fa-calendar prefix prefix-icon-custom"
+                       [owlDateTimeTrigger]="dtend"
+                       style="cursor: pointer"></i>
+                    <input mdbInputDirective
+                           data-error="End date must be after start date."
+                           data-success="End date is valid."
+                           formControlName="endDate"
+                           readonly
+                           type="text"
+                           [min]="today"
+                           [owlDateTime]="dtend"
+                           [owlDateTimeTrigger]="dtend"
+                           class="form-control input-custom-style"
+                           [class.border-bottom-wide]="endDate.untouched && !endDate.dirty"
+                           id="eventEndDate">
+                    <label for="eventEndDate" class="label-custom">Event end date...</label>
+                    <owl-date-time #dtend></owl-date-time>
+                  </div>
+                </div>
+
+                <div id="mapId" class="event-map-wrapper"></div>
+
+              </div>
+            </mdb-carousel-item>
+            <mdb-carousel-item>
+              <div class="carousel-page-wrapper">
+
+                <div class="profile-pic-preview"
+                     [style.background-image]=" profilePic.source ? 'url(' + profilePic.source + ')' : 'url(\'../../assets/img/large-placeholder.png\')'">
+                  <input type="file"
+                         class="input-file"
+                         id="profilePicture"
+                         name="profilePicture"
+                         formControlName="profilePicture"
+                         (change)="uploadProfilePic($event)"
+                         accept="image/*">
+                </div>
+                <label mdbBtn
+                       style="margin: 20px"
+                       class="the-button"
+                       for="profilePicture">
+                  <i class="fa fa-image"></i>
+                  Choose a profile picture
+                </label>
+
+                <input type="file"
+                       class="input-file"
+                       id="photos"
+                       name="profilePicture"
+                       multiple
+                       (change)="uploadPhotos($event)"
+                       accept="image/*">
+
+                <label mdbBtn
+                       style="display: none"
+                       #photosButton
+                       for="photos">
+                  <i class="fa fa-image"></i>
+                  haha +
+                </label>
+
+                <div class="pictures-carousel-wrapper">
+                  <mdb-carousel [interval]="'0'"
+                                [activeSlideIndex]="0"
+                                [noWrap]="true"
+                                #carouselImages
+                                id="carousel-images"
+                                class="carousel carousel-slide carousel-custom"
+                                [animation]="'slide'">
+                    <ng-container *ngFor="let photo of uploadedPhotos; let i = index;">
+                      <mdb-carousel-item *ngIf="i % 3 === 0" class="carousel-custom-item">
+                        <div class="picture-3" (click)="photosButton.click()">
+                          <div class="pic-preview"
+                               [style.background-image]="uploadedPhotos[i] ? 'url(' + uploadedPhotos[i].source + ')' : 'url(\'../../../assets/img/small-placeholder.png\')'">
+                          </div>
+                          <div class="pic-preview"
+                               [style.background-image]="uploadedPhotos[i + 1] ? 'url(' + uploadedPhotos[i + 1].source + ')' : 'url(\'../../../assets/img/small-placeholder.png\')'">
+                          </div>
+                          <div class="pic-preview"
+                               [style.background-image]="uploadedPhotos[i + 2] ? 'url(' + uploadedPhotos[i + 2].source + ')' : 'url(\'../../../assets/img/small-placeholder.png\')'">
+                          </div>
+                        </div>
+                      </mdb-carousel-item>
+                    </ng-container>
+                    <mdb-carousel-item *ngIf="uploadedPhotos.length === 0" class="carousel-custom-item">
+                      <div (click)="photosButton.click()" class="picture-3">
+                        <div class="pic-preview small-placeholder"></div>
+                        <div class="pic-preview small-placeholder"></div>
+                        <div class="pic-preview small-placeholder"></div>
+                      </div>
+                    </mdb-carousel-item>
+                  </mdb-carousel>
+                </div>
+              </div>
+            </mdb-carousel-item>
+          </mdb-carousel>
+        </div>
+        <div class="modal-footer d-flex justify-content-center" style="padding: 0.2rem;">
+          <button mdbBtn
+                  class="mat-button-custom"
+                  [disabled]="formGroup.invalid || !locationMarker"
+                  mdbWavesEffect>
+            Save
+            <i class="fa fa-floppy-o ml-1" style="font-size: 1rem"></i>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

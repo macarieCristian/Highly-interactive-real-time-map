@@ -35,7 +35,8 @@
               "node_modules/angular-bootstrap-md/scss/bootstrap/bootstrap.scss",
               "node_modules/angular-bootstrap-md/scss/mdb-free.scss",
               "node_modules/leaflet-draw/dist/leaflet.draw.css",
-              "node_modules/leaflet.awesome-markers/dist/leaflet.awesome-markers.css"
+              "node_modules/leaflet.awesome-markers/dist/leaflet.awesome-markers.css",
+              "node_modules/ng-pick-datetime/assets/style/picker.min.css"
             ],
             "scripts": [
               "node_modules/chart.js/dist/Chart.js",

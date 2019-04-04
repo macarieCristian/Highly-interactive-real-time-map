@@ -6,8 +6,8 @@ import {AppComponent} from './app.component';
 import {MDBBootstrapModule} from 'angular-bootstrap-md';
 import {LoginComponent} from './login/login.component';
 import {ErrorComponent} from './error/error.component';
-import {FormsModule} from '@angular/forms';
-import {LoginService} from './shared/service/user/login.service';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {LoginService} from './shared/service/login.service';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {RecaptchaModule} from 'angular-google-recaptcha';
 import {Constants} from './shared/constants/constants';
@@ -22,14 +22,20 @@ import {WebSocketService} from './shared/service/web-socket.service';
 import {UtilityService} from './shared/service/utility.service';
 import {TransportService} from './shared/service/transport.service';
 import {TokenHttpInterceptor} from './shared/util/token-http-interceptor';
-import {UserService} from './shared/service/user/user.service';
+import {UserService} from './shared/service/user.service';
 import {CustomExceptionHandler} from './shared/util/custom-exception-handler';
 import {NgxLoadingModule} from 'ngx-loading';
 import {MapService} from './home/service/map.service';
 import {ChatService} from './shared/service/chat.service';
 import {MapRepository} from './shared/repository/map-repository';
-import { ChatComponent } from './home/chat/chat.component';
+import {ChatComponent} from './home/chat/chat.component';
 import {NgxAutoScrollModule} from 'ngx-auto-scroll';
+import {ScanAreaComponent} from './home/scan-area/scan-area.component';
+import {ScanAreaRepository} from './shared/repository/scan-area-repository';
+import {ScanAreaService} from './shared/service/scan-area.service';
+import {AddEventComponent} from './home/add-event/add-event.component';
+import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
+import {EventService} from './shared/service/event.service';
 
 @NgModule({
   declarations: [
@@ -39,12 +45,15 @@ import {NgxAutoScrollModule} from 'ngx-auto-scroll';
     SingupComponent,
     HomeComponent,
     ChatComponent,
+    ScanAreaComponent,
+    AddEventComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     MDBBootstrapModule.forRoot(),
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     MatStepperModule,
     MatDatepickerModule,
@@ -57,7 +66,9 @@ import {NgxAutoScrollModule} from 'ngx-auto-scroll';
     NgSelectModule,
     ToastrModule.forRoot(),
     NgxLoadingModule.forRoot({}),
-    NgxAutoScrollModule
+    NgxAutoScrollModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule
   ],
   providers: [
     LoginService,
@@ -70,6 +81,9 @@ import {NgxAutoScrollModule} from 'ngx-auto-scroll';
     MapService,
     ChatService,
     MapRepository,
+    ScanAreaRepository,
+    ScanAreaService,
+    EventService,
     {provide: HTTP_INTERCEPTORS, useClass: TokenHttpInterceptor, multi: true},
     {provide: ErrorHandler, useClass: CustomExceptionHandler},
   ],

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AppUser} from '../shared/model/app-user';
 import {Constants} from '../shared/constants/constants';
 import {LocationCustom} from '../shared/model/location-custom';
-import {LoginService} from '../shared/service/user/login.service';
+import {LoginService} from '../shared/service/login.service';
 import {ToastrUtilService} from '../shared/service/toastr-util.service';
 import {Router} from '@angular/router';
 import {ClientUrls} from '../shared/constants/client-urls';
@@ -32,7 +32,7 @@ export class SingupComponent implements OnInit {
   }
 
   signUp() {
-    this.utilityService.getReverseGeocoding(this.model.homeLocation.country,
+    this.utilityService.getGeocoding(this.model.homeLocation.country,
       this.model.homeLocation.county,
       this.model.homeLocation.city)
       .subscribe(res => {

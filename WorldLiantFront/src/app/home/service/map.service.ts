@@ -122,6 +122,14 @@ export class MapService {
       .set(Constants.CATEGORY_ID_PARAM, `${MapService.formatCategories(options)}`)
       .set(Constants.INTENT_PARAM, Constants.INTENT)
       .set(Constants.VERSION_PARAM, Constants.VERSION);
-    return this.httpClient.get(ServerUrls.FORSQUARE_VENUSE_IN_CIRCLE, {params: params});
+    return this.httpClient.get(ServerUrls.FORSQUARE_VENUES_IN_CIRCLE, {params: params});
+  }
+
+  getVenueDetails(venueId: string): Observable<any> {
+    const params = new HttpParams()
+      .set(Constants.CLIENT_ID_PARAM, Constants.CLIENT_ID)
+      .set(Constants.CLIENT_SECRET_PARAM, Constants.CLIENT_SECRET)
+      .set(Constants.VERSION_PARAM, Constants.VERSION);
+    return this.httpClient.get<any>(`${ServerUrls.FORSQUARE_VENUE_DETAILS}${venueId}`, {params: params});
   }
 }

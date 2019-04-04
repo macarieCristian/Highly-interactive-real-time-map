@@ -131,7 +131,7 @@ body {
   background-image: linear-gradient(to right, rgba(66, 117, 228, 0.7) 0%, rgba(149, 202, 255, 0.5) 51%, rgba(63, 120, 228, 0.7) 100%);
 }
 
-.leaflet-top,
+#mapid > .leaflet-control-container > .leaflet-top,
 .map-controls {
   margin-top: 80px;
 }
@@ -340,3 +340,93 @@ body {
 .disappear {
   display: none;
 }
+
+.close-modal-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: black;
+  font: 16px/14px Tahoma, Verdana, sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.carousel-custom {
+
+  & > a.carousel-control-prev {
+    height: 15%;
+    top: 42.5%;
+    width: 5% !important;
+    opacity: 1;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, .2);
+    }
+
+    & > span {
+      height: 25px;
+      width: 25px;
+      filter: brightness(0);
+      -webkit-filter: brightness(0);
+    }
+  }
+
+  & > a.carousel-control-next {
+    height: 15%;
+    top: 42.5%;
+    width: 5% !important;
+    opacity: 1;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, .2);
+    }
+
+    & > span {
+      height: 25px;
+      width: 25px;
+      filter: brightness(0);
+      -webkit-filter: brightness(0);
+    }
+  }
+
+  & > ol > li {
+    background-color: rgba(0, 0, 0, 0.5);
+
+    &.active {
+      background-color: black;
+    }
+  }
+
+}
+
+.cdk-overlay-container {
+  z-index: 2000 !important;
+}
+
+.simple-popup {
+  background: none;
+}
+
+#carousel-images {
+  & > div:first-child {
+    height: 100% !important;
+
+    & > a.disabled {
+      display: none;
+    }
+
+    & > ol {
+      display: none;
+    }
+
+    & > div.carousel-inner {
+      height: 100%;
+    }
+  }
+}
+
+
+
+//body::-webkit-scrollbar { width: 0.4rem; }
+//body::-webkit-scrollbar-thumb { background: #c1c1c1; }
+//body::-webkit-scrollbar-thumb:hover { background: #c1c1c1; }

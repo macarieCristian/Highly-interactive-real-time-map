@@ -7,7 +7,6 @@ import ro.licence.cristian.persistence.model.enums.StatusType;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
 @NamedEntityGraphs({
@@ -18,7 +17,7 @@ import java.util.Set;
 })
 @NamedQuery(name = "AppUser.getUserScanAreas",
 query = "select new ro.licence.cristian.persistence.model.ScanArea( " +
-        "sa.id, sa.longitude, sa.latitude, sa.country, sa.county, sa.city, sa.name, sa.radius ) " +
+        "sa.id, sa.longitude, sa.latitude, sa.country, sa.county, sa.city, sa.name, sa.radius, sa.notificationStatus, sa.scanOptions ) " +
         "from AppUser u " +
         "inner join u.scanAreas sa " +
         "where u.username = :username")

@@ -1,0 +1,203 @@
+
+.popup-button-custom {
+  text-transform: capitalize;
+  background-image: linear-gradient(to right, rgba(66, 117, 228, 0.9) 0%, rgba(149, 202, 255, 0.8) 51%, rgba(63, 120, 228, 0.9) 100%) !important;
+  margin-right: 0.5rem;
+  background-size: 200% auto;
+  transition: 0.5s;
+}
+
+.popup-button-custom:hover {
+  background-position: right center;
+}
+
+.popup-button-custom-o {
+  text-transform: capitalize;
+  border-color: #3877c4;
+  color: #3877c4;
+}
+
+.popup-img-background {
+  background-image: linear-gradient(to right, rgba(66, 117, 228, 0.9) 0%, rgba(149, 202, 255, 0.8) 51%, rgba(63, 120, 228, 0.9) 100%) !important;
+  background-size: 200% auto;
+  transition: 0.5s;
+}
+
+.popup-img-background:hover {
+  background-position: right center;
+}
+
+.popup-header-custom {
+  background-image: linear-gradient(to right, rgba(66, 117, 228, 0.9) 0%, rgba(149, 202, 255, 0.8) 51%, rgba(63, 120, 228, 0.9) 100%) !important;
+  background-size: 200% auto;
+  transition: 0.5s;
+}
+
+.question-text {
+  font-weight: bolder;
+}
+
+.check-wrapper {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-custom-check-box {
+  font-size: 15px !important;
+}
+
+.custom-custom-check-box:before {
+  border-bottom-color: #3a7ec9 !important;
+  border-right-color: #3a7ec9 !important;
+}
+
+.scan-areas-modal-body-custom {
+  min-height: 50vh;
+  max-height: 50vh;
+  overflow-y: auto;
+  text-align: left !important;
+  background-color: rgba(255, 235, 205, .8);
+}
+
+.card-scan-area-custom {
+  margin-bottom: 0.5rem;
+  border: 1px solid #448eff;
+  cursor: pointer;
+}
+
+.card-scan-area-custom:hover {
+  background-color: rgba(148, 202, 255, 0.6);
+}
+
+.card-scan-area-custom:active {
+  opacity: .8;
+}
+
+.scan-areas-modal-footer {
+  background-color: rgba(66, 117, 228, 0.9);
+  padding: 0.5rem !important;
+}
+
+.card-wrapper {
+  position: relative;
+}
+
+.trash-button {
+  position: absolute;
+  top: 18px;
+  right: 12px;
+  cursor: pointer;
+  z-index: 1;
+  font-size: 1.25rem;
+}
+
+.trash-icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: darkred !important;
+}
+
+.trash-button:hover {
+  background-color: rgba(139,0,0,.2);
+}
+
+/* CUSTOM SCROLLBAR FOR BODY */
+.scan-areas-modal-body-custom::-webkit-scrollbar {
+  width: 0.4rem;
+}
+
+.scan-areas-modal-body-custom::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+}
+
+.scan-areas-modal-body-custom::-webkit-scrollbar-thumb:hover {
+  background: #c1c1c1;
+}
+
+/*Checkboxes styles*/
+input[type="checkbox"] {
+  display: none;
+}
+
+input[type="checkbox"] + label {
+  display: inline;
+  position: relative;
+  padding-left: 26px;
+  margin-bottom: 20px;
+  font: 17px 'Open Sans', Arial, sans-serif;
+  color: black;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+input[type="checkbox"] + label:last-child {
+  margin-bottom: 0;
+}
+
+input[type="checkbox"] + label:hover {
+  color: #4275e4;
+}
+
+input[type="checkbox"] + label:before {
+  content: '';
+  display: block;
+  width: 17px;
+  height: 17px;
+  border: 2px solid #4275e4;
+  position: absolute;
+  left: 0;
+  top: 0;
+  -webkit-transition: all .12s, border-color .08s;
+  transition: all .12s, border-color .08s;
+}
+
+input[type="checkbox"]:checked + label:before {
+  width: 9px;
+  top: -5px;
+  left: 5px;
+  border-radius: 0;
+  opacity: 1;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.input-text-style {
+  font-size: 1em;
+  color: #3a7ec9;
+  text-shadow: 1px 1px black;
+}
+
+.attributes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10ch, 1fr));
+  grid-gap: 0.2em 1em;
+  color: #747373;
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin-bottom: 0;
+  margin-top: 1.1em;
+
+  dt {
+    grid-column-start: 1;
+  }
+
+  dd {
+    grid-column-start: span 2;
+    margin-bottom: .3em;
+  }
+}
