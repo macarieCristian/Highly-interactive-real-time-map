@@ -9,4 +9,8 @@ public interface ChatService {
     void persistMessage(SimpleMessageDto simpleMessageDto);
 
     List<SimpleMessageDto> getConversation(final String sourceUsername, final String destinationUsername);
+
+    void persistEventMessage(SimpleMessageDto simpleMessageDto);
+
+    List<SimpleMessageDto> getConversation(final Long idEvent);
 }

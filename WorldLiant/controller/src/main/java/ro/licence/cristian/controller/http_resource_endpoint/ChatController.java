@@ -32,4 +32,10 @@ public class ChatController {
                                                                   Authentication authentication) {
         return ResponseEntity.ok(chatService.getConversation(source, destination));
     }
+
+    @GetMapping("/conversation-chat-room")
+    public ResponseEntity<List<SimpleMessageDto>> getConversationChatRoom(@RequestParam("idEvent") final Long idEvent) {
+        return ResponseEntity.ok(chatService.getConversation(idEvent));
+    }
+
 }

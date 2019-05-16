@@ -8,7 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ro.licence.cristian.persistence.model.AppUser;
 import ro.licence.cristian.persistence.model.ScanArea;
 import ro.licence.cristian.persistence.model.enums.AccountStatusType;
+import ro.licence.cristian.persistence.model.enums.ScanAreaNotificationStatusType;
 import ro.licence.cristian.persistence.model.enums.StatusType;
+import ro.licence.cristian.persistence.repository.projection.AppUserWithScanAreasProjection;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,8 +31,10 @@ public interface UserRepository extends BaseRepository<AppUser, Long> {
     Long findAppUserIdByUsername(@Param("username") final String username);
 
     @Transactional
-    List<AppUser> getUsersWithLocationsSatisfyingScanCriteria(@Param("lat") Double lat, @Param("lng") Double lng,
-                                                              @Param("rad") Double rad, @Param("username") String username);
+    List<AppUser> getUsersWithLocationsSatisfyingScanCriteria(@Param("lat") Double lat,
+                                                              @Param("lng") Double lng,
+                                                              @Param("rad") Double rad,
+                                                              @Param("username") String username);
 
     @Modifying
     @Transactional
@@ -42,4 +46,9 @@ public interface UserRepository extends BaseRepository<AppUser, Long> {
     Boolean existsAppUserByUsernameEquals(String username);
 
     List<ScanArea> getUserScanAreas(@Param("username") String username);
+
+    List<AppUserWithScanAreasProjection> getUsersWithScanAreasContainingPoint(@Param("lat") Double lat,
+                                                                              @Param("lng") Double lng,
+                                                                              @Param("notificationStatus") ScanAreaNotificationStatusType notificationStatus,
+                                                                              @Param("username") String username);
 }

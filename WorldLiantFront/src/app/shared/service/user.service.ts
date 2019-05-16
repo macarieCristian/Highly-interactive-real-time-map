@@ -12,8 +12,8 @@ export class UserService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getImage(imageUrl: string): Observable<Blob> {
-    return this.httpClient.get(imageUrl, {responseType: 'blob'});
+  loadImage(username: string): Observable<Blob> {
+    return this.httpClient.get(`${ServerUrls.PROFILE_PIC}${username}`, {responseType: 'blob'});
   }
 
   getPersonalInfoWithLocations(username: string): Observable<AppUser> {

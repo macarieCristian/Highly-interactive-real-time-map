@@ -23,9 +23,12 @@ export class ServerUrls {
 
   // Chat
   static CONVERSATION = `${ServerUrls.BASE_URL}chat/conversation`;
+  static CONVERSATION_CHAT_ROOM = `${ServerUrls.BASE_URL}chat/conversation-chat-room`;
 
   // Events
   static EVENTS = `${ServerUrls.BASE_URL}events`;
+  static EVENT = `${ServerUrls.BASE_URL}events/event`;
+  static SCAN_EVENTS = `${ServerUrls.BASE_URL}events/scan`;
 
   // Forsquare
   static FORSQUARE_VENUES_IN_CIRCLE = 'https://api.foursquare.com/v2/venues/search';

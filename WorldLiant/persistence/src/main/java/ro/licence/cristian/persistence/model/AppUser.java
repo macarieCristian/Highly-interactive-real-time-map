@@ -15,20 +15,29 @@ import java.util.Set;
         @NamedEntityGraph(name = "appUserWithDesiredLocations",
         attributeNodes = @NamedAttributeNode(value = "desiredLocations"))
 })
+@NamedQuery(name = "AppUser.getUsersWithScanAreasContainingPoint",
+query = "select distinct u.firstName as firstName, u.lastName as lastName, " +
+        "u.email as email, u.username as username, " +
+        "u.phone as phone, function('string_agg', sa.name, ',') as scanAreas " +
+        "from AppUser u join u.scanAreas sa " +
+        "where u.username <> :username and sa.notificationStatus = :notificationStatus and " +
+        "function('haversinedistance', sa.latitude, sa.longitude, :lat, :lng) <= sa.radius " +
+        "group by u.id")
 @NamedQuery(name = "AppUser.getUserScanAreas",
 query = "select new ro.licence.cristian.persistence.model.ScanArea( " +
-        "sa.id, sa.longitude, sa.latitude, sa.country, sa.county, sa.city, sa.name, sa.radius, sa.notificationStatus, sa.scanOptions ) " +
+        "sa.id, sa.longitude, sa.latitude, sa.country, sa.county, sa.city, " +
+        "sa.name, sa.radius, sa.notificationStatus, sa.scanOptions ) " +
         "from AppUser u " +
-        "inner join u.scanAreas sa " +
+        "join u.scanAreas sa " +
         "where u.username = :username")
 @NamedQuery(name = "AppUser.changeUserStatus",
 query = "update AppUser u set u.statusType = :status where u.username = :username")
 @NamedQuery(name = "AppUser.findAppUserIdByUsername",
 query = "select u.id from AppUser u where u.username = :username")
 @NamedQuery(name = "AppUser.findAppUserByUsernameProfilePicLoaded",
-query = "select distinct u from AppUser u inner join fetch u.profilePicture where u.username = :username")
+query = "select distinct u from AppUser u join fetch u.profilePicture where u.username = :username")
 @NamedQuery(name = "AppUser.getUsersWithLocationsSatisfyingScanCriteria",
-        query = "select distinct u from AppUser u inner join fetch u.profilePicture inner join fetch u.desiredLocations dl " +
+        query = "select distinct u from AppUser u join fetch u.profilePicture join fetch u.desiredLocations dl " +
                 "where function('haversinedistance', :lat, :lng, dl.latitude, dl.longitude) <= :rad and u.username <> :username")
 @Entity
 @NoArgsConstructor

@@ -15,5 +15,6 @@ public class MarkerEventDto implements Serializable{
     private String source;
     private String destination;
     private EventType eventType;
+    private Long idEvent;
     private LocationDto location;
 }

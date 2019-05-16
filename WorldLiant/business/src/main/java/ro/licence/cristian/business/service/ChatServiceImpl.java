@@ -49,4 +49,21 @@ public class ChatServiceImpl implements ChatService {
     public List<SimpleMessageDto> getConversation(final String sourceUsername, final String destinationUsername) {
         return simpleMessageMapper.entitiesToDtos(simpleMessageRepository.getConversation(sourceUsername, destinationUsername));
     }
+
+    @Override
+    public void persistEventMessage(SimpleMessageDto simpleMessageDto) {
+        if (simpleMessageDto.getEventType().equals(EventType.CHAT_ROOM_MESSAGE)) {
+            SimpleMessage message = simpleMessageMapper.dtoWithEventToEntity(simpleMessageDto);
+            message.getSource().setId(userRepository.findAppUserIdByUsername(message.getSource().getUsername()));
+            message.setStatusType(MessageStatusType.SEEN);
+            simpleMessageRepository.save(message);
+        }
+    }
+
+    @Override
+    public List<SimpleMessageDto> getConversation(final Long idEvent) {
+        return simpleMessageMapper.entitiesWithEventToDtos(simpleMessageRepository.getConversationEvent(idEvent));
+    }
+
+
 }

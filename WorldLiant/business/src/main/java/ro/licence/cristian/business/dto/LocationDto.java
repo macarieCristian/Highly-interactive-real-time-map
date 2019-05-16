@@ -8,6 +8,7 @@ import lombok.*;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@Builder
 public class LocationDto extends BaseDto {
     private Double longitude;
     private Double latitude;

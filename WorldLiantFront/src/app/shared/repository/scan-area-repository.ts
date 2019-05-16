@@ -4,15 +4,17 @@ import {SearchOption} from '../model/util-model/search-option';
 
 @Injectable({providedIn: 'root'})
 export class ScanAreaRepository {
-  userMarkers: Set<string>;
+  userMarkers: Map<string, string>;
   venueMarkers: Set<string>;
+  eventMarkers: Set<string>;
   scanArea: any;
   searchOptions: SearchOption[];
 
 
   constructor() {
-    this.userMarkers = new Set<string>();
+    this.userMarkers = new Map<string, string>();
     this.venueMarkers = new Set<string>();
+    this.eventMarkers = new Set<string>();
     // Forsquare search option
     this.searchOptions = [
       {
@@ -55,9 +57,14 @@ export class ScanAreaRepository {
   }
 
   cleanUp() {
-    this.userMarkers = new Set<string>();
+    this.userMarkers = new Map<string, string>();
     this.venueMarkers = new Set<string>();
+    this.eventMarkers = new Set<string>();
     this.scanArea = undefined;
+  }
+
+  existUser(username: string): boolean {
+    return !!Array.from(this.userMarkers.values()).find(value => value === username);
   }
 
   getSelectedScanAreaOptionIds(): string {

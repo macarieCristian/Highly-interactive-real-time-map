@@ -3,9 +3,9 @@ import {WebSocketService} from './shared/service/web-socket.service';
 import {UtilityService} from './shared/service/utility.service';
 import {TransportService} from './shared/service/transport.service';
 import {WebSocketCommand} from './shared/constants/web-socket-command';
-import {EventType} from './shared/model/web-socket-model/event-type';
+import {EventType} from './shared/model/enums/event-type';
 import {LocalStorageConstants} from './shared/constants/local-storage-constants';
-import {StandardMessageType} from './shared/model/web-socket-model/standard-message-type';
+import {StandardMessageType} from './shared/model/enums/standard-message-type';
 import {Subscription} from 'rxjs';
 
 @Component({
@@ -49,7 +49,10 @@ export class AppComponent implements OnInit, OnDestroy {
                   switch (message.eventType) {
                     case EventType.CHAT_MESSAGE:
                     case EventType.TYPING_STOP:
-                    case EventType.TYPING: {
+                    case EventType.TYPING:
+                    case EventType.CHAT_ROOM_MESSAGE:
+                    case EventType.CHAT_ROOM_TYPING:
+                    case EventType.CHAT_ROOM_TYPING_STOP: {
                       this.transportService.chatEventsSink(message);
                       break;
                     }
@@ -79,9 +82,12 @@ export class AppComponent implements OnInit, OnDestroy {
                   const messages = JSON.parse(wrapper.body);
                   messages.forEach(message => {
                     switch (message.eventType) {
-                      case EventType.MARKER_CREATED:
-                      case EventType.MARKER_DELETED:
-                      case EventType.MARKER_UPDATED: {
+                      case EventType.MARKER_USER_CREATED:
+                      case EventType.MARKER_USER_DELETED:
+                      case EventType.MARKER_USER_UPDATED:
+                      case EventType.MARKER_EVENT_CREATED:
+                      case EventType.MARKER_EVENT_UPDATED:
+                      case EventType.MARKER_EVENT_DELETED: {
                         this.transportService.markerEventsSink(message);
                         break;
                       }

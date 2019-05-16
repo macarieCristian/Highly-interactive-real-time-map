@@ -66,7 +66,7 @@
   overflow: auto;
 }
 
-/* custom scroll bar for side chat */
+/* custom scroll bar for side chatComp */
 .custom-modal-body::-webkit-scrollbar { width: 0.4rem; }
 .custom-modal-body::-webkit-scrollbar-thumb { background: #c1c1c1; }
 .custom-modal-body::-webkit-scrollbar-thumb:hover { background: #c1c1c1; }
@@ -114,7 +114,7 @@
 }
 .grey-dot-chat{}
 
-// chat-box styles
+// chatComp-box styles
 
 /* CUSTOM SCROLLBAR FOR CHATBOX */
 .chats::-webkit-scrollbar { width: 0.4rem; }
@@ -165,19 +165,30 @@
   cursor: pointer;
 }
 
+.chat-box-header-blue,
+.chat-box-header-purple,
 #chat-box-container > .chat-box > .chat-box-header {
   position: relative;
   height: 3rem;
   width: 100%;
-  background-color: #4275e4;
   border-radius: 8px 8px 0 0;
   display: flex;
   flex-direction: row;
   align-items: center !important;
 }
 
+.chat-box-header-blue > div,
+.chat-box-header-purple > div,
 .chat-box-header > div {
   display: flex;
+}
+
+.chat-box-header-blue {
+  background-color: #4275e4;
+}
+
+.chat-box-header-purple {
+  background-color: #6351ce;
 }
 
 
@@ -227,12 +238,19 @@
   word-break: break-all;
   text-transform: none;
 }
+
+.msg.him-purple,
 .msg.him {
   float: left;
   background-color: #4275e4;
   color: #fff;
   border-bottom-left-radius: 0.125rem;
 }
+
+.msg.him-purple {
+  background-color: #6351ce;
+}
+
 .msg.you {
   float: right;
   background-color: #ECEFF1;
@@ -243,6 +261,9 @@
 .msg.load {
   background-color: #4275e4;
   border-bottom-left-radius: 0.125rem;
+}
+.load-purple {
+  background-color: #6351ce !important;
 }
 .msg > span {
   font-weight: 500;
@@ -261,7 +282,8 @@
   display: none;
 }
 .msg:hover span.time { display: block; }
-.msg.him > span { left: 0;	 }
+.msg.him-purple > span,
+.msg.him > span { left: 0; }
 .msg.you > span {	right: 0; }
 .sendBox {
   position: absolute;
@@ -281,11 +303,17 @@
   border-top: 0.125rem solid #d8d8d8;
   transition: 0.5s ease-in-out;
 }
-.sendBox >input:hover,
-.sendBox >input:focus,
-.sendBox >input:active {
+.sendBox > input:hover,
+.sendBox > input:focus,
+.sendBox > input:active {
   outline: none!important;
   border-top: 0.125rem solid #4275e4;
+}
+
+.sendBox-purple > input:hover,
+.sendBox-purple > input:focus,
+.sendBox-purple > input:active {
+  border-top: 0.125rem solid #6351ce !important;
 }
 
 /*  LOADING MESSAGE CSS */

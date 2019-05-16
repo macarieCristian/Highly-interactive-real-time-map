@@ -10,8 +10,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true, exclude = {"owner", "content"})
-@ToString(callSuper = true, exclude = {"owner", "content"})
+@EqualsAndHashCode(callSuper = true, exclude = {"owner", "content", "ownerEvent"})
+@ToString(callSuper = true, exclude = {"owner", "content", "ownerEvent"})
 @Builder
 public class Attachment extends BaseEntity<Long> {
     private String type;
@@ -23,6 +23,13 @@ public class Attachment extends BaseEntity<Long> {
     @OneToOne(fetch = FetchType.LAZY)
     private AppUser owner;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "profilePicture")
+    private Event ownerEvent;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private Event event;
+
+    public Attachment(Long id) {
+        super(id);
+    }
 }

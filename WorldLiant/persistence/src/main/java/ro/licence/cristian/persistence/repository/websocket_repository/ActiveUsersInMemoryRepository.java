@@ -2,9 +2,7 @@ package ro.licence.cristian.persistence.repository.websocket_repository;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.socket.WebSocketSession;
 
-import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;

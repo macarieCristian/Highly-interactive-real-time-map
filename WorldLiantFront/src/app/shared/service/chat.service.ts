@@ -16,4 +16,10 @@ export class ChatService {
       .set('destination', destination);
     return this.httpClient.get<ChatMessage[]>(ServerUrls.CONVERSATION, {params: params});
   }
+
+  getConversationEvent(idEvent: number): Observable<ChatMessage[]> {
+    const params = new HttpParams()
+      .set('idEvent', `${idEvent}`);
+    return this.httpClient.get<ChatMessage[]>(ServerUrls.CONVERSATION_CHAT_ROOM, {params: params});
+  }
 }

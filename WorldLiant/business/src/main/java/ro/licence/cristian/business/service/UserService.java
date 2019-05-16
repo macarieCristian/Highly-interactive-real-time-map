@@ -6,6 +6,7 @@ import ro.licence.cristian.business.dto.AppUserDto;
 import ro.licence.cristian.business.dto.ScanAreaDto;
 import ro.licence.cristian.business.exception.BusinessException;
 import ro.licence.cristian.persistence.model.Attachment;
+import ro.licence.cristian.persistence.repository.projection.AppUserWithScanAreasProjection;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -32,4 +33,8 @@ public interface UserService {
     List<ScanAreaDto> userScanAreas(String username);
 
     Boolean logout(String username);
+
+    List<AppUserWithScanAreasProjection> getAppUserWithScanAreasIncludingPoint(Double latitude,
+                                                                               Double longitude,
+                                                                               String currentUsername);
 }

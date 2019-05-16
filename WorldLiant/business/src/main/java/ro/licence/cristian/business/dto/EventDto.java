@@ -1,6 +1,7 @@
 package ro.licence.cristian.business.dto;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.Set;

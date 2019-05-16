@@ -13,6 +13,7 @@ export class Constants {
   static VERSION = '20190227';
   // Intent
   static INTENT = 'browse';
+  static RESULT_LIMIT = '50';
 
   // Forsquare categories
   static FOOD_CATEGORY_ID = '4d4b7105d754a06374d81259';
@@ -26,6 +27,7 @@ export class Constants {
   // Forsquare placeholders
   static LAT_LNG_PARAM = 'll';
   static RADIUS_PARAM = 'radius';
+  static LIMIT_PARAM = 'limit';
   static CATEGORY_ID_PARAM = 'categoryId';
   static CLIENT_ID_PARAM = 'client_id';
   static CLIENT_SECRET_PARAM = 'client_secret';

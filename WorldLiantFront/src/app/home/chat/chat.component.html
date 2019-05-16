@@ -8,7 +8,7 @@
     <div class="modal-body custom-modal-body">
 
       <mat-list>
-        <h3 mat-subheader><strong>Scan area</strong></h3>
+        <h3 mat-subheader><strong>Scan area people</strong></h3>
         <mat-list-item *ngFor="let user of scanAreaUsers" (click)="openChat(user)">
           <div mat-list-icon class="side-chat-img-wrapper">
             <img *ngIf="user.profilePicture"
@@ -21,15 +21,30 @@
           <!--13-->
           <!--</mdb-badge>-->
         </mat-list-item>
+
         <mat-divider></mat-divider>
-        <h3 mat-subheader><strong>Contacts</strong></h3>
-        <mat-list-item *ngFor="let note of notes">
+        <h3 mat-subheader><strong>Scan area events</strong></h3>
+        <mat-list-item *ngFor="let event of scanAreaEvents" (click)="openChatEvent(event)">
           <div mat-list-icon class="side-chat-img-wrapper">
-            <img [src]="note.photo"
+            <img *ngIf="event.profilePicture"
+                 [src]="setUpPicture(event.profilePicture)"
                  class="side-chat-img">
-            <div class="green-dot"></div>
           </div>
-          <h4 mat-line>{{note.name}}</h4>
+          <h4 mat-line>{{event.name}}</h4>
+          <!--<mdb-badge pill="true" color="red">-->
+          <!--2-->
+          <!--</mdb-badge>-->
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+        <h3 mat-subheader><strong>Added events</strong></h3>
+        <mat-list-item *ngFor="let event of addedEvents" (click)="openChatEvent(event)">
+          <div mat-list-icon class="side-chat-img-wrapper">
+            <img *ngIf="event.profilePicture"
+                 [src]="setUpPicture(event.profilePicture)"
+                 class="side-chat-img">
+          </div>
+          <h4 mat-line>{{event.name}}</h4>
           <!--<mdb-badge pill="true" color="red">-->
           <!--2-->
           <!--</mdb-badge>-->
@@ -41,10 +56,11 @@
 </div>
 
 <div id="chat-box-container"
-     *ngIf="openChatList.length > 0"
+     *ngIf="openChatListUsers.length > 0 || openChatListEvents.length > 0"
      [class.slide-away]="!sideChat">
-  <div class="chat-box" *ngFor="let user of openChatList">
-    <div class="chat-box-header">
+
+  <div class="chat-box" *ngFor="let user of openChatListUsers">
+    <div class="chat-box-header-blue">
       <div class="chat-close" (click)="closeChat(user)">x</div>
       <div>
         <div class="chat-img-wrapper">
@@ -58,20 +74,19 @@
           </span>
       </div>
     </div>
-    <!--<div class="chats" #scrollMe [scrollTop]="scrollMe.scrollHeight">-->
     <div class="chats" ngx-auto-scroll>
-      <ul *ngIf="chatListMessagesMap.get(user.username)">
-        <li *ngFor="let message of chatListMessagesMap.get(user.username).messages">
+      <ul *ngIf="chatListMessagesMapUsers.get(user.username)">
+        <li *ngFor="let message of chatListMessagesMapUsers.get(user.username).messages">
           <div class="msg"
                [class.him]="message.source === user.username"
                [class.you]="message.source === appUser.username">
-            <span class="partner">{{message.source === user.username ? user.firstName : appUser.firstName}}</span>
+            <span class="partner" style="text-transform: capitalize;">{{message.source === user.username ? user.firstName : 'You'}}</span>
             {{message.message}}
             <span class="time">{{message.date | date: 'medium'}}</span>
           </div>
         </li>
         <li>
-          <div class="msg load" *ngIf="chatListMessagesMap.get(user.username).typing === true">
+          <div class="msg load" *ngIf="chatListMessagesMapUsers.get(user.username).typing === true">
             <div class="dot-anim"></div>
             <div class="dot-anim"></div>
             <div class="dot-anim"></div>
@@ -87,4 +102,48 @@
              (keyup.enter)="sendChatMessage(user.username, 'CHAT_MESSAGE', messageInput.value); messageInput.value = ''; onKeyUpEventHandler(user.username, '')">
     </div>
   </div>
+
+  <div class="chat-box" *ngFor="let event of openChatListEvents">
+    <div class="chat-box-header-purple">
+      <div class="chat-close" (click)="closeChatEvent(event)">x</div>
+      <div>
+        <div class="chat-img-wrapper">
+          <img *ngIf="event.profilePicture"
+               [src]="setUpPicture(event.profilePicture)"
+               class="chat-img">
+        </div>
+        <span class="chat-header-text-wrapper">
+            <span class="chat-header-text">{{event.name}}</span>
+          </span>
+      </div>
+    </div>
+    <div class="chats" ngx-auto-scroll>
+      <ul *ngIf="chatListMessagesMapEvents.get(event.id)">
+        <li *ngFor="let message of chatListMessagesMapEvents.get(event.id).messages">
+          <div class="msg"
+               [class.him-purple]="message.source !== appUser.username"
+               [class.you]="message.source === appUser.username">
+            <span class="partner" style="text-transform: capitalize;">{{message.source === appUser.username ? 'You' : message.source}}</span>
+            {{message.message}}
+            <span class="time">{{message.date | date: 'medium'}}</span>
+          </div>
+        </li>
+        <li>
+          <div class="msg load load-purple" *ngIf="chatListMessagesMapEvents.get(event.id).usersTyping > 0">
+            <div class="dot-anim"></div>
+            <div class="dot-anim"></div>
+            <div class="dot-anim"></div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="sendBox sendBox-purple">
+      <input type="text"
+             #messageInputEvent
+             (keyup)="onKeyUpEventHandlerChatRoom(event.id, messageInputEvent.value)"
+             placeholder="type something..."
+             (keyup.enter)="sendChatRoomMessage(event.id, 'CHAT_ROOM_MESSAGE', messageInputEvent.value); messageInputEvent.value = ''; onKeyUpEventHandlerChatRoom(event.id, '')">
+    </div>
+  </div>
+
 </div>

@@ -8,7 +8,7 @@ import {MarkerEventMessage} from '../model/web-socket-model/marker-event-message
 import {ChatMessage} from '../model/web-socket-model/chat-message';
 import {StandardMessage} from '../model/web-socket-model/standard-message';
 import {MapService} from '../../home/service/map.service';
-import {StandardMessageType} from '../model/web-socket-model/standard-message-type';
+import {StandardMessageType} from '../model/enums/standard-message-type';
 
 @Injectable()
 export class WebSocketService {
@@ -91,6 +91,14 @@ export class WebSocketService {
 
   sendPrivateMessage(message: ChatMessage) {
     this.stompClient.send('/app/private/send', {}, JSON.stringify(message));
+  }
+
+  sendPrivateChatRoomMessage(message: ChatMessage) {
+    this.stompClient.send('/app/private/chat-room/send', {}, JSON.stringify(message));
+  }
+
+  sendPrivateNotificationMessage(message: ChatMessage) {
+    this.stompClient.send('/app/private/notification/send', {}, JSON.stringify(message));
   }
 
   sendBroadcastMessage(message: StandardMessage) {

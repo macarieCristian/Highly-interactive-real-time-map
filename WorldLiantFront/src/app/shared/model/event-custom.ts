@@ -3,6 +3,7 @@ import {LocationCustom} from './location-custom';
 import {AttachmentCustom} from './attachment-custom';
 
 export class EventCustom {
+  id: number;
   name: string;
   description: string;
   startDate: Date;

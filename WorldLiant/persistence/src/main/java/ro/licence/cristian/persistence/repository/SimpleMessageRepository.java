@@ -1,6 +1,5 @@
 package ro.licence.cristian.persistence.repository;
 
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ro.licence.cristian.persistence.model.SimpleMessage;
 
@@ -10,4 +9,6 @@ public interface SimpleMessageRepository extends BaseRepository<SimpleMessage, L
 
     List<SimpleMessage> getConversation(@Param("source") String sourceUsername,
                                         @Param("destination") String destinationUsername);
+
+    List<SimpleMessage> getConversationEvent(@Param("idEvent") Long idEvent);
 }

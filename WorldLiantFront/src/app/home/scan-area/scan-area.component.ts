@@ -6,7 +6,7 @@ import {ToastrUtilService} from '../../shared/service/toastr-util.service';
 import {UtilityService} from '../../shared/service/utility.service';
 import {ScanAreaRepository} from '../../shared/repository/scan-area-repository';
 import {ScanAreaService} from '../../shared/service/scan-area.service';
-import {ScanAreaNotificationStatusType} from '../../shared/model/scan-area-notification-status-type';
+import {ScanAreaNotificationStatusType} from '../../shared/model/enums/scan-area-notification-status-type';
 
 @Component({
   selector: 'app-scan-area',

@@ -19,9 +19,11 @@ import ro.licence.cristian.persistence.model.Role;
 import ro.licence.cristian.persistence.model.ScanArea;
 import ro.licence.cristian.persistence.model.enums.AccountStatusType;
 import ro.licence.cristian.persistence.model.enums.RoleType;
+import ro.licence.cristian.persistence.model.enums.ScanAreaNotificationStatusType;
 import ro.licence.cristian.persistence.model.enums.StatusType;
 import ro.licence.cristian.persistence.repository.AttachmentRepository;
 import ro.licence.cristian.persistence.repository.UserRepository;
+import ro.licence.cristian.persistence.repository.projection.AppUserWithScanAreasProjection;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -163,5 +165,13 @@ public class UserServiceImpl implements UserService {
         userRepository.changeUserStatus(username, StatusType.OFFLINE);
         log.info("logout successful: username={}", username);
         return true;
+    }
+
+    @Override
+    public List<AppUserWithScanAreasProjection> getAppUserWithScanAreasIncludingPoint(Double latitude,
+                                                                                      Double longitude,
+                                                                                      String currentUsername) {
+        return userRepository.getUsersWithScanAreasContainingPoint(latitude, longitude,
+                ScanAreaNotificationStatusType.ENABLED, currentUsername);
     }
 }
