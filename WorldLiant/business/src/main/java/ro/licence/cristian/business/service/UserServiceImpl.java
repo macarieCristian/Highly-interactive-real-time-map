@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
     public Attachment getProfilePicture(String username) throws BusinessException {
         Optional<Attachment> attachmentOptional = attachmentRepository.findByOwnerUsernameEquals(username);
         return attachmentOptional
-                .orElseThrow(() -> new BusinessException(BusinessExceptionCode.ATTACHMENT_FOR_USERNAME_DOES_NOT_EXIST));
+                .orElseThrow(() -> new BusinessException(BusinessExceptionCode.ATTACHMENT_DOES_NOT_EXIST));
     }
 
     @Override

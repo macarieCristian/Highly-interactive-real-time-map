@@ -65,28 +65,27 @@
   height: 20vh;
 }
 
-.pic-preview {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  overflow: hidden;
-
-  &:hover {
-    opacity: .8;
-  }
-}
-
 .small-placeholder {
   background-image: url("../../../assets/img/small-placeholder.png");
 }
 
 .profile-pic-preview {
-  height: 50%;
-  width: 60%;
-  border: 2px dashed black;
+  height: auto;
+  width: auto;
+  max-height: 100%;
+  max-width: 100%;
+  border: 2px dashed rgb(81, 81, 81);
   background: no-repeat center;
   background-size: cover;
   overflow: hidden;
+}
+
+.profile-pic-preview-container {
+  width: 60%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .the-button {
@@ -144,11 +143,26 @@
     height: 100%;
     width: 32%;
     margin-left: 1%;
-    border: 1px solid black;
+    border: 1px solid #00000082;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    background-color: #c9c9c9;
+    justify-content: center;
 
     &:last-child {
       margin-right: 1%;
+    }
+
+    & > .pic-preview {
+      height: auto;
+      width: auto;
+      max-height: 100%;
+      max-width: 100%;
+
+      &:hover {
+        opacity: .8;
+      }
     }
   }
 }

@@ -15,5 +15,6 @@ public class LocationDto extends BaseDto {
     private String country;
     private String county;
     private String city;
+    private LocationDetailsDto locationDetails;
 
 }

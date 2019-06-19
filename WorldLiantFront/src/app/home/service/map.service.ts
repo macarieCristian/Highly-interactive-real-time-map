@@ -12,6 +12,10 @@ import {StandardMessage} from '../../shared/model/web-socket-model/standard-mess
 import {SearchOption} from '../../shared/model/util-model/search-option';
 import {SearchResultPinData} from '../../shared/model/util-model/search-result-pin-data';
 import {EventCustom} from '../../shared/model/event-custom';
+import {AttachmentCustom} from '../../shared/model/attachment-custom';
+import {NgElement, WithProperties} from '@angular/elements';
+import {EventPopupComponent} from '../../shared/util/components/event-popup/event-popup.component';
+import {UserLocationPopupComponent} from '../../shared/util/components/user-location-popup/user-location-popup.component';
 
 declare let L;
 
@@ -85,51 +89,35 @@ export class MapService {
     }
   }
 
-  static getUserPopup(picUrl: string, appUser: AppUser): any {
-    return L.popup({className: MapService.POPUP_USER_BASE_CLASS})
-      .setContent(`
-<div class="card" style="width: 14rem;">
-  <img class="card-img-top" src=${picUrl} alt="Card image cap">
-  <div class="card-body card-body-custom">
-    <h5 class="card-title text-center card-title-pos">${appUser.lastName} ${appUser.firstName}</h5>
-    <button class="custom-button" type="button">
-      <span class="${1 === 1 ? 'disappear' : ''}">
-        <i class="fa fa-user-plus"></i>
-        Add contact
-      </span>
-      <span class="${1 !== 1 ? 'disappear' : ''}">
-        <i class="fa fa-address-book-o"></i>
-        Contact
-      </span>
-    </button>
-    <hr>
-  </div>
-</div>
-`);
-  }
-
-  static getEventPopup(picUrl: string, event: EventCustom, goingButtonFunction?: any): any {
-    const wrapper = L.DomUtil.create('div', 'card');
-    const img = L.DomUtil.create('img', 'card-img-top', wrapper);
-    img.setAttribute('src', picUrl);
-    const body = L.DomUtil.create('div', 'card-body card-body-custom', wrapper);
-    const title = L.DomUtil.create('h5', 'card-title text-center card-title-pos', body);
-    title.innerHTML = event.name;
-    const goingButton = L.DomUtil.create('button', 'custom-button', body);
-    goingButton.setAttribute('type', 'button');
-    const innerButton = L.DomUtil.create('span', '', goingButton);
-    L.DomUtil.create('i', 'fa fa-user-plus', innerButton);
-    const text = L.DomUtil.create('span', '', innerButton);
-    text.innerHTML = 'Going';
-    L.DomUtil.create('hr', '', body);
-    goingButton.onclick = function () {
-      goingButtonFunction();
+  static getUserPopup(picUrl: string, appUser: AppUser, location: LocationCustom): any {
+    return () => {
+      const popupEl: NgElement & WithProperties<UserLocationPopupComponent> = document.createElement('user-location-popup-element') as any;
+      popupEl.picUrl = picUrl;
+      popupEl.appUser = appUser;
+      popupEl.location = location;
+      // Listen to the close event
+      popupEl.addEventListener('closed', () => document.body.removeChild(popupEl));
+      // Add to the DOM
+      document.body.appendChild(popupEl);
+      return popupEl;
     };
-    return L.popup({className: MapService.POPUP_EVENT_BASE_CLASS})
-      .setContent(wrapper);
   }
 
-  static getCustomMarkerIcon(picUrl: string, markerClassName: string, imageClassName: string, markerAnimation: string, pulseClassName: string): any {
+  static getEventPopup(picUrl: string, event: EventCustom, customFunction?: any): any {
+    return () => {
+      const popupEl: NgElement & WithProperties<EventPopupComponent> = document.createElement('event-popup-element') as any;
+      popupEl.picUrl = picUrl;
+      popupEl.event = event;
+      // Listen to the close event
+      popupEl.addEventListener('closed', () => document.body.removeChild(popupEl));
+      // Add to the DOM
+      document.body.appendChild(popupEl);
+      return popupEl;
+    };
+  }
+
+  static getCustomMarkerIcon(picUrl: string, markerClassName: string, imageClassName: string,
+                             markerAnimation: string, pulseClassName: string): any {
     return L.divIcon({
       popupAnchor: [0, -40],
       iconSize: null,

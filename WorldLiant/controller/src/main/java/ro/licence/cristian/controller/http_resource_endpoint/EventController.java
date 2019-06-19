@@ -38,7 +38,7 @@ public class EventController {
         return ResponseEntity.ok(eventService.getEventByIdWithProfilePicLoaded(idEvent));
     }
 
-    @GetMapping(value = "/scan")
+    @GetMapping("/scan")
     public ResponseEntity<List<EventDto>> getEventsInside(
             @RequestParam("lat") Double latitude,
             @RequestParam("lng") Double longitude,
@@ -51,14 +51,14 @@ public class EventController {
 
     @PostMapping
     public ResponseEntity<EventDto> saveEvent(@RequestPart EventDto event,
-                                             @RequestPart MultipartFile profilePicture,
-                                             @RequestPart List<MultipartFile> photos) throws BusinessException {
+                                              @RequestPart MultipartFile profilePicture,
+                                              @RequestPart List<MultipartFile> photos) throws BusinessException {
         return ResponseEntity.ok(eventService.saveEvent(event, profilePicture, photos));
     }
 
     // DELETE
 
-    @DeleteMapping(value = "/{eventIds}")
+    @DeleteMapping("/{eventIds}")
     public ResponseEntity<Boolean> deleteDesiredLocations(@PathVariable List<Long> eventIds) {
         return ResponseEntity.ok(eventService.deleteEvents(eventIds));
     }

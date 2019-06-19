@@ -1,0 +1,38 @@
+<div class="card" style="width: 16rem;">
+  <img [style.cursor]="existAttachments() ? 'pointer' : 'default'"
+       class="card-img-top"
+       (click)="togglePreview()"
+       [src]="picUrl">
+  <div id="event-popup-card-body" class="card-body card-body-custom">
+    <h5 class="card-title text-center card-title-pos">{{event.name}}</h5>
+    <button class="custom-button" type="button" (click)="openEventChat()">
+      <span>
+        <i class="fa fa-envelope"></i>
+        Message
+      </span>
+    </button>
+    <div class="floating-button add-attachment-floating-button"
+         *ngIf="existAttachments()"
+         (click)="togglePreview()">
+      <i class="fa fa-picture-o" aria-hidden="true"></i>
+    </div>
+
+    <mdb-badge class="start-date" [pill]="true">{{event.startDate | date}}</mdb-badge>
+    <mdb-badge class="end-date" [pill]="true">{{event.endDate | date}}</mdb-badge>
+
+    <hr style="border-top-color: rgba(0, 0, 0, 0.3)">
+
+    <span style="font-size: 0.8rem;">
+      <span *ngIf="event.description.length >= descriptionLength">
+        {{event.description.slice(0, descriptionLength)}}
+        <span *ngIf="!more" (click)="more = !more">... <span class="see-link">See More</span></span>
+        <span *ngIf="more">{{event.description.slice(descriptionLength)}}</span>
+        <span class="see-link" *ngIf="more" (click)="more = !more"> See Less</span>
+      </span>
+      <span *ngIf="event.description.length < descriptionLength">
+        {{event.description}}
+      </span>
+    </span>
+
+  </div>
+</div>

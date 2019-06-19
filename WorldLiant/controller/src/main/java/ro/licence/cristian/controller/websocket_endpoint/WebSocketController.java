@@ -59,8 +59,8 @@ public class WebSocketController {
 
     @MessageMapping("/private/send")
     public void specific(SimpleMessageDto message) {
-        template.convertAndSendToUser(message.getDestination(), "/queue/private/", message);
         chatService.persistMessage(message);
+        template.convertAndSendToUser(message.getDestination(), "/queue/private/", message);
     }
 
     @MessageMapping("/private/chat-room/send")

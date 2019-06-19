@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>ro.licence.cristian.business.service.websocket_service.EventChatRoomService</OriginalElement>
+  <nodes>
+    <node x="240.78893406399158" y="556.3634435213012">ro.licence.cristian.business.service.websocket_service.EventChatRoomService</node>
+    <node x="635.6950680572742" y="158.30086618348946">ro.licence.cristian.business.service.EventServiceImpl</node>
+    <node x="-84.28990631076556" y="615.044016263037">ro.licence.cristian.business.service.ScanAreaServiceImpl</node>
+    <node x="1167.2128336574156" y="317.579105532968">ro.licence.cristian.business.service.EmailUtilService</node>
+    <node x="1315.2128336574156" y="521.579105532968">ro.licence.cristian.business.service.EmailUtilServiceImpl.SendEmailEventAddedTask</node>
+    <node x="1208.4094042778859" y="-33.993105886512296">ro.licence.cristian.business.service.ChatService</node>
+    <node x="637.8249955806965" y="348.8782039950504">ro.licence.cristian.business.service.LocationService</node>
+    <node x="637.8249955806965" y="494.8782039950504">ro.licence.cristian.business.service.LocationServiceImpl</node>
+    <node x="-84.28990631076556" y="491.04401626303695">ro.licence.cristian.business.service.ScanAreaService</node>
+    <node x="0.0" y="1169.0">ro.licence.cristian.business.service.websocket_service.WebSocketEventManagerService</node>
+    <node x="635.6950680572742" y="-31.69913381651054">ro.licence.cristian.business.service.EventService</node>
+    <node x="-83.57044369807318" y="244.37970655824643">ro.licence.cristian.business.service.UserServiceImpl</node>
+    <node x="-83.57044369807318" y="-33.620293441753574">ro.licence.cristian.business.service.UserService</node>
+    <node x="1167.2128336574156" y="419.579105532968">ro.licence.cristian.business.service.EmailUtilServiceImpl</node>
+    <node x="1208.4094042778859" y="134.0068941134877">ro.licence.cristian.business.service.ChatServiceImpl</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="ro.licence.cristian.business.service.UserServiceImpl" target="ro.licence.cristian.business.service.UserService">
+      <point x="0.0" y="-114.0" />
+      <point x="0.0" y="114.0" />
+    </edge>
+    <edge source="ro.licence.cristian.business.service.LocationServiceImpl" target="ro.licence.cristian.business.service.LocationService">
+      <point x="0.0" y="-48.0" />
+      <point x="0.0" y="48.0" />
+    </edge>
+    <edge source="ro.licence.cristian.business.service.EmailUtilServiceImpl.SendEmailEventAddedTask" target="ro.licence.cristian.business.service.EmailUtilServiceImpl">
+      <point x="0.0" y="-26.0" />
+      <point x="0.0" y="26.0" />
+    </edge>
+    <edge source="ro.licence.cristian.business.service.ScanAreaServiceImpl" target="ro.licence.cristian.business.service.ScanAreaService">
+      <point x="0.0" y="-37.0" />
+      <point x="0.0" y="37.0" />
+    </edge>
+    <edge source="ro.licence.cristian.business.service.EventServiceImpl" target="ro.licence.cristian.business.service.EventService">
+      <point x="0.0" y="-70.0" />
+      <point x="0.0" y="70.0" />
+    </edge>
+    <edge source="ro.licence.cristian.business.service.ChatServiceImpl" target="ro.licence.cristian.business.service.ChatService">
+      <point x="0.0" y="-59.0" />
+      <point x="0.0" y="59.0" />
+    </edge>
+    <edge source="ro.licence.cristian.business.service.EmailUtilServiceImpl" target="ro.licence.cristian.business.service.EmailUtilService">
+      <point x="0.0" y="-26.0" />
+      <point x="0.0" y="26.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0410379094589621" x="795.0519710093689" y="326.89163867774437" />
+  <SelectedNodes>
+    <node>ro.licence.cristian.business.service.websocket_service.EventChatRoomService</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>public</VISIBILITY>
+</Diagram>
+

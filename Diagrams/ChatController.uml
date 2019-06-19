@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>ro.licence.cristian.controller.http_resource_endpoint.ChatController</OriginalElement>
+  <nodes>
+    <node x="1137.2323379461036" y="201.54479242534597">ro.licence.cristian.controller.websocket_endpoint.config.WebSocketConfig</node>
+    <node x="1134.326292789512" y="-29.656227239621273">ro.licence.cristian.controller.websocket_endpoint.WebSocketController</node>
+    <node x="501.74726875455207" y="203.796067006555">ro.licence.cristian.controller.http_resource_endpoint.LocationController</node>
+    <node x="-203.42316096139837" y="-27.123088128186453">ro.licence.cristian.controller.http_resource_endpoint.UserController</node>
+    <node x="498.871085214858" y="-26.731973780043717">ro.licence.cristian.controller.http_resource_endpoint.EventController</node>
+    <node x="703.2913328477784" y="367.1893663510562">ro.licence.cristian.controller.exception.GlobalExceptionMapper</node>
+    <node x="-202.45447924253483" y="210.55863073561545">ro.licence.cristian.controller.http_resource_endpoint.ChatController</node>
+    <node x="-203.42316096139848" y="329.5586307356155">ro.licence.cristian.controller.http_resource_endpoint.ScanAreaController</node>
+    <node x="1141.5178441369267" y="347.96358339402775">ro.licence.cristian.controller.security.UserSecurityConstraints</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="1.0323308270676692" x="685.0732091252967" y="362.40786598689" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>public</VISIBILITY>
+</Diagram>
+

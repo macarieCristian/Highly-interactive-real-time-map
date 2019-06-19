@@ -63,6 +63,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chatListMessagesMapEvents = new Map<number, ChatContainer>();
     this.setupChatEventsListener();
     this.setupBroadcastMessagesListener();
+    this.setupOpenChatListeners();
   }
 
   ngOnDestroy() {
@@ -122,6 +123,17 @@ export class ChatComponent implements OnInit, OnDestroy {
       EventType.CHAT_ROOM_PARTICIPANT_LEFT,
       '');
     this.webSocketService.sendPrivateChatRoomMessage(msg);
+  }
+
+  private setupOpenChatListeners() {
+    this.transportService.openChatStream()
+      .subscribe(user => {
+        this.openChat(user);
+      });
+    this.transportService.openChatEventStream()
+      .subscribe(event => {
+        this.openChatEvent(event);
+      });
   }
 
   private setupChatEventsListener() {

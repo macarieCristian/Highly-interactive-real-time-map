@@ -1,0 +1,102 @@
+<div class="card" style="width: 16rem;">
+  <img [style.cursor]="existAttachments() ? 'pointer' : 'default'"
+       class="card-img-top"
+       (click)="togglePreview()"
+       [src]="picUrl">
+  <div class="card-body card-body-custom">
+    <h5 class="card-title text-center card-title-pos">{{appUser.lastName}} {{appUser.firstName}}</h5>
+    <button class="custom-button" type="button"
+            *ngIf="!isOwnerUser()"
+            (click)="openChat()">
+      <span>
+        <i class="fa fa-envelope"></i>
+        Message
+      </span>
+    </button>
+    <button class="custom-button" type="button"
+            *ngIf="isOwnerUser()"
+            (click)="photosButton.click()">
+      <span>
+        <i class="fa fa-picture-o"></i>
+        Add Picture
+      </span>
+    </button>
+    <div class="floating-button add-attachment-floating-button"
+         *ngIf="existAttachments()"
+         (click)="togglePreview()">
+      <i class="fa fa-picture-o" aria-hidden="true"></i>
+    </div>
+    <input type="file"
+           class="input-file"
+           id="photos"
+           name="profilePicture"
+           multiple
+           (change)="uploadPhotos($event)"
+           accept="image/*">
+
+    <label mdbBtn
+           style="display: none"
+           #photosButton
+           for="photos">
+      +
+    </label>
+
+    <hr>
+
+    <div *ngIf="isOwnerUser()">
+      <div class="md-form"
+           style="margin: 0;"
+           [class.is-invisible]="isInput === false">
+      <textarea
+        type="text"
+        id="eventDescription"
+        maxlength="255"
+        [(ngModel)]="locationDetails.description"
+        [mdbValidate]="false"
+        class="md-textarea form-control form-control-custom"
+        rows="1"
+        (focusout)="addOrModifyDescription();"
+        #textAreaElement
+        mdbInputDirective></textarea>
+        <label for="eventDescription" class="label-custom">Say something about this...</label>
+      </div>
+
+      <span style="font-size: 0.8rem;" *ngIf="isInput === false">
+      <span *ngIf="locationDetails.description && locationDetails.description.length >= descriptionLength">
+        <span (click)="showTextArea()"> {{locationDetails.description.slice(0, descriptionLength)}}</span>
+        <span *ngIf="!more" (click)="more = !more">...
+          <span class="see-link"> See More</span>
+        </span>
+        <span (click)="showTextArea()" *ngIf="more">{{locationDetails.description.slice(descriptionLength)}}</span>
+        <span class="see-link" *ngIf="more" (click)="more = !more"> See Less</span>
+      </span>
+      <span *ngIf="locationDetails.description && locationDetails.description.length < descriptionLength"
+            (click)="showTextArea()">
+        {{locationDetails.description}}
+      </span>
+    </span>
+    </div>
+
+    <div *ngIf="!isOwnerUser()">
+      <span style="font-size: 0.8rem;">
+      <span *ngIf="locationDetails.description && locationDetails.description.length >= descriptionLength">
+        <span> {{locationDetails.description.slice(0, descriptionLength)}}</span>
+        <span *ngIf="!more" (click)="more = !more">...
+          <span class="see-link"> See More</span>
+        </span>
+        <span *ngIf="more">{{locationDetails.description.slice(descriptionLength)}}</span>
+        <span class="see-link" *ngIf="more" (click)="more = !more"> See Less</span>
+      </span>
+      <span *ngIf="locationDetails.description && locationDetails.description.length < descriptionLength">
+        {{locationDetails.description}}
+      </span>
+    </span>
+      <div *ngIf="!locationDetails.description" style="text-align: center;">
+        <span style="font-size: 0.8rem;">
+          No description available.
+        </span>
+      </div>
+    </div>
+
+  </div>
+</div>

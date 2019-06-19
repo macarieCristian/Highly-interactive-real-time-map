@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>ro.licence.cristian.persistence.model.AppUser</OriginalElement>
+  <nodes>
+    <node x="395.2055137844612" y="122.0">ro.licence.cristian.persistence.model.ScanArea</node>
+    <node x="242.6388888888889" y="469.12998361551064">ro.licence.cristian.persistence.model.AppUser</node>
+    <node x="0.0" y="572.5406881485527">ro.licence.cristian.persistence.model.Event</node>
+    <node x="458.14954051796167" y="16.29710540688148">ro.licence.cristian.persistence.model.BaseEntity</node>
+    <node x="27.205513784461175" y="166.0">ro.licence.cristian.persistence.model.Attachment</node>
+    <node x="667.1086407763446" y="529.0813762971052">ro.licence.cristian.persistence.model.SimpleMessage</node>
+    <node x="752.2055137844611" y="221.0">ro.licence.cristian.persistence.model.Role</node>
+    <node x="212.20551378446117" y="166.0">ro.licence.cristian.persistence.model.Location</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="ro.licence.cristian.persistence.model.ScanArea" target="ro.licence.cristian.persistence.model.BaseEntity">
+      <point x="0.0" y="-125.0" />
+      <point x="563.7055137844611" y="118.29710540688149" />
+      <point x="510.14954051796167" y="118.29710540688149" />
+      <point x="0.0" y="26.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.Attachment" target="ro.licence.cristian.persistence.model.BaseEntity">
+      <point x="0.0" y="-81.0" />
+      <point x="109.70551378446117" y="108.29710540688149" />
+      <point x="480.43525480367595" y="108.29710540688149" />
+      <point x="-29.714285714285722" y="26.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.Location" target="ro.licence.cristian.persistence.model.AppUser">
+      <point x="61.125" y="81.0" />
+      <point x="354.8305137844612" y="392.0" />
+      <point x="381.6388888888889" y="392.0" />
+      <point x="0.0" y="-180.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.AppUser" target="ro.licence.cristian.persistence.model.ScanArea">
+      <point x="30.888888888888914" y="-180.0" />
+      <point x="412.5277777777778" y="412.0" />
+      <point x="479.4555137844612" y="412.0" />
+      <point x="-84.25" y="125.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.SimpleMessage" target="ro.licence.cristian.persistence.model.BaseEntity">
+      <point x="78.33333333333331" y="-81.0" />
+      <point x="862.9419741096779" y="504.0813762971052" />
+      <point x="942.705513784461" y="504.0813762971055" />
+      <point x="942.7055137844611" y="88.29710540688149" />
+      <point x="554.7209690893902" y="88.29710540688149" />
+      <point x="44.571428571428555" y="26.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.AppUser" target="ro.licence.cristian.persistence.model.BaseEntity">
+      <point x="123.55555555555554" y="-180.0" />
+      <point x="505.19444444444446" y="442.0" />
+      <point x="931.7055137844611" y="442.0" />
+      <point x="931.7055137844611" y="98.29710540688149" />
+      <point x="539.8638262322474" y="98.29710540688149" />
+      <point x="29.714285714285722" y="26.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.Event" target="ro.licence.cristian.persistence.model.BaseEntity">
+      <point x="-97.91666666666663" y="-103.0" />
+      <point x="16.527626069543075" y="629.9519388312398" />
+      <point x="16.70551378446119" y="525.0393227744402" />
+      <point x="16.705513784461175" y="98.29710540688149" />
+      <point x="465.5781119465331" y="98.29710540688149" />
+      <point x="-44.571428571428555" y="26.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.Event" target="ro.licence.cristian.persistence.model.Attachment">
+      <point x="19.58333333333337" y="-103.0" />
+      <point x="137.08333333333337" y="714.6788640087384" />
+      <point x="90.0822890559732" y="714.6788640087384" />
+      <point x="90.0822890559732" y="619.2310212998361" />
+      <point x="109.70551378446117" y="619.2310212998361" />
+      <point x="0.0" y="81.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.ScanArea" target="ro.licence.cristian.persistence.model.AppUser">
+      <point x="84.25" y="125.0" />
+      <point x="647.9555137844611" y="422.0" />
+      <point x="443.4166666666667" y="422.0" />
+      <point x="61.77777777777777" y="-180.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.Event" target="ro.licence.cristian.persistence.model.Location">
+      <point x="58.75000000000003" y="-103.0" />
+      <point x="123.28440742763519" y="650.5090114691427" />
+      <point x="168.3666964836084" y="650.5090114691427" />
+      <point x="170.4038346594686" y="442.0" />
+      <point x="232.58051378446117" y="442.0" />
+      <point x="-61.125" y="81.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.AppUser" target="ro.licence.cristian.persistence.model.Location">
+      <point x="-30.888888888888914" y="-180.0" />
+      <point x="350.75" y="402.0" />
+      <point x="314.0805137844612" y="402.0" />
+      <point x="20.375" y="81.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.AppUser" target="ro.licence.cristian.persistence.model.Attachment">
+      <point x="-123.55555555555554" y="-180.0" />
+      <point x="258.08333333333337" y="432.0" />
+      <point x="142.70551378446117" y="432.0" />
+      <point x="33.0" y="81.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.Event" target="ro.licence.cristian.persistence.model.AppUser">
+      <point x="97.91666666666666" y="-103.0" />
+      <point x="216.4352357545967" y="852.0" />
+      <point x="312.1388888888889" y="852.0" />
+      <point x="-69.5" y="180.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.Attachment" target="ro.licence.cristian.persistence.model.AppUser">
+      <point x="66.0" y="81.0" />
+      <point x="175.70551378446117" y="422.0" />
+      <point x="288.9722222222223" y="422.0" />
+      <point x="-92.66666666666663" y="-180.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.SimpleMessage" target="ro.licence.cristian.persistence.model.AppUser">
+      <point x="1.4210854715202004E-14" y="-81.0" />
+      <point x="710.2530973574479" y="654.8296013107588" />
+      <point x="487.8073760543723" y="655.8481703986889" />
+      <point x="69.5" y="180.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.Attachment" target="ro.licence.cristian.persistence.model.Event">
+      <point x="-33.0" y="81.0" />
+      <point x="76.70551378446117" y="721.0879300928455" />
+      <point x="68.70551378446117" y="674.2337520480612" />
+      <point x="67.6869446965311" y="627.9148006553796" />
+      <point x="67.3595940287639" y="675.7875477880939" />
+      <point x="-19.583333333333314" y="-103.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.SimpleMessage" target="ro.licence.cristian.persistence.model.Event">
+      <point x="-78.33333333333331" y="-81.0" />
+      <point x="709.3310147068016" y="871.7848170398686" />
+      <point x="117.50000000000006" y="871.7848170398689" />
+      <point x="0.0" y="103.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.Location" target="ro.licence.cristian.persistence.model.BaseEntity">
+      <point x="0.0" y="-81.0" />
+      <point x="293.7055137844612" y="118.29710540688149" />
+      <point x="495.2923976608188" y="118.29710540688149" />
+      <point x="-14.85714285714289" y="26.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.Role" target="ro.licence.cristian.persistence.model.BaseEntity">
+      <point x="0.0" y="-26.0" />
+      <point x="836.7055137844611" y="108.29710540688149" />
+      <point x="525.0066833751046" y="108.29710540688149" />
+      <point x="14.857142857142833" y="26.0" />
+    </edge>
+    <edge source="ro.licence.cristian.persistence.model.AppUser" target="ro.licence.cristian.persistence.model.Role">
+      <point x="92.66666666666669" y="-180.0" />
+      <point x="474.3055555555556" y="432.0" />
+      <point x="836.7055137844611" y="432.0" />
+      <point x="0.0" y="26.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.9817694369973183" x="563.6482796286188" y="449.0589841616606" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

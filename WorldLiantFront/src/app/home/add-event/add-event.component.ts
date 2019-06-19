@@ -13,6 +13,7 @@ import {EventCustomProfilePic} from '../../shared/model/util-model/event-custom-
 import {MapService} from '../service/map.service';
 import {EventType} from '../../shared/model/enums/event-type';
 import {WebSocketService} from '../../shared/service/web-socket.service';
+import {AttachmentCustom} from '../../shared/model/attachment-custom';
 
 declare let L;
 export let mapAddEvent;
@@ -119,8 +120,7 @@ export class AddEventComponent implements OnInit {
     const profilePicture = this.profilePic;
     this.eventService.saveEvent(event, profilePicture, this.uploadedPhotos)
       .subscribe(res => {
-        event.id = res.id;
-        event.location.id = res.location.id;
+        this.furtherPrepareEventAfterResponse(event, res, profilePicture.source);
         this.eventAdded.emit({event, profilePicture});
         this.toastrUtilService.displaySuccessToastr('Event saved', 'The event was saved successfully!');
         const msg = MapService.prepareChatMessage(
@@ -186,5 +186,14 @@ export class AddEventComponent implements OnInit {
     event.location = eventLocation;
     event.contactPerson = contact;
     return event;
+  }
+
+  private furtherPrepareEventAfterResponse(event: EventCustom, resEvent: EventCustom, profilePicture: string) {
+    event.id = resEvent.id;
+    event.location.id = resEvent.location.id;
+    event.attachments = resEvent.attachments;
+    const attachment = new AttachmentCustom();
+    attachment.photoSource = profilePicture;
+    event.profilePicture = attachment;
   }
 }

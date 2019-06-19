@@ -80,6 +80,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.addSelfEventMarkers();
       });
     });
+
+    // this.mapService.getVenueDetails('547e2444498e356dc6957217')
+    //   .subscribe(res => console.log(res)); NOA
   }
 
   ngOnDestroy() {
@@ -193,7 +196,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     );
     const location = eventWrapper.event.location;
     const marker = L.marker([location.latitude, location.longitude], {icon: pictureMarker}).addTo(editableLayers);
-    marker.bindPopup(MapService.getEventPopup(eventWrapper.profilePicture.source, eventWrapper.event));
+    marker.bindPopup(MapService.getEventPopup(eventWrapper.profilePicture.source, eventWrapper.event),
+      {className: MapService.POPUP_EVENT_BASE_CLASS});
     const markerDetails = new CustomMarkerDetails(location.id, CustomMarkerType.EVENT_MARKER);
     markerDetails.idEvent = eventWrapper.event.id;
     this.mapRepo.leafletToRealId.set(marker._leaflet_id, markerDetails);
@@ -205,10 +209,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     profilePic.photoSource = eventWrapper.profilePicture.source;
     eventWrapper.event.profilePicture = profilePic;
     this.chatComp.addedEvents.push(eventWrapper.event);
-  }
-
-  dummyFunctionPopup() {
-    console.log('haha');
   }
 
   // !MapGlobal event handlers start!
@@ -329,7 +329,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // Save newly added location
   private saveDesiredLocation(layer: any) {
-    layer.bindPopup(MapService.getUserPopup(this.profilePictureUrl, this.appUser));
     const wrapper = layer.getLatLng();
     const location = new LocationCustom();
     location.longitude = wrapper.lng;
@@ -339,6 +338,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         editableLayers.addLayer(layer);
         this.mapRepo.leafletToRealId.set(editableLayers.getLayerId(layer), new CustomMarkerDetails(res, CustomMarkerType.USER_MARKER));
         location.id = res;
+        layer.bindPopup(MapService.getUserPopup(this.profilePictureUrl, this.appUser, location),
+          {className: MapService.POPUP_USER_BASE_CLASS});
         this.appUser.desiredLocations.push(location);
         const message = MapService.prepareBroadcastMarkerMessage(location.latitude,
           location.longitude, EventType.MARKER_USER_CREATED, location.id);
@@ -355,7 +356,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         {
           icon: this.personalMarkerIcon
         }).addTo(editableLayers);
-      marker.bindPopup(MapService.getUserPopup(this.profilePictureUrl, this.appUser));
+      marker.bindPopup(MapService.getUserPopup(this.profilePictureUrl, this.appUser, location),
+        {className: MapService.POPUP_USER_BASE_CLASS});
       this.mapRepo.leafletToRealId
         .set(editableLayers.getLayerId(marker), new CustomMarkerDetails(location.id, CustomMarkerType.USER_MARKER));
     });
@@ -383,7 +385,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         );
         const location = event.location;
         const marker = L.marker([location.latitude, location.longitude], {icon: pictureMarker}).addTo(baseLayer);
-        marker.bindPopup(MapService.getEventPopup(profilePic, event, thisObject.dummyFunctionPopup));
+        marker.bindPopup(MapService.getEventPopup(profilePic, event),
+          {className: MapService.POPUP_EVENT_BASE_CLASS});
         const markerDetails = new CustomMarkerDetails(location.id, CustomMarkerType.EVENT_MARKER);
         markerDetails.idEvent = event.id;
         this.mapRepo.leafletToRealId.set(marker._leaflet_id, markerDetails);
@@ -486,7 +489,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       );
       user.desiredLocations.forEach(location => {
         const marker = L.marker([location.latitude, location.longitude], {icon: pictureMarker}).addTo(mapGlobal);
-        marker.bindPopup(MapService.getUserPopup(pictureUrl, user));
+        marker.bindPopup(MapService.getUserPopup(pictureUrl, user, location),
+          {className: MapService.POPUP_USER_BASE_CLASS});
         thisObject.sac.userMarkers.set(marker._leaflet_id, user.username);
         thisObject.mapRepo.leafletToRealId
           .set(marker._leaflet_id, new CustomMarkerDetails(location.id, CustomMarkerType.USER_MARKER));
@@ -572,7 +576,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       MapService.PULSE_BLUE
     );
     const marker = L.marker([point.latitude, point.longitude], {icon: pictureMarker}).addTo(mapGlobal);
-    marker.bindPopup(MapService.getUserPopup(pictureUrl, user));
+    marker.bindPopup(MapService.getUserPopup(pictureUrl, user, point),
+      {className: MapService.POPUP_USER_BASE_CLASS});
     thisObject.sac.userMarkers.set(marker._leaflet_id, user.username);
     thisObject.mapRepo.leafletToRealId
       .set(marker._leaflet_id, new CustomMarkerDetails(point.id, CustomMarkerType.USER_MARKER));
@@ -588,7 +593,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       MapService.PULSE_PURPLE
     );
     const marker = L.marker([point.latitude, point.longitude], {icon: pictureMarker}).addTo(mapGlobal);
-    marker.bindPopup(MapService.getEventPopup(pictureUrl, event));
+    marker.bindPopup(MapService.getEventPopup(pictureUrl, event),
+      {className: MapService.POPUP_EVENT_BASE_CLASS});
     thisObject.sac.eventMarkers.add(marker._leaflet_id);
     const markerDetails = new CustomMarkerDetails(point.id, CustomMarkerType.EVENT_MARKER);
     markerDetails.idEvent = event.id;

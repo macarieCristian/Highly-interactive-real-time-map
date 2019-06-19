@@ -14,4 +14,8 @@ public class AttachmentDto extends BaseDto {
     private String type;
     private String name;
     private byte[] content;
+
+    public AttachmentDto(Long id) {
+        super(id);
+    }
 }

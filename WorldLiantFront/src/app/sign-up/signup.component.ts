@@ -10,8 +10,8 @@ import {UtilityService} from '../shared/service/utility.service';
 
 @Component({
   selector: 'app-singup',
-  templateUrl: './singup.component.html',
-  styleUrls: ['./singup.component.scss']
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.scss']
 })
 export class SingupComponent implements OnInit {
   rePass: string;

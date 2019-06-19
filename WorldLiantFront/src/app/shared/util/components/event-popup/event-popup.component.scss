@@ -1,0 +1,60 @@
+.see-link {
+  color: #4285f4;
+  text-transform: capitalize;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    color: #95caff;
+  }
+}
+
+.start-date {
+  position: absolute;
+  font-size: 0.8rem;
+  text-shadow: 1px 1px black;
+  top: 59px;
+  left: 10px;
+  background-color: #7873f5 !important;
+  //background: linear-gradient(to right, #7873f5 0%, #95caff 100%)!important;
+}
+
+.end-date {
+  position: absolute;
+  font-size: 0.8rem;
+  text-shadow: 1px 1px black;
+  top: 59px;
+  right: 10px;
+  background-color: #7873f5 !important;
+
+  //background: linear-gradient(to right, #95caff 0%, #7873f5 100%)!important;
+}
+
+.floating-button {
+  height: 2.6rem;
+  width: 2.6rem;
+  border-radius: 50%;
+  position: absolute;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-attachment-floating-button {
+  right: 5px;
+  top: -22px;
+  font-size: 1.6em;
+  color: white;
+  background-image: linear-gradient(to right, #95caff 0%, #7873f5 51%, #95caff 100%);
+  transition: 0.5s;
+  background-size: 200% auto;
+
+  &:hover {
+    background-position: right center;
+  }
+
+  &:active {
+    background: #95caff;
+  }
+}

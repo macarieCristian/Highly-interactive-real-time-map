@@ -9,8 +9,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true, exclude = "appUser")
-@ToString(callSuper = true, exclude = "appUser")
+@EqualsAndHashCode(callSuper = true, exclude = {"appUser", "locationDetails"})
+@ToString(callSuper = true, exclude = {"appUser", "locationDetails"})
 @Builder
 public class Location extends BaseEntity<Long> {
     private Double longitude;
@@ -21,6 +21,9 @@ public class Location extends BaseEntity<Long> {
 
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private AppUser appUser;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private LocationDetails locationDetails;
 
     public Location(Long id, Double longitude, Double latitude, String country, String county, String city) {
         super(id);

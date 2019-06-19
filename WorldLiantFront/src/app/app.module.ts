@@ -1,5 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {ErrorHandler, NgModule} from '@angular/core';
+import {ErrorHandler, Injector, NgModule} from '@angular/core';
+import {createCustomElement} from '@angular/elements';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -11,7 +12,7 @@ import {LoginService} from './shared/service/login.service';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {RecaptchaModule} from 'angular-google-recaptcha';
 import {Constants} from './shared/constants/constants';
-import {SingupComponent} from './sing-up/singup.component';
+import {SingupComponent} from './sign-up/signup.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatDatepickerModule, MatListModule, MatNativeDateModule, MatStepperModule} from '@angular/material';
 import {NgSelectModule} from '@ng-select/ng-select';
@@ -36,6 +37,12 @@ import {ScanAreaService} from './shared/service/scan-area.service';
 import {AddEventComponent} from './home/add-event/add-event.component';
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
 import {EventService} from './shared/service/event.service';
+import {EventPopupComponent} from './shared/util/components/event-popup/event-popup.component';
+import {NgxGalleryModule} from 'ngx-gallery';
+import {GalleryPreviewComponent} from './shared/util/components/gallery-preview/gallery-preview.component';
+import {UserLocationPopupComponent} from './shared/util/components/user-location-popup/user-location-popup.component';
+import {VenuePopupComponent} from './shared/util/components/venue-popup/venue-popup.component';
+import {LocationDetailsService} from './shared/service/location-details.service';
 
 @NgModule({
   declarations: [
@@ -47,6 +54,10 @@ import {EventService} from './shared/service/event.service';
     ChatComponent,
     ScanAreaComponent,
     AddEventComponent,
+    EventPopupComponent,
+    GalleryPreviewComponent,
+    UserLocationPopupComponent,
+    VenuePopupComponent,
   ],
   imports: [
     BrowserModule,
@@ -68,7 +79,8 @@ import {EventService} from './shared/service/event.service';
     NgxLoadingModule.forRoot({}),
     NgxAutoScrollModule,
     OwlDateTimeModule,
-    OwlNativeDateTimeModule
+    OwlNativeDateTimeModule,
+    NgxGalleryModule
   ],
   providers: [
     LoginService,
@@ -84,9 +96,18 @@ import {EventService} from './shared/service/event.service';
     ScanAreaRepository,
     ScanAreaService,
     EventService,
+    LocationDetailsService,
     {provide: HTTP_INTERCEPTORS, useClass: TokenHttpInterceptor, multi: true},
     {provide: ErrorHandler, useClass: CustomExceptionHandler},
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [EventPopupComponent, UserLocationPopupComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private injector: Injector) {
+    const eventPopupComp = createCustomElement(EventPopupComponent, {injector});
+    customElements.define('event-popup-element', eventPopupComp);
+    const userLocationPopupComp = createCustomElement(UserLocationPopupComponent, {injector});
+    customElements.define('user-location-popup-element', userLocationPopupComp);
+  }
+}

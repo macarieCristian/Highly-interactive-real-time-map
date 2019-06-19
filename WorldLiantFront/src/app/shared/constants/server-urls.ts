@@ -13,10 +13,16 @@ export class ServerUrls {
   // Location
   static ADD_DESIRED_LOCATION = `${ServerUrls.BASE_URL}locations/desired-location/`;
   static DESIRED_LOCATIONS = `${ServerUrls.BASE_URL}locations/desired-locations/`;
+  static LOCATION_DETAILS = `${ServerUrls.BASE_URL}locations/details/`;
+  static LOCATION_DETAILS_DESCRIPTION = `${ServerUrls.BASE_URL}locations/details/description`;
+  static LOCATION_DETAILS_ATTACHMENTS = `${ServerUrls.BASE_URL}locations/details/attachments`;
 
   // Scan areas
   static SCAN_AREA = `${ServerUrls.BASE_URL}scan-areas/`;
   static SCAN_AREAS = `${ServerUrls.BASE_URL}users/scan-areas/`;
+
+  // Attachments
+  static ATTACHMENT_PICTURE = `${ServerUrls.BASE_URL}attachments/picture`;
 
   // WebSocket
   static SOCKET_URL = `${ServerUrls.BASE_URL}ws`;

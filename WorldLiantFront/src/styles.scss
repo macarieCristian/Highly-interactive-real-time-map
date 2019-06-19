@@ -493,6 +493,26 @@ body {
   }
 }
 
+#event-popup-card-body {
+
+  //& > .popover {
+  //  background-color: #515151;
+  //  left: 0 !important;
+  //
+  //  & > .popover-header {
+  //    text-align: center;
+  //    background-image: linear-gradient(to right, #7873f5 0%, #95caff 51%, #7873f5 100%);
+  //    transition: 0.5s;
+  //    background-size: 200% auto;
+  //    color: white;
+  //
+  //    &:hover {
+  //      background-position: right center;
+  //    }
+  //  }
+  //}
+}
+
 
 
 //body::-webkit-scrollbar { width: 0.4rem; }

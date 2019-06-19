@@ -1,0 +1,58 @@
+.form-control-custom,
+.form-control {
+  line-height: 1.4 !important;
+  font-size: 0.9rem !important;
+}
+
+.see-link {
+  color: #4285f4;
+  text-transform: capitalize;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    color: #95caff;
+  }
+}
+
+.is-invisible {
+  display: none;
+}
+
+.floating-button {
+  height: 2.6rem;
+  width: 2.6rem;
+  border-radius: 50%;
+  position: absolute;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-attachment-floating-button {
+  right: 5px;
+  top: -22px;
+  font-size: 1.6em;
+  color: white;
+  background-image: linear-gradient(to right, #95caff 0%, #7873f5 51%, #95caff 100%);
+  transition: 0.5s;
+  background-size: 200% auto;
+
+  &:hover {
+    background-position: right center;
+  }
+
+  &:active {
+    background: #95caff;
+  }
+}
+
+.input-file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}

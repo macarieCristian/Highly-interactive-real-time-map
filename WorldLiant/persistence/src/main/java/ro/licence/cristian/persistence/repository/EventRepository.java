@@ -47,13 +47,6 @@ public interface EventRepository extends BaseRepository<Event, Long> {
             "where e.id = :id")
     Set<Attachment> getAttachmentIdsForEventById(@Param("id") Long idEvent);
 
-    @Query("select distinct new ro.licence.cristian.persistence.model.Attachment(att.id) " +
-            "from Event e " +
-            "join e.attachments att " +
-            "join e.contactPerson cp " +
-            "where cp.username = :username")
-    Set<Attachment> getAttachmentIdsForEventByUsername(@Param("username") String username);
-
     @Query("select distinct new ro.licence.cristian.persistence.model.Event(" +
             "e.id, e.name, e.description, e.startDate, e.endDate, " +
             "cp.firstName, cp.lastName, cp.phone, cp.email, e.location, e.profilePicture" +
