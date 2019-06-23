@@ -80,9 +80,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.addSelfEventMarkers();
       });
     });
-
-    // this.mapService.getVenueDetails('547e2444498e356dc6957217')
-    //   .subscribe(res => console.log(res)); NOA
   }
 
   ngOnDestroy() {
@@ -121,7 +118,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     mapGlobal = L.map('mapid').setView(this.homeCoordinates, 13);
     mapGlobal.doubleClickZoom.disable();
     L.tileLayer(Constants.LEAFLET_URL, Constants.LEAFLET_MAP_PROPERTIES).addTo(mapGlobal);
-    this.addFAMarker(this.homeCoordinates, 'fa-home', 'red', '<b>Hello!</b> Here is your home!');
+    this.addFAMarker(this.homeCoordinates, 'fa-home', 'red', {}, '<b>Hello!</b> Here is your home!');
   }
 
   private initEditableAndDrawLayer() {
@@ -470,8 +467,9 @@ export class HomeComponent implements OnInit, OnDestroy {
             const popupTemplate = `Name: ${venue.name}<br>Address: ${location.formattedAddress[0]}<br>`;
             const colorAndIcon: SearchResultPinData = MapService.getColorAndIcon(venue, categories);
             const marker = thisObject
-              .addFAMarker([+location.lat, +location.lng], colorAndIcon.iconName, colorAndIcon.pinColor, popupTemplate);
+              .addFAMarker([+location.lat, +location.lng], colorAndIcon.iconName, colorAndIcon.pinColor, venue);
             thisObject.sac.venueMarkers.add(marker._leaflet_id);
+            console.log(venue);
           });
         });
     }
@@ -498,7 +496,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  private addFAMarker(latlng: number[], iconName: string, color: string, popupTemplate: string): any {
+  private addFAMarker(latlng: number[], iconName: string, color: string, venueData?: any, template?: any): any {
     const marker =
       L.marker(latlng,
         {
@@ -508,7 +506,12 @@ export class HomeComponent implements OnInit, OnDestroy {
             markerColor: color,
           })
         }).addTo(mapGlobal);
-    marker.bindPopup(popupTemplate);
+    if (template) {
+      marker.bindPopup(template);
+    } else {
+      marker.bindPopup(MapService.getVenuePopup(venueData),
+        {className: MapService.POPUP_VENUE_BASE_CLASS});
+    }
     return marker;
   }
 

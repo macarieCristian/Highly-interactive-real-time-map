@@ -1,11 +1,10 @@
-package ro.licence.cristian.business.service.websocket_service;
+package ro.licence.cristian.business.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.licence.cristian.business.exception.BusinessException;
 import ro.licence.cristian.business.exception.BusinessExceptionCode;
-import ro.licence.cristian.business.service.AttachmentService;
 import ro.licence.cristian.persistence.model.Attachment;
 import ro.licence.cristian.persistence.repository.AttachmentRepository;
 

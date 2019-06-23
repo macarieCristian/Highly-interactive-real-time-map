@@ -10,6 +10,7 @@ import {LocalStorageConstants} from '../shared/constants/local-storage-constants
 import {WebSocketCommand} from '../shared/constants/web-socket-command';
 import {ToastrUtilService} from '../shared/service/toastr-util.service';
 import {UtilExceptionMessage} from '../shared/constants/util-exception-message';
+import {ngxLoadingAnimationTypes} from 'ngx-loading';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,8 @@ export class LoginComponent implements OnInit {
   imgList: Array<any>;
   model: AppUserCredentials = new AppUserCredentials();
   recaptcha: boolean;
+  loading: boolean;
+  loadingConfig: any;
 
   constructor(private router: Router,
               private transportService: TransportService,
@@ -29,11 +32,18 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = false;
+    this.loadingConfig = {
+      animationType: ngxLoadingAnimationTypes.cubeGrid,
+      primaryColour: '#841439',
+      secondaryColour: '#841439',
+      tertiaryColour: '#841439',
+      fullScreenBackdrop: true
+    };
     this.utilityService.getCarouselData()
       .subscribe((data) => {
         this.imgList = this.shuffle(data.slidesData);
       });
-
   }
 
   shuffle(arr) {
@@ -56,6 +66,7 @@ export class LoginComponent implements OnInit {
   }
 
   submitLogin() {
+    this.loading = true;
     if (this.model.username && this.model.password) {
       this.loginService.login(this.model)
         .subscribe((token) => {
@@ -64,9 +75,11 @@ export class LoginComponent implements OnInit {
             localStorage.setItem(LocalStorageConstants.ROLE, res.auth);
             localStorage.setItem(LocalStorageConstants.TOKEN, token.token);
             this.router.navigateByUrl(ClientUrls.HOME_PAGE);
+            this.loading = false;
             this.transportService.webSocketCommandSink(WebSocketCommand.CONNECT_AND_SUBSCRIBE_ALL);
           },
           err => {
+            this.loading = false;
             this.toastrUtilService.displayErrorToastr('Error', UtilExceptionMessage.LOGIN_FAILED);
           });
     }

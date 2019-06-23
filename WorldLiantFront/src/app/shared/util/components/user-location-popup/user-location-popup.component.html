@@ -5,7 +5,7 @@
        [src]="picUrl">
   <div class="card-body card-body-custom">
     <h5 class="card-title text-center card-title-pos">{{appUser.lastName}} {{appUser.firstName}}</h5>
-    <button class="custom-button" type="button"
+    <button class="custom-button-blue" type="button"
             *ngIf="!isOwnerUser()"
             (click)="openChat()">
       <span>
@@ -13,7 +13,7 @@
         Message
       </span>
     </button>
-    <button class="custom-button" type="button"
+    <button class="custom-button-blue" type="button"
             *ngIf="isOwnerUser()"
             (click)="photosButton.click()">
       <span>

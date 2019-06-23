@@ -1,3 +1,58 @@
-<p>
-  venue-popup works!
-</p>
+<div class="card" style="width: 16rem;">
+  <img [style.cursor]="true"
+       *ngIf="picUrl"
+       class="card-img-top"
+       [src]="picUrl">
+  <div id="event-popup-card-body" class="card-body card-body-custom">
+    <h5 class="card-title text-center card-title-pos">{{initialData.name}}</h5>
+    <button class="custom-button-blue"
+            *ngIf="details && details.likes"
+            type="button">
+      <span>
+        {{details.likes.count}}
+        <i class="fa fa-thumbs-up"></i>
+      </span>
+    </button>
+    <!--<div class="floating-button add-attachment-floating-button"-->
+    <!--*ngIf="existAttachments()"-->
+    <!--(click)="togglePreview()">-->
+    <!--<i class="fa fa-picture-o" aria-hidden="true"></i>-->
+    <!--</div>-->
+
+    <hr style="border-top-color: rgba(0, 0, 0, 0.3)">
+
+    <div class="attributes">
+      <div class="section-title">
+        <i class="fa fa-map-marker" aria-hidden="true"></i>
+        Address
+      </div>
+      <div class="subsection">
+        {{initialData.location.country}}, {{initialData.location.city}}, {{initialData.location.address}}
+      </div>
+      <hr class="custom-hr" *ngIf="more == true">
+      <span *ngIf="more == false" (click)="more = true;" class="see-link position-right">See more</span>
+      <div *ngIf="more == true">
+        <div class="section-title">
+          <i class="fa fa-link" aria-hidden="true"></i>
+          Link
+        </div>
+        <div class="subsection" *ngIf="details && details.url">
+          <a target="_blank"
+             rel="noopener noreferrer"
+             [href]="details.url">
+            <span *ngIf="details.url.length > linkLength">{{details.url.slice(0, linkLength)}}...</span>
+            <span *ngIf="details.url.length <= linkLength">{{details.url}}</span>
+          </a>
+        </div>
+        <hr class="custom-hr">
+        <div class="social-media-container" *ngIf="details && details.contact">
+          <i class="fa fa-twitter social-media-button twitter" aria-hidden="true"></i>
+          <i class="fa fa-facebook social-media-button facebook" aria-hidden="true"></i>
+          <i class="fa fa-instagram social-media-button instagram" aria-hidden="true"></i>
+        </div>
+        <span *ngIf="more == true" (click)="more = false;" class="see-link position-right">See less</span>
+      </div>
+    </div>
+
+  </div>
+</div>

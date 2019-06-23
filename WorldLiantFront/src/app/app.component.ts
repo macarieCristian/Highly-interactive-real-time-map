@@ -7,6 +7,7 @@ import {EventType} from './shared/model/enums/event-type';
 import {LocalStorageConstants} from './shared/constants/local-storage-constants';
 import {StandardMessageType} from './shared/model/enums/standard-message-type';
 import {Subscription} from 'rxjs';
+import {ToastrUtilService} from './shared/service/toastr-util.service';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,8 @@ export class AppComponent implements OnInit, OnDestroy {
   private transportServiceSubscription: Subscription;
 
   constructor(private socketService: WebSocketService,
-              private transportService: TransportService) {
+              private transportService: TransportService,
+              private toastrUtilService: ToastrUtilService) {
   }
 
   ngOnInit() {
@@ -54,6 +56,10 @@ export class AppComponent implements OnInit, OnDestroy {
                     case EventType.CHAT_ROOM_TYPING:
                     case EventType.CHAT_ROOM_TYPING_STOP: {
                       this.transportService.chatEventsSink(message);
+                      break;
+                    }
+                    case EventType.NOTIFICATION_NEW_EVENT: {
+                      this.handleNotificationMessage('New event appeared', message.message);
                       break;
                     }
                     default: {
@@ -110,5 +116,9 @@ export class AppComponent implements OnInit, OnDestroy {
           }
         }
       });
+  }
+
+  private handleNotificationMessage(title: string, text: string) {
+    this.toastrUtilService.displayInfoToastr(title, text);
   }
 }

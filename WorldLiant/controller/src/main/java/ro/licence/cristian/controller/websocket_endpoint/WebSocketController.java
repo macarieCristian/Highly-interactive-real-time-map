@@ -1,7 +1,7 @@
 package ro.licence.cristian.controller.websocket_endpoint;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -13,10 +13,7 @@ import ro.licence.cristian.business.dto.websocket_dto.SimpleMessageDto;
 import ro.licence.cristian.business.dto.websocket_dto.StandardMessageDto;
 import ro.licence.cristian.business.dto.websocket_dto.enums.EventType;
 import ro.licence.cristian.business.exception.BusinessException;
-import ro.licence.cristian.business.service.ChatService;
-import ro.licence.cristian.business.service.EmailUtilService;
-import ro.licence.cristian.business.service.EventService;
-import ro.licence.cristian.business.service.UserService;
+import ro.licence.cristian.business.service.*;
 import ro.licence.cristian.business.service.websocket_service.EventChatRoomService;
 import ro.licence.cristian.persistence.repository.projection.AppUserWithScanAreasProjection;
 
@@ -25,25 +22,15 @@ import java.util.Set;
 
 @Log4j2
 @Controller
+@RequiredArgsConstructor
 public class WebSocketController {
-    private SimpMessagingTemplate template;
-    private ChatService chatService;
-    private EventChatRoomService eventChatRoomService;
-    private UserService userService;
-    private EventService eventService;
-    private EmailUtilService emailUtilService;
-
-    @Autowired
-    public WebSocketController(SimpMessagingTemplate template, ChatService chatService,
-                               EventChatRoomService eventChatRoomService, UserService userService,
-                               EventService eventService, EmailUtilService emailUtilService) {
-        this.template = template;
-        this.chatService = chatService;
-        this.eventChatRoomService = eventChatRoomService;
-        this.userService = userService;
-        this.eventService = eventService;
-        this.emailUtilService = emailUtilService;
-    }
+    private final SimpMessagingTemplate template;
+    private final ChatService chatService;
+    private final EventChatRoomService eventChatRoomService;
+    private final UserService userService;
+    private final EventService eventService;
+    private final EmailUtilService emailUtilService;
+    private final NotificationService notificationService;
 
     @MessageMapping("/broadcast/send")
     @SendTo("/topic/broadcast")
@@ -73,7 +60,7 @@ public class WebSocketController {
             Set<String> participants =
                     eventChatRoomService.getActiveParticipants(message.getDestination(), message.getSource());
             participants.forEach(participant ->
-            template.convertAndSendToUser(participant, "/queue/private/", message));
+                    template.convertAndSendToUser(participant, "/queue/private/", message));
             chatService.persistEventMessage(message);
         }
     }
@@ -89,7 +76,11 @@ public class WebSocketController {
                                 locationDto.getLatitude(),
                                 locationDto.getLongitude(),
                                 message.getSource());
-                // send notifications before
+                receivers.forEach(receiver -> {
+                    message.setMessage(notificationService
+                            .getTextNotificationEventAdded(eventDto.getName(), receiver.getScanAreas()));
+                    template.convertAndSendToUser(receiver.getUsername(), "/queue/private/", message);
+                });
                 emailUtilService.sendEmailEventAdded(receivers, eventDto);
             } catch (BusinessException e) {
                 log.error("Could not load event");
@@ -99,7 +90,6 @@ public class WebSocketController {
             eventChatRoomService.handleNewParticipant(message.getDestination(), message.getSource());
         }
     }
-
 
 
 }

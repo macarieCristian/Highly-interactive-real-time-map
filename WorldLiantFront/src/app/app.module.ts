@@ -25,7 +25,7 @@ import {TransportService} from './shared/service/transport.service';
 import {TokenHttpInterceptor} from './shared/util/token-http-interceptor';
 import {UserService} from './shared/service/user.service';
 import {CustomExceptionHandler} from './shared/util/custom-exception-handler';
-import {NgxLoadingModule} from 'ngx-loading';
+import {ngxLoadingAnimationTypes, NgxLoadingModule} from 'ngx-loading';
 import {MapService} from './home/service/map.service';
 import {ChatService} from './shared/service/chat.service';
 import {MapRepository} from './shared/repository/map-repository';
@@ -101,7 +101,7 @@ import {LocationDetailsService} from './shared/service/location-details.service'
     {provide: ErrorHandler, useClass: CustomExceptionHandler},
   ],
   bootstrap: [AppComponent],
-  entryComponents: [EventPopupComponent, UserLocationPopupComponent]
+  entryComponents: [EventPopupComponent, UserLocationPopupComponent, VenuePopupComponent]
 })
 export class AppModule {
   constructor(private injector: Injector) {
@@ -109,5 +109,7 @@ export class AppModule {
     customElements.define('event-popup-element', eventPopupComp);
     const userLocationPopupComp = createCustomElement(UserLocationPopupComponent, {injector});
     customElements.define('user-location-popup-element', userLocationPopupComp);
+    const venueLocationPopupComp = createCustomElement(VenuePopupComponent, {injector});
+    customElements.define('venue-popup-element', venueLocationPopupComp);
   }
 }

@@ -4,11 +4,11 @@
   <div class="modal-content" style="height: 100%">
     <div class="modal-header">
       <div class="close-modal-button" (click)="sideChat = false;">x</div>
-      <h4 class="modal-title w-100" id="myModalLabel1">Get in touch</h4></div>
+      <h4 class="modal-title w-100" id="myModalLabel1">Get in Touch</h4></div>
     <div class="modal-body custom-modal-body">
 
       <mat-list>
-        <h3 mat-subheader><strong>Scan area people</strong></h3>
+        <h3 mat-subheader><strong>Scan Area People</strong></h3>
         <mat-list-item *ngFor="let user of scanAreaUsers" (click)="openChat(user)">
           <div mat-list-icon class="side-chat-img-wrapper">
             <img *ngIf="user.profilePicture"
@@ -23,7 +23,7 @@
         </mat-list-item>
 
         <mat-divider></mat-divider>
-        <h3 mat-subheader><strong>Scan area events</strong></h3>
+        <h3 mat-subheader><strong>Scan Area Events</strong></h3>
         <mat-list-item *ngFor="let event of scanAreaEvents" (click)="openChatEvent(event)">
           <div mat-list-icon class="side-chat-img-wrapper">
             <img *ngIf="event.profilePicture"
@@ -37,7 +37,7 @@
         </mat-list-item>
 
         <mat-divider></mat-divider>
-        <h3 mat-subheader><strong>Added events</strong></h3>
+        <h3 mat-subheader><strong>Added Events</strong></h3>
         <mat-list-item *ngFor="let event of addedEvents" (click)="openChatEvent(event)">
           <div mat-list-icon class="side-chat-img-wrapper">
             <img *ngIf="event.profilePicture"

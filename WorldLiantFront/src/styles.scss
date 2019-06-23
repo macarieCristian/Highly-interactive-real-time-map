@@ -245,6 +245,28 @@ body {
   }
 }
 
+.venue-custom-popup-base {
+  & > .leaflet-popup-content-wrapper {
+    & > .leaflet-popup-content {
+      & > .card {
+        width: 14rem;
+      }
+    }
+  }
+
+  & > .leaflet-popup-content-wrapper,
+  .leaflet-popup-tip {
+    background-image: linear-gradient(to right, #fc6262 0%, #ffd86f 51%, #fc6262 100%);
+    background-size: 200% auto;
+    transition: 0.5s;
+  }
+
+  & > .leaflet-popup-tip:hover,
+  .leaflet-popup-content-wrapper:hover {
+    background-position: right center;
+  }
+}
+
 .leaflet-popup-close-button,
 .custom-close-button {
   color: black !important;
@@ -371,6 +393,11 @@ body {
   }
 }
 
+.custom-button-blue {
+  background-image: linear-gradient(to right, #4285f4 0%, #95caff 51%, #4285f4 100%) !important;
+}
+
+.custom-button-blue,
 .custom-button {
   border-radius: 25px;
   text-transform: capitalize;
@@ -389,10 +416,12 @@ body {
   left: calc(50% - 60px);
 }
 
+.custom-button-blue:hover,
 .custom-button:hover {
   background-position: right center;
 }
 
+.custom-button-blue:active,
 .custom-button:active {
   background: #95caff;
 }
@@ -491,6 +520,14 @@ body {
       height: 100%;
     }
   }
+}
+
+.custom-backdrop {
+
+  & > div > div {
+    z-index: 3000 !important;
+  }
+
 }
 
 #event-popup-card-body {

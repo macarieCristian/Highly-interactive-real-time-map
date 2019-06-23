@@ -16,6 +16,7 @@ import {AttachmentCustom} from '../../shared/model/attachment-custom';
 import {NgElement, WithProperties} from '@angular/elements';
 import {EventPopupComponent} from '../../shared/util/components/event-popup/event-popup.component';
 import {UserLocationPopupComponent} from '../../shared/util/components/user-location-popup/user-location-popup.component';
+import {VenuePopupComponent} from '../../shared/util/components/venue-popup/venue-popup.component';
 
 declare let L;
 
@@ -34,6 +35,7 @@ export class MapService {
 
   static POPUP_USER_BASE_CLASS = 'user-custom-popup-base';
   static POPUP_EVENT_BASE_CLASS = 'event-custom-popup-base';
+  static POPUP_VENUE_BASE_CLASS = 'venue-custom-popup-base';
 
   constructor(private httpClient: HttpClient) {
   }
@@ -108,6 +110,18 @@ export class MapService {
       const popupEl: NgElement & WithProperties<EventPopupComponent> = document.createElement('event-popup-element') as any;
       popupEl.picUrl = picUrl;
       popupEl.event = event;
+      // Listen to the close event
+      popupEl.addEventListener('closed', () => document.body.removeChild(popupEl));
+      // Add to the DOM
+      document.body.appendChild(popupEl);
+      return popupEl;
+    };
+  }
+
+  static getVenuePopup(initialData: any): any {
+    return () => {
+      const popupEl: NgElement & WithProperties<VenuePopupComponent> = document.createElement('venue-popup-element') as any;
+      popupEl.initialData = initialData;
       // Listen to the close event
       popupEl.addEventListener('closed', () => document.body.removeChild(popupEl));
       // Add to the DOM

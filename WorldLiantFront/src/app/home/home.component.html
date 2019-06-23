@@ -13,18 +13,18 @@
         <a class="nav-link" (click)="goToCoordinates(homeCoordinates, 13)"><i class="fa fa-home"></i>Home</a>
       </li>
       <li class="nav-item waves-light" mdbWavesEffect>
-        <a class="nav-link" (click)="scanAreaComp.startSaveProcess(sac.scanArea)" ><i class="fa fa-floppy-o"></i>Scan</a>
+        <a class="nav-link" (click)="scanAreaComp.startSaveProcess(sac.scanArea)" ><i class="fa fa-floppy-o"></i>Save Scan</a>
       </li>
       <li class="nav-item waves-light" mdbWavesEffect>
-        <a class="nav-link" (click)="scanAreaComp.openScanAreasModal()">Saved scans</a>
+        <a class="nav-link" (click)="scanAreaComp.openScanAreasModal()"><i class="fa fa-folder-open"></i>View Scans</a>
       </li>
       <li class="nav-item waves-light" mdbWavesEffect>
-      <a class="nav-link" (click)="openAddEventComp()">Add event</a>
+      <a class="nav-link" (click)="openAddEventComp()"><i class="fa fa-plus"></i>Add Event</a>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto nav-flex-icons" style="margin-right: 1vw">
       <li class="nav-item" style="margin-right: 0.5vw">
-        <a class="nav-link waves-effect waves-light">1
+        <a class="nav-link waves-effect waves-light">
           <i class="fa fa-bell"></i>
         </a>
       </li>
@@ -36,10 +36,10 @@
                class="img-custom z-depth-0">
 
           <div class="dropdown-menu menu-item-custom dropdown-menu-right" id="dada">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-            <div class="dropdown-divider"></div>
+            <!--<a class="dropdown-item" href="#">Action</a>-->
+            <!--<a class="dropdown-item" href="#">Another action</a>-->
+            <!--<a class="dropdown-item" href="#">Something else here</a>-->
+            <!--<div class="dropdown-divider"></div>-->
             <a class="dropdown-item" (click)="logout()">Logout</a>
           </div>
 
@@ -88,57 +88,57 @@
 <!-->
 <!-->
 <!-->
-<footer class="page-footer font-small unique-color-dark">
+<!--<footer class="page-footer font-small unique-color-dark">-->
 
-  <div class="my-custom-background">
-    <div class="container">
+  <!--<div class="my-custom-background">-->
+    <!--<div class="container">-->
 
-      <!-- Grid row-->
-      <div class="row py-4 d-flex align-items-center">
+      <!--&lt;!&ndash; Grid row&ndash;&gt;-->
+      <!--<div class="row py-4 d-flex align-items-center">-->
 
-        <!-- Grid column -->
-        <div class="col-md-6 col-lg-5 text-center text-md-left mb-4 mb-md-0">
-          <h6 class="mb-0">Get connected with us on social networks!</h6>
-        </div>
-        <!-- Grid column -->
+        <!--&lt;!&ndash; Grid column &ndash;&gt;-->
+        <!--<div class="col-md-6 col-lg-5 text-center text-md-left mb-4 mb-md-0">-->
+          <!--<h6 class="mb-0">Get connected with us on social networks!</h6>-->
+        <!--</div>-->
+        <!--&lt;!&ndash; Grid column &ndash;&gt;-->
 
-        <!-- Grid column -->
-        <div class="col-md-6 col-lg-7 text-center text-md-right">
+        <!--&lt;!&ndash; Grid column &ndash;&gt;-->
+        <!--<div class="col-md-6 col-lg-7 text-center text-md-right">-->
 
-          <!-- Facebook -->
-          <a class="fb-ic">
-            <mdb-icon fab icon="facebook" class="white-text mr-4"></mdb-icon>
-          </a>
-          <!-- Twitter -->
-          <a class="tw-ic">
-            <mdb-icon fab icon="twitter" class="white-text mr-4"></mdb-icon>
-          </a>
-          <!-- Google +-->
-          <a class="gplus-ic">
-            <mdb-icon fab fab icon="google-plus" class="white-text mr-4"></mdb-icon>
-          </a>
-          <!--Linkedin -->
-          <a class="li-ic">
-            <mdb-icon fab icon="linkedin" class="white-text mr-4"></mdb-icon>
-          </a>
-          <!--Instagram-->
-          <a class="ins-ic">
-            <mdb-icon fab icon="instagram" class="white-text mr-4"></mdb-icon>
-          </a>
+          <!--&lt;!&ndash; Facebook &ndash;&gt;-->
+          <!--<a class="fb-ic">-->
+            <!--<mdb-icon fab icon="facebook" class="white-text mr-4"></mdb-icon>-->
+          <!--</a>-->
+          <!--&lt;!&ndash; Twitter &ndash;&gt;-->
+          <!--<a class="tw-ic">-->
+            <!--<mdb-icon fab icon="twitter" class="white-text mr-4"></mdb-icon>-->
+          <!--</a>-->
+          <!--&lt;!&ndash; Google +&ndash;&gt;-->
+          <!--<a class="gplus-ic">-->
+            <!--<mdb-icon fab fab icon="google-plus" class="white-text mr-4"></mdb-icon>-->
+          <!--</a>-->
+          <!--&lt;!&ndash;Linkedin &ndash;&gt;-->
+          <!--<a class="li-ic">-->
+            <!--<mdb-icon fab icon="linkedin" class="white-text mr-4"></mdb-icon>-->
+          <!--</a>-->
+          <!--&lt;!&ndash;Instagram&ndash;&gt;-->
+          <!--<a class="ins-ic">-->
+            <!--<mdb-icon fab icon="instagram" class="white-text mr-4"></mdb-icon>-->
+          <!--</a>-->
 
-        </div>
-        <!-- Grid column -->
+        <!--</div>-->
+        <!--&lt;!&ndash; Grid column &ndash;&gt;-->
 
-      </div>
-      <!-- Grid row-->
+      <!--</div>-->
+      <!--&lt;!&ndash; Grid row&ndash;&gt;-->
 
-    </div>
-  </div>
+    <!--</div>-->
+  <!--</div>-->
 
-  <!-- Copyright -->
-  <div class="footer-copyright text-center py-3">© 2018 Copyright:
-    <a href="https://mdbootstrap.com/education/bootstrap/"> MDBootstrap.com</a>
-  </div>
-  <!-- Copyright -->
+  <!--&lt;!&ndash; Copyright &ndash;&gt;-->
+  <!--<div class="footer-copyright text-center py-3">© 2019 Copyright:-->
+    <!--<a href="https://mdbootstrap.com/education/bootstrap/"> WorldLiant</a>-->
+  <!--</div>-->
+  <!--&lt;!&ndash; Copyright &ndash;&gt;-->
 
-</footer>
+<!--</footer>-->
