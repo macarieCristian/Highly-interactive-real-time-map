@@ -1,5 +1,5 @@
 export class ServerUrls {
-  static BASE_URL = 'http://localhost:8080/';
+  static BASE_URL = 'http://localhost:8081/';
 
   // Users
   static LOGIN = `${ServerUrls.BASE_URL}authentication/login`;

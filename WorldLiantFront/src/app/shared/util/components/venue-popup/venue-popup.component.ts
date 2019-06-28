@@ -15,6 +15,7 @@ export class VenuePopupComponent implements OnInit {
   picUrl;
   more = false;
   linkLength = 30;
+  descriptionLength = 80;
   details: any;
   defaultUrl = '../../../../../assets/img/no-image-placeholder.png';
 
@@ -29,12 +30,15 @@ export class VenuePopupComponent implements OnInit {
           this.picUrl = this.details.bestPhoto ?
             this.buildUrl(this.details.bestPhoto.prefix, '300x300', this.details.bestPhoto.suffix) :
             this.defaultUrl;
-          console.log(this.details.contact);
         });
     }
     // this.initialData = {id: 1, name: 'Name', location: {address: 'Iulius', city: 'Cluj', country: 'Romania'}};
     // this.picUrl = this.defaultUrl;
-    // this.details = {likes: {count: 500}, url: 'https://example.com', contact: {twitter: 'ceva'}};
+    // this.details = {
+    //   likes: {count: 500}, url: 'https://example.com',
+    //   contact: {twitter: 'ceva', phone: '+40753046160', formattedPhone: '+40 753 046 160'},
+    //   description: 'Some loong description which needs see more button addded here unfortunaty salam was here batman'
+    // };
   }
 
   private buildUrl(prefix: string, size: string, suffix: string): string {

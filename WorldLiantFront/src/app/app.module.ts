@@ -43,6 +43,8 @@ import {GalleryPreviewComponent} from './shared/util/components/gallery-preview/
 import {UserLocationPopupComponent} from './shared/util/components/user-location-popup/user-location-popup.component';
 import {VenuePopupComponent} from './shared/util/components/venue-popup/venue-popup.component';
 import {LocationDetailsService} from './shared/service/location-details.service';
+import {AuthService} from './shared/service/auth.service';
+import {AuthGuard} from './shared/util/auth.guard';
 
 @NgModule({
   declarations: [
@@ -97,8 +99,10 @@ import {LocationDetailsService} from './shared/service/location-details.service'
     ScanAreaService,
     EventService,
     LocationDetailsService,
+    AuthService,
+    AuthGuard,
     {provide: HTTP_INTERCEPTORS, useClass: TokenHttpInterceptor, multi: true},
-    {provide: ErrorHandler, useClass: CustomExceptionHandler},
+    {provide: ErrorHandler, useClass: CustomExceptionHandler}
   ],
   bootstrap: [AppComponent],
   entryComponents: [EventPopupComponent, UserLocationPopupComponent, VenuePopupComponent]

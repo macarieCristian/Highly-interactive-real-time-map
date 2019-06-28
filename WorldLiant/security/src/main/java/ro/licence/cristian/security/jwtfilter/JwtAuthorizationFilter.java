@@ -49,17 +49,17 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 log.warn(EXCEPTION_MSG_FORMAT, e.getMessage());
             }
         } else {
-            log.info("couldn't find bearer string, will ignore the header");
+            // log.info("couldn't find bearer string, will ignore the header");
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             if (!tokenProvider.isUserDisabled(username)) {
                 UsernamePasswordAuthenticationToken authentication = tokenProvider.getAuthentication(claims);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-                log.info("authorized user: {}, setting security context", username);
+                // log.info("authorized user: {}, setting security context", username);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
                 res.addHeader(Constants.EXCEPTION_MESSAGE_HEADER, "User disabled.");
-                log.warn("User with username: {} is disabled.", username);
+                // log.warn("User with username: {} is disabled.", username);
             }
         }
         chain.doFilter(req, res);

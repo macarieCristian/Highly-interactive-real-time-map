@@ -1,11 +1,10 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {AppUserCredentials} from '../model/app-user-credentials';
 import {ServerUrls} from '../constants/server-urls';
 import {Token} from '../model/token';
 import {Observable} from 'rxjs';
 import {AppUser} from '../model/app-user';
-import {Constants} from '../constants/constants';
 
 @Injectable()
 export class LoginService {

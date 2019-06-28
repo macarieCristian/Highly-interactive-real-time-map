@@ -136,7 +136,7 @@ export class MapService {
       popupAnchor: [0, -40],
       iconSize: null,
       html: `<div class="${markerClassName} animated ${markerAnimation}">
-               <img class="${imageClassName}" src="${picUrl}">
+               <div class="${imageClassName}" style="background-image: url(${picUrl})"></div>
              </div>
              <div class="${pulseClassName}"></div>`
     });

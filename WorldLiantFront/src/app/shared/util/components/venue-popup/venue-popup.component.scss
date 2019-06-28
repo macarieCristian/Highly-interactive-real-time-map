@@ -62,10 +62,17 @@
   align-items: center;
   justify-content: center;
   font-size: 1.7rem;
+
+  & > a {
+    margin-right: 1rem;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
 }
 
 .social-media-button {
-  margin-right: 1rem;
   cursor: pointer;
 
   &.twitter {
@@ -92,7 +99,21 @@
     }
   }
 
-  &:last-child {
-    margin-right: 0;
+}
+
+.absolute-button-wrapper {
+  position: absolute;
+  width: 100%;
+  top: -15px;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & > button {
+    position: static;
+    width: auto;
+    padding: 5px 15px 5px 15px;
+    cursor: default;
   }
 }

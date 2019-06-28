@@ -469,7 +469,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             const marker = thisObject
               .addFAMarker([+location.lat, +location.lng], colorAndIcon.iconName, colorAndIcon.pinColor, venue);
             thisObject.sac.venueMarkers.add(marker._leaflet_id);
-            console.log(venue);
           });
         });
     }

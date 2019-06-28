@@ -11,6 +11,9 @@
   height: 45px;
   width: 45px;
   border-radius: 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   cursor: pointer;
 }
 
@@ -77,12 +80,6 @@
   right: 0;
 }
 
-.side-chat-img {
-  height: 40px !important;
-  width: 40px !important;
-  border-radius: 50%;
-}
-
 .side-chat-img-wrapper {
   position: relative;
   height: 40px !important;
@@ -94,12 +91,6 @@
   height: 38px !important;
   width: 38px !important;
   margin-left: 5px;
-}
-
-.chat-img {
-  height: 38px !important;
-  width: 38px !important;
-  border-radius: 50%;
 }
 
 .chat-header-text-wrapper {

@@ -36,16 +36,13 @@ export class SingupComponent implements OnInit {
       this.model.homeLocation.county,
       this.model.homeLocation.city)
       .subscribe(res => {
-        console.log(res);
         if (res.length === 0) {
           this.toastrUtil.displayErrorToastr('Location error', 'The location you entered does not exist.');
         } else {
           this.model.homeLocation.longitude = res[0].lon;
           this.model.homeLocation.latitude = res[0].lat;
-          console.log(this.model);
           this.loginService.signUp(this.model, this.imageFile)
             .subscribe(result => {
-              console.log(result);
               this.router.navigateByUrl(ClientUrls.LOGIN_PAGE);
             },
               err => console.log(err));

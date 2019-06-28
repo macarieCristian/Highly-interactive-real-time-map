@@ -11,9 +11,9 @@
         <h3 mat-subheader><strong>Scan Area People</strong></h3>
         <mat-list-item *ngFor="let user of scanAreaUsers" (click)="openChat(user)">
           <div mat-list-icon class="side-chat-img-wrapper">
-            <img *ngIf="user.profilePicture"
-                 [src]="setUpPicture(user.profilePicture)"
-                 class="side-chat-img">
+            <div *ngIf="user.profilePicture"
+                 [style.background-image]="'url(' + setUpPicture(user.profilePicture) + ')'"
+                 class="side-chat-img"></div>
             <div [class]="user.statusType === 'OFFLINE' ? 'grey-dot' : 'green-dot'"></div>
           </div>
           <h4 mat-line>{{user.lastName}} {{user.firstName}}</h4>
@@ -26,9 +26,9 @@
         <h3 mat-subheader><strong>Scan Area Events</strong></h3>
         <mat-list-item *ngFor="let event of scanAreaEvents" (click)="openChatEvent(event)">
           <div mat-list-icon class="side-chat-img-wrapper">
-            <img *ngIf="event.profilePicture"
-                 [src]="setUpPicture(event.profilePicture)"
-                 class="side-chat-img">
+            <div *ngIf="event.profilePicture"
+                 [style.background-image]="'url(' + setUpPicture(event.profilePicture) + ')'"
+                 class="side-chat-img"></div>
           </div>
           <h4 mat-line>{{event.name}}</h4>
           <!--<mdb-badge pill="true" color="red">-->
@@ -40,9 +40,9 @@
         <h3 mat-subheader><strong>Added Events</strong></h3>
         <mat-list-item *ngFor="let event of addedEvents" (click)="openChatEvent(event)">
           <div mat-list-icon class="side-chat-img-wrapper">
-            <img *ngIf="event.profilePicture"
-                 [src]="setUpPicture(event.profilePicture)"
-                 class="side-chat-img">
+            <div *ngIf="event.profilePicture"
+                 [style.background-image]="'url(' + setUpPicture(event.profilePicture) + ')'"
+                 class="side-chat-img"></div>
           </div>
           <h4 mat-line>{{event.name}}</h4>
           <!--<mdb-badge pill="true" color="red">-->
@@ -64,9 +64,9 @@
       <div class="chat-close" (click)="closeChat(user)">x</div>
       <div>
         <div class="chat-img-wrapper">
-          <img *ngIf="user.profilePicture"
-               [src]="setUpPicture(user.profilePicture)"
-               class="chat-img">
+          <div *ngIf="user.profilePicture"
+               [style.background-image]="'url(' + setUpPicture(user.profilePicture) + ')'"
+               class="chat-img"></div>
           <div [class]="user.statusType === 'OFFLINE' ? 'grey-dot-chat' : 'green-dot-chat'"></div>
         </div>
         <span class="chat-header-text-wrapper">
@@ -108,9 +108,9 @@
       <div class="chat-close" (click)="closeChatEvent(event)">x</div>
       <div>
         <div class="chat-img-wrapper">
-          <img *ngIf="event.profilePicture"
-               [src]="setUpPicture(event.profilePicture)"
-               class="chat-img">
+          <div *ngIf="event.profilePicture"
+               [style.background-image]="'url(' + setUpPicture(event.profilePicture) + ')'"
+               class="chat-img"></div>
         </div>
         <span class="chat-header-text-wrapper">
             <span class="chat-header-text">{{event.name}}</span>

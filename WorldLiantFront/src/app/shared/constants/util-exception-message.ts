@@ -5,4 +5,6 @@ export class UtilExceptionMessage {
   static LOGIN_FAILED = 'Looks like your password or your username is wrong.';
 
   static RADIUS_ADJUSTED = 'Looks like you exceeded the maximum radius of 50 km so we did a little adjustment :).';
+
+  static TOO_MANY_REQUESTS_FORSQUARE = 'Looks like you exceeded the maximum limit of 50 requests (Forsquare).';
 }

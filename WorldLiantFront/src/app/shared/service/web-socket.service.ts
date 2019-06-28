@@ -28,6 +28,7 @@ export class WebSocketService {
   connectToSocket() {
     const sockJs = new SockJS(`${ServerUrls.SOCKET_URL}`);
     this.stompClient = Stomp.over(sockJs);
+    this.stompClient.debug = () => {};
     const username = localStorage.getItem(LocalStorageConstants.USERNAME);
     this.stompClient.connect({user: username}, () => {
         console.log('connected!');
